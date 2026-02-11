@@ -12,7 +12,7 @@
 
 ## 🎯 Visión General
 
-Un sistema de venta automatizada de instancias Odoo que funciona como un servicio SaaS. El cliente entra a una página web, compra una suscripción, y automáticamente recibe su propia instalación completa de Odoo sin intervención humana.
+Un sistema de venta automatizada de instancias Odoo que funciona como un servicio SaaS. El cliente entra a una página web, compra una suscripción, y automáticamente recibe su propia instalación completa de Odoo.
 
 ### Modelo de Negocio
 - Cliente paga $10/mes → Recibe su Odoo completo
@@ -74,7 +74,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 
 ---
 
-#### E1-002: Instalar Ubuntu Server en VirtualBox
+#### E1-002: Instalar Ubuntu Server en VirtualBox (Pendiente)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
@@ -91,7 +91,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 
 ---
 
-#### E1-003: Configurar red bridged para acceso desde host
+#### E1-003: Configurar red bridged para acceso desde host (Pendiente y en revision)
 - [ ] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
@@ -1420,50 +1420,49 @@ docker network inspect odoo_network
 
 ## 💳 ÉPICA 7: Integración de Pagos
 
-**Objetivo:** Stripe funcionando (o pasarela de pago alternativa)  
+**Objetivo:** QR funcionando (o pasarela de pago alternativa)  
 **Sprint:** 10 (Semana 10)  
 **Criterios de Aceptación:**
-- ✅ Hago una compra con tarjeta de prueba
+- ✅ Hago una compra con QR de prueba
 - ✅ El pago se procesa
 - ✅ Se crea la instancia automáticamente
 - ✅ Recibo el email
 
 ### Tareas
 
-#### E7-001: [SPIKE] Investigar integración de Stripe con Odoo
+#### E7-001: [SPIKE] Investigar integración de QR con Odoo
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
 ```bash
 # Documentación revisada:
-# - Stripe Checkout
+# - QR Checkout
 # - Webhooks
 # - Modo test vs producción
 ```
 
 ---
 
-#### E7-002: Sistema de pago con tarjeta
+#### E7-002: Sistema de pago con QR
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
-- **Historia de Usuario:** Como cliente, quiero pagar con tarjeta de forma segura
+- **Historia de Usuario:** Como cliente, quiero pagar con QR de forma segura
 - **Comandos/Notas:**
 ```bash
-# Payment provider configurado: Stripe (o alternativa)
+# Payment provider configurado: QR (o alternativa)
 ```
 
 ---
 
-#### E7-003: Crear cuenta de Stripe (modo test)
+#### E7-003: Crear cuenta de QR (modo test)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
 ```bash
-# Cuenta creada en: https://stripe.com
-# Modo: Test
+# 
 # Email de cuenta: 
 ```
 
@@ -1483,7 +1482,7 @@ docker network inspect odoo_network
 
 ---
 
-#### E7-005: Configurar claves API de Stripe
+#### E7-005: Configurar claves API de la entidad financiera o pasarela de pago (pendiente)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
@@ -1498,20 +1497,19 @@ docker network inspect odoo_network
 
 ---
 
-#### E7-006: Configurar Webhook de Stripe
+#### E7-006: Configurar Webhook de Pasarela de Pago (QR)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
 ```bash
-# Webhook configurado en Stripe Dashboard
-
-# URL: https://[dominio]/payment/stripe/webhook
+# 
+#
 # Eventos suscritos:
 # - payment_intent.succeeded
 # - payment_intent.payment_failed
 
-# Webhook secret: whsec_...
+# ...
 ```
 
 ---
@@ -1582,7 +1580,7 @@ docker network inspect odoo_network
 
 ### Tareas - Sprint 11: Infraestructura Cloud
 
-#### E8-001: [SPIKE] Investigar proveedores VPS
+#### E8-001: [SPIKE] Investigar proveedores VPS (Pendiente)
 - [ ] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
@@ -1601,7 +1599,7 @@ docker network inspect odoo_network
 
 ---
 
-#### E8-002: Contratar VPS
+#### E8-002: Contratar VPS (Pendiente)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
@@ -1616,7 +1614,7 @@ docker network inspect odoo_network
 
 ---
 
-#### E8-003: Configurar Ubuntu en VPS
+#### E8-003: Configurar Ubuntu en VPS (Pendiente)
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
@@ -1838,7 +1836,7 @@ sudo certbot renew --dry-run
 
 ---
 
-#### E8-013: Configurar Stripe en modo producción
+#### E8-013: Configurar Pasarela de pago (QR) en modo producción
 - [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
@@ -1846,14 +1844,8 @@ sudo certbot renew --dry-run
 - **Comandos/Notas:**
 ```bash
 # Cambiar en Odoo:
-# Payment Provider > Stripe > State: Enabled (Production)
+# Payment Provider > QR > State: Enabled (Production)
 
-# Claves de producción:
-# Publishable Key: pk_live_...
-# Secret Key: sk_live_...
-
-# Actualizar webhook URL:
-# https://[dominio].com/payment/stripe/webhook
 ```
 
 ---
@@ -2051,15 +2043,14 @@ docker exec -it odoo_maestro odoo -u saas_docker_manager -d odoo_maestro
 - **Repositorio:** [URL del repositorio en GitHub]
 - **Servidor de Desarrollo:** http://[IP_UBUNTU]:8069
 - **Servidor de Producción:** https://[dominio].com
-- **Panel Stripe:** https://dashboard.stripe.com
 - **UptimeRobot:** https://uptimerobot.com
 
 ---
 
 ## 👥 Equipo
 
-- **Developer 1:** [Nombre] - Backend/DevOps
-- **Developer 2:** [Nombre] - Frontend/Odoo
+- **Developer 1:** [Adolfo Mendoza Ribera] 
+- **Developer 2:** [Marco Lehonti Guzman Montalvan] 
 
 ---
 
