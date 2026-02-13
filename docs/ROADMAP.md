@@ -24,8 +24,8 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ## 📊 Estado General del Proyecto
 
 ### Progreso por Épicas
-- [ ] **ÉPICA 1:** Infraestructura Base (8/10)
-- [ ] **ÉPICA 2:** Portal Web y eCommerce (7/14)
+- [ ] **ÉPICA 1:** Infraestructura Base (0/10)
+- [ ] **ÉPICA 2:** Portal Web y eCommerce (0/14)
 - [ ] **ÉPICA 3:** Sistema de Provisión Automática (0/19)
 - [ ] **ÉPICA 4:** Gestión de Ciclo de Vida (0/15)
 - [ ] **ÉPICA 5:** Portal del Cliente (0/11)
@@ -34,10 +34,10 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 - [ ] **ÉPICA 8:** Despliegue a Producción (0/15)
 
 ### Progreso por Sprints
-- [X] **Sprint 1:** Fundamentos (Semana 1)
-- [X] **Sprint 2:** Portal Web (Semana 2)
-- [X] **Sprint 3:** Fundamentos del Módulo (Semana 3)
-- [X] **Sprint 4:** Captura de Ventas (Semana 4)
+- [ ] **Sprint 1:** Fundamentos (Semana 1)
+- [ ] **Sprint 2:** Portal Web (Semana 2)
+- [ ] **Sprint 3:** Fundamentos del Módulo (Semana 3)
+- [ ] **Sprint 4:** Captura de Ventas (Semana 4)
 - [ ] **Sprint 5:** Creación de Instancias (Semana 5)
 - [ ] **Sprint 6:** Suspensión Automática (Semana 6)
 - [ ] **Sprint 7:** Reactivación (Semana 7)
@@ -62,7 +62,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ### Tareas
 
 #### E1-001: [SPIKE] Investigar Docker y contenedores
-- [X] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Descripción:** Entender qué es Docker, cómo funcionan los contenedores, diferencia entre imagen y contenedor
@@ -74,8 +74,8 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 
 ---
 
-#### E1-002: Instalar Ubuntu Server en VirtualBox (Realizado)
-- [X] Completada
+#### E1-002: Instalar Ubuntu Server en VirtualBox (Pendiente)
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Descargar Ubuntu Server 22.04 LTS e instalarlo en VirtualBox
@@ -91,8 +91,8 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 
 ---
 
-#### E1-003: Configurar red bridged para acceso desde host (Realizado)
-- [x] Completada
+#### E1-003: Configurar red bridged para acceso desde host (Pendiente y en revision)
+- [ ] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Descripción:** Configurar red en modo bridge para que Windows pueda acceder al Ubuntu
@@ -107,7 +107,7 @@ ip addr show
 ---
 
 #### E1-004: Instalar Docker Engine en Ubuntu
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Instalar Docker siguiendo documentación oficial
@@ -129,7 +129,7 @@ sudo usermod -aG docker $USER
 ---
 
 #### E1-005: Instalar Docker Compose
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Descripción:** Instalar Docker Compose para orquestar contenedores
@@ -145,7 +145,7 @@ docker-compose --version
 ---
 
 #### E1-006: Crear estructura de proyecto
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** High
 - **Estimación:** 1 punto
 - **Descripción:** Crear carpetas para el proyecto
@@ -165,7 +165,7 @@ cd ~/odoo-saas-project
 ---
 
 #### E1-007: Configurar docker-compose.yml para Odoo Maestro
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Descripción:** Crear archivo docker-compose.yml con servicios de PostgreSQL y Odoo
@@ -179,7 +179,7 @@ cd ~/odoo-saas-project
 ---
 
 #### E1-008: Levantar Odoo Maestro + PostgreSQL
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Ejecutar docker-compose up y verificar que los servicios arrancan
@@ -198,7 +198,7 @@ docker logs odoo_maestro
 ---
 
 #### E1-009: Verificar acceso desde navegador Windows
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Descripción:** Abrir navegador en Windows y acceder a http://IP_UBUNTU:8069
@@ -216,7 +216,7 @@ http://[IP_UBUNTU]:8069
 ---
 
 #### E1-010: Configurar volumen para addons personalizados
-- [x] Completada
+- [ ] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Descripción:** Montar carpeta de addons en el contenedor de Odoo
