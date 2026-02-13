@@ -248,7 +248,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ### Tareas
 
 #### E2-001: Landing page atractiva
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como visitante, quiero ver una landing page atractiva que explique el servicio
@@ -268,7 +268,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-002: Página de precios
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como visitante, quiero ver los planes disponibles con sus precios
@@ -283,7 +283,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-003: Instalar módulo Website en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -295,7 +295,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-004: Instalar módulo eCommerce en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -307,7 +307,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-005: Diseñar página de inicio con Website Builder
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -321,7 +321,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-006: Crear página "Cómo Funciona"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -337,7 +337,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-007: Crear página "Precios"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -349,7 +349,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-008: Configurar productos: Plan Básico, Plan Pro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -368,7 +368,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-009: Configurar precios y descripciones
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -380,7 +380,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-010: Personalizar tema visual (colores, logo)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -395,7 +395,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-011: Sistema de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Historia de Usuario:** Como cliente, quiero poder registrarme en el sitio
@@ -408,7 +408,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-012: Sistema de login
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Historia de Usuario:** Como cliente, quiero poder hacer login
@@ -420,7 +420,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-013: Configurar formulario de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -435,7 +435,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-014: Probar flujo completo de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
