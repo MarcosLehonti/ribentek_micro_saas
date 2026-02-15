@@ -466,7 +466,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ### Tareas - Sprint 3: Fundamentos del Módulo
 
 #### E3-001: [SPIKE] Investigar Odoo ORM y herencia de modelos
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -482,7 +482,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E3-002: [SPIKE] Investigar subprocess y comandos Docker desde Python
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -504,7 +504,7 @@ import subprocess
 ---
 
 #### E3-003: Crear estructura del módulo saas_docker_manager
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Sprint:** 3
@@ -535,7 +535,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-004: Configurar __manifest__.py con dependencias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Sprint:** 3
@@ -549,7 +549,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-005: Crear modelo saas.instance para control de instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -563,7 +563,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-006: Definir campos del modelo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 3
@@ -584,7 +584,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-007: Crear vistas XML para gestión de instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 3
