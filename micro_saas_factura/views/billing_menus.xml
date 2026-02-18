@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_micro_saas_customers" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'default_is_company': True}</field>
+    </record>
+
+    <record id="action_micro_saas_invoices" model="ir.actions.act_window">
+        <field name="name">Facturas</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+    </record>
+
+    <record id="action_micro_saas_payments" model="ir.actions.act_window">
+        <field name="name">Pagos</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('payment_type', '=', 'inbound')]</field>
+        <field name="context">{'default_payment_type': 'inbound'}</field>
+    </record>
+
+    <record id="action_micro_saas_subscriptions" model="ir.actions.act_window">
+        <field name="name">Suscripciones</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('detailed_type', '=', 'service')]</field>
+        <field name="context">{'default_detailed_type': 'service'}</field>
+    </record>
+
+    <menuitem id="menu_micro_saas_billing"
+              name="Facturación"
+              parent="micro_saas.menu_odoo_instance_management"
+              sequence="20"/>
+
+    <menuitem id="menu_micro_saas_billing_customers"
+              name="Clientes"
+              parent="menu_micro_saas_billing"
+              action="action_micro_saas_customers"
+              sequence="10"/>
+
+    <menuitem id="menu_micro_saas_billing_invoices"
+              name="Facturas"
+              parent="menu_micro_saas_billing"
+              action="action_micro_saas_invoices"
+              sequence="20"/>
+
+    <menuitem id="menu_micro_saas_billing_payments"
+              name="Pagos"
+              parent="menu_micro_saas_billing"
+              action="action_micro_saas_payments"
+              sequence="30"/>
+
+    <menuitem id="menu_micro_saas_billing_subscriptions"
+              name="Suscripciones"
+              parent="menu_micro_saas_billing"
+              action="action_micro_saas_subscriptions"
+              sequence="40"/>
+</odoo>
