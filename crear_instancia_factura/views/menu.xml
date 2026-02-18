@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Acción de ventana para la vista de Facturas con Instancias -->
+    <record id="action_facturas_con_instancias" model="ir.actions.act_window">
+        <field name="name">Facturas con Instancias</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('instancia_count', '>', 0)]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay facturas con instancias creadas
+            </p>
+            <p>
+                Las facturas aparecerán aquí una vez que crees instancias desde ellas.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Menú en Facturación -->
+    <menuitem 
+        id="menu_facturas_con_instancias"
+        name="Facturas con Instancias"
+        parent="account.menu_finance_receivables"
+        action="action_facturas_con_instancias"
+        sequence="15"/>
+    
+</odoo>
