@@ -29,6 +29,24 @@ class OdooDockerInstance(models.Model):
     variable_ids = fields.One2many('docker.compose.template.variable', 'instance_id',
                                    string="Template Variables", store=True, compute='_compute_variable_ids',
                                    precompute=True, readonly=False)
+    
+    # ============================================
+    # NUEVOS CAMPOS PARA RELACIÓN CON FACTURAS
+    # ============================================
+    factura_id = fields.Many2one(
+        'account.move',
+        string='Factura Origen',
+        readonly=True,
+        ondelete='set null',
+        help='Factura desde la cual se creó esta instancia'
+    )
+    
+    partner_id = fields.Many2one(
+        'res.partner',
+        string='Cliente',
+        help='Cliente propietario de esta instancia'
+    )
+    # ============================================
 
     @api.onchange('template_id')
     def onchange_template_id(self):

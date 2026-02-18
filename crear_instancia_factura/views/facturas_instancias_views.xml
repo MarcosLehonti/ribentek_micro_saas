@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista Tree personalizada para Facturas con Instancias -->
+    <record id="view_facturas_instancias_tree" model="ir.ui.view">
+        <field name="name">facturas.instancias.tree</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree string="Facturas con Instancias" create="false" delete="false">
+                <field name="partner_id" string="Cliente"/>
+                <field name="name" string="Factura"/>
+                <field name="invoice_date" string="Fecha"/>
+                <field name="amount_total" string="Total"/>
+                <field name="payment_state" string="Estado Pago" widget="badge" 
+                       decoration-success="payment_state == 'paid'"
+                       decoration-warning="payment_state == 'partial'"
+                       decoration-danger="payment_state == 'not_paid'"/>
+                <field name="instancia_count" string="# Instancias"/>
+                <field name="state" invisible="1"/>
+                <field name="move_type" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Vista Form personalizada para Facturas con Instancias -->
+    <record id="view_facturas_instancias_form" model="ir.ui.view">
+        <field name="name">facturas.instancias.form</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <form string="Factura con Instancia" create="false" delete="false">
+                <sheet>
+                    <field name="instancia_count" invisible="1"/>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Cliente">
+                            <field name="company_id" invisible="1"/>
+                            <field name="partner_id" readonly="1" 
+                                   context="{'show_address': 1}" 
+                                   options="{'always_reload': True, 'highlight_first_line': True}"/>
+                        </group>
+                        
+                        <group string="Factura">
+                            <field name="invoice_date" string="Fecha" readonly="1"/>
+                            <field name="payment_state" string="Estado Pago" readonly="1" 
+                                   widget="badge"
+                                   decoration-success="payment_state == 'paid'"
+                                   decoration-warning="payment_state == 'partial'"
+                                   decoration-danger="payment_state == 'not_paid'"/>
+                            <field name="amount_untaxed" string="Subtotal" readonly="1"/>
+                            <field name="amount_tax" string="Impuestos" readonly="1"/>
+                            <field name="amount_total" string="Total" readonly="1" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Productos/Servicios Comprados">
+                            <field name="invoice_line_ids" readonly="1">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                        </page>
+                        
+                        <page string="Instancias Asociadas">
+                            <field name="instancia_ids" readonly="1">
+                                <tree>
+                                    <field name="name" string="Nombre Instancia"/>
+                                    <field name="state" string="Estado" 
+                                           widget="badge"
+                                           decoration-success="state == 'running'"
+                                           decoration-warning="state == 'stopped'"
+                                           decoration-info="state == 'draft'"
+                                           decoration-danger="state == 'error'"/>
+                                    <field name="instance_url" string="URL" widget="url"/>
+                                    <field name="http_port" string="Puerto HTTP"/>
+                                    <field name="longpolling_port" string="Puerto Longpolling"/>
+                                    <field name="template_id" string="Template"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="partner_id" readonly="1"/>
+                                                <field name="factura_id" readonly="1"/>
+                                                <field name="state"/>
+                                            </group>
+                                            <group>
+                                                <field name="instance_url" widget="url"/>
+                                                <field name="http_port"/>
+                                                <field name="longpolling_port"/>
+                                                <field name="template_id"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                            
+                            <div class="mt16">
+                                <button name="action_ver_instancias" 
+                                        string="Ver Detalles Completos de Instancia" 
+                                        type="object" 
+                                        class="btn-primary"
+                                        invisible="instancia_count == 0"/>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Asociar las vistas personalizadas a la acción -->
+    <record id="action_facturas_con_instancias" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_facturas_instancias_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_facturas_instancias_form')})]"/>
+    </record>
+    
+</odoo>
