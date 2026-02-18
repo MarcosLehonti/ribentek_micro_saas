@@ -605,7 +605,7 @@ touch models/saas_instance.py
 ### Tareas - Sprint 4: Captura de Ventas
 
 #### E3-008: Implementar método para calcular siguiente puerto disponible
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -623,7 +623,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-009: Heredar modelo sale.order para detectar ventas
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 4
@@ -637,7 +637,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-010: Sobrescribir método action_confirm()
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -650,8 +650,8 @@ touch models/saas_instance.py
 
 ---
 
-#### E3-011: Implementar validación de producto (es suscripción Odoo?)
-- [ ] Completada
+#### E3-011: Implementar validación de producto 
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 4
@@ -664,8 +664,8 @@ touch models/saas_instance.py
 
 ---
 
-#### E3-012: Crear función para generar contraseña aleatoria
-- [ ] Completada
+#### E3-012: Crear función para generar contraseña
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 2 puntos
 - **Sprint:** 4
@@ -684,7 +684,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-013: Implementar creación de registro en saas.instance
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -706,14 +706,13 @@ touch models/saas_instance.py
 ### Tareas - Sprint 5: Creación de Instancias
 
 #### E3-014: Implementar comando Docker para crear PostgreSQL del cliente
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
 - **Sprint:** 5
 - **Comandos/Notas:**
 ```python
 # Función implementada: _create_postgres_container()
-
 
 # Comando Docker ejecutado:
 # docker run -d \
@@ -728,7 +727,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-015: Implementar comando Docker para crear Odoo del cliente
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
 - **Sprint:** 5
@@ -751,7 +750,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-016: Implementar gestión de red Docker
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -768,7 +767,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-017: Implementar manejo de errores en creación
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -789,7 +788,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-018: Probar creación manual de instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 5
@@ -809,7 +808,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-019: Probar creación automática tras venta
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -845,7 +844,7 @@ docker network inspect odoo_network
 ### Tareas - Sprint 6: Suspensión Automática
 
 #### E4-001: [SPIKE] Investigar Cron Jobs en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
