@@ -54,8 +54,7 @@ class AccountMove(models.Model):
             'context': {
                 'default_partner_id': self.partner_id.id,
                 'default_factura_id': self.id,
-                'default_name': f'Instancia - {self.partner_id.name}',
-            },
+                'default_name': f'Instancia - {self.partner_id.name} - {self.name}',            },
         }
     
     def action_ver_instancias(self):

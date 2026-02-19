@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_microsaas_form" model="ir.ui.view">
+        <field name="name">product.template.microsaas.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="MicroSaaS" name="microsaas">
+                    <group string="Configuración de Suscripción">
+                        <field name="es_plan_microsaas"/>
+                        <field name="duracion_suscripcion" invisible="not es_plan_microsaas"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
