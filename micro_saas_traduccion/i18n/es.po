@@ -1,0 +1,672 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* micro_saas
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250428\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-17 23:25+0000\n"
+"PO-Revision-Date: 2026-02-17 23:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "%(original_name)s (copy)"
+msgstr "%(original_name)s (copia)"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ": davidmonterocrespo24@gmail.com"
+msgstr ": davidmonterocrespo24@gmail.com"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__active
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__addons_path
+msgid "Addons Path"
+msgstr "Ruta de Addons"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"After installation, verify Docker's successful installation by running <code>\n"
+"                                        docker\n"
+"                                        --version</code>."
+msgstr ""
+"Después de la instalación, verifique que Docker se haya instalado correctamente ejecutando <code>\n"
+"                                        docker\n"
+"                                        --version</code>."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Body Template"
+msgstr "Plantilla de Contenido"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__name
+msgid "Branch Name"
+msgstr "Nombre de la Rama"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Cannot get field value from %(variable_type)s template variable"
+msgstr "No se puede obtener el valor del campo desde la variable de plantilla %(variable_type)s"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Choose the appropriate installation method for your operating system (Windows,\n"
+"                                        macOS, or Linux)."
+msgstr ""
+"Elija el método de instalación adecuado para su sistema operativo (Windows,\n"
+"                                        macOS o Linux)."
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__color
+msgid "Color"
+msgstr "Color"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Community Support and Contribution"
+msgstr "Soporte y Contribución de la Comunidad"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Confirm the installation by running <code>docker-compose --version</code>."
+msgstr ""
+"Confirme la instalación ejecutando <code>docker-compose --version</code>."
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Create Instance"
+msgstr "Crear Instancia"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+msgid "Create Instance from Template"
+msgstr "Crear Instancia desde Plantilla"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__create_uid
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__create_uid
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__create_uid
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__create_uid
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__create_uid
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__create_date
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__create_date
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__create_date
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__create_date
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__create_date
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__dc_template_id
+msgid "Dc Template"
+msgstr "Plantilla Dc"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__display_name
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__display_name
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__display_name
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__display_name
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__display_name
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__display_name
+msgid "Display Name"
+msgstr "Nombre para Mostrar"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Docker Compose Installation"
+msgstr "Instalación de Docker Compose"
+
+#. module: micro_saas
+#: model:ir.actions.act_window,name:micro_saas.action_docker_compose_template_form
+#: model:ir.model,name:micro_saas.model_docker_compose_template
+msgid "Docker Compose Template"
+msgstr "Plantilla de Docker Compose"
+
+#. module: micro_saas
+#: model:ir.model,name:micro_saas.model_docker_compose_template_variable
+msgid "Docker Compose Template Variable"
+msgstr "Variable de Plantilla de Docker Compose"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Docker Compose simplifies the management of multi-container Docker applications.\n"
+"                                        To\n"
+"                                        install Docker Compose:"
+msgstr ""
+"Docker Compose simplifica la gestión de aplicaciones Docker con múltiples contenedores.\n"
+"                                        Para\n"
+"                                        instalar Docker Compose:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Docker Compose:"
+msgstr "Docker Compose:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Docker Installation Guide"
+msgstr "Guía de Instalación de Docker"
+
+#. module: micro_saas
+#: model:ir.model,name:micro_saas.model_docker_compose_tag
+msgid "Docker compose Tag"
+msgstr "Etiqueta de Docker Compose"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Docker:"
+msgstr "Docker:"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__odoo_docker_instance__state__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__odoo_docker_instance__state__error
+msgid "Error"
+msgstr "Error"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Fetching field value for template variable must use a single record"
+msgstr "La obtención del valor del campo para la variable de plantilla debe realizarse utilizando un único registro"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__field_name
+msgid "Field"
+msgstr "Campo"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__docker_compose_template_variable__field_type__field
+msgid "Field of Model"
+msgstr "Campo del Modelo"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Field template variables must be associated with a field."
+msgstr "Las variables de plantilla de tipo campo deben estar asociadas a un campo."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Follow the installation instructions provided."
+msgstr "Siga las instrucciones de instalación proporcionadas."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Follow the official Docker Compose installation guide:"
+msgstr "Siga la guía oficial de instalación de Docker Compose:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "For more information, please contact us at"
+msgstr "Para mayor información, por favor contáctenos en"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__docker_compose_template_variable__field_type__free_text
+msgid "Free Text"
+msgstr "Texto Libre"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Free Text template variables must have a demo value."
+msgstr "Las variables de plantilla de tipo Texto Libre deben contar con un valor de demostración."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Git Downloads"
+msgstr "Descargas de Git"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Git is a distributed version control system. To install Git:"
+msgstr "Git es un sistema de control de versiones distribuido. Para instalar Git:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Git:"
+msgstr "Git:"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__http_port
+msgid "HTTP Port"
+msgstr "Puerto HTTP"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Help"
+msgstr "Ayuda"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__id
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__id
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__id
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__id
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__id
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Installation Guide: Docker, Docker Compose, and Git"
+msgstr "Guía de Instalación: Docker, Docker Compose y Git"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__instance_id
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__instance_id
+msgid "Instance"
+msgstr "Instancia"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__instance_data_path
+msgid "Instance Data Path"
+msgstr "Ruta de Datos de la Instancia"
+
+#. module: micro_saas
+#: model:ir.ui.menu,name:micro_saas.menu_odoo_instance_management
+msgid "Instance Management"
+msgstr "Gestión de Instancias"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__name
+msgid "Instance Name"
+msgstr "Nombre de la Instancia"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__instance_url
+msgid "Instance URL"
+msgstr "URL de la Instancia"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Invalid field chain %r"
+msgstr "Cadena de campo inválida %r"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Invalid field name: %r"
+msgstr "Nombre de campo inválido: %r"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__is_clone
+msgid "Is Clone"
+msgstr "Es Clon"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__write_uid
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__write_uid
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__write_uid
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__write_uid
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__write_uid
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__write_uid
+msgid "Last Updated by"
+msgstr "Última Actualización por"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__write_date
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__write_date
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__write_date
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__write_date
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__write_date
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__write_date
+msgid "Last Updated on"
+msgstr "Última Actualización el"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__log
+msgid "Log"
+msgstr "Registro"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Logs"
+msgstr "Registros"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__longpolling_port
+msgid "Longpolling Port"
+msgstr "Puerto de Longpolling"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__name
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Name"
+msgstr "Nombre"
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "Not able to get the value of field %r"
+msgstr "No es posible obtener el valor del campo %r"
+
+#. module: micro_saas
+#: model:ir.actions.act_window,name:micro_saas.action_docker_instance
+#: model:ir.model,name:micro_saas.model_odoo_docker_instance
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Odoo Docker Instance"
+msgstr "Instancia Odoo en Docker"
+
+#. module: micro_saas
+#: model:ir.ui.menu,name:micro_saas.menu_odoo_instances
+msgid "Odoo Instances"
+msgstr "Instancias Odoo"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__name
+msgid "Placeholder"
+msgstr "Marcador de Posición"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo_line__repository_id
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Repository"
+msgstr "Repositorio"
+
+#. module: micro_saas
+#: model:ir.ui.menu,name:micro_saas.menu_repository_repo_form
+msgid "Repository "
+msgstr "Repositorio "
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_repository_repo__name
+msgid "Repository Name"
+msgstr "Nombre del Repositorio"
+
+#. module: micro_saas
+#: model:ir.ui.menu,name:micro_saas.menu_repository_repo
+msgid "Repository Repos"
+msgstr "Repositorios"
+
+#. module: micro_saas
+#: model:ir.model,name:micro_saas.model_repository_repo
+#: model:ir.model,name:micro_saas.model_repository_repo_line
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__repository_line
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__repository_line
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_repository_repo_tree
+msgid "Repository and Branch"
+msgstr "Repositorio y Rama"
+
+#. module: micro_saas
+#: model:ir.actions.act_window,name:micro_saas.action_repository_repo_form
+msgid "RepositoryRepo"
+msgstr "Repositorio"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_kanban
+msgid "Restart"
+msgstr "Reiniciar"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Restart Instance"
+msgstr "Reiniciar Instancia"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__is_result_dc_body
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__result_dc_body
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__is_result_dc_body
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__result_dc_body
+msgid "Result Docker Compose"
+msgstr "Resultado de Docker Compose"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__is_result_odoo_conf
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__result_odoo_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__is_result_odoo_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__result_odoo_conf
+msgid "Result Odoo Conf"
+msgstr "Resultado de Configuración de Odoo"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__is_result_postgres_conf
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__result_postgres_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__is_result_postgres_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__result_postgres_conf
+msgid "Result Postgres Conf"
+msgstr "Resultado de Configuración de Postgres"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__odoo_docker_instance__state__running
+msgid "Running"
+msgstr "En Ejecución"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__demo_value
+msgid "Sample Value"
+msgstr "Valor de Ejemplo"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Select the instructions relevant to your operating system."
+msgstr "Seleccione las instrucciones correspondientes a su sistema operativo."
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__sequence
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_kanban
+msgid "Start"
+msgstr "Iniciar"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Start Instance"
+msgstr "Iniciar Instancia"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__state
+msgid "State"
+msgstr "Estado"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_kanban
+msgid "Stop"
+msgstr "Detener"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Stop Instance"
+msgstr "Detener Instancia"
+
+#. module: micro_saas
+#: model:ir.model.fields.selection,name:micro_saas.selection__odoo_docker_instance__state__stopped
+msgid "Stopped"
+msgstr "Detenido"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_tag__name
+msgid "Tag Name"
+msgstr "Nombre de la Etiqueta"
+
+#. module: micro_saas
+#: model:ir.model.constraint,message:micro_saas.constraint_docker_compose_tag_name_uniq
+msgid "Tag name already exists !"
+msgstr "¡El nombre de la etiqueta ya existe!"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__tag_ids
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__tag_ids
+msgid "Tags"
+msgstr "Etiquetas"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__template_id
+msgid "Template"
+msgstr "Plantilla"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.dc_template_variable_view_form
+msgid "Template Button"
+msgstr "Botón de Plantilla"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__template_dc_body
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__template_dc_body
+msgid "Template Docker Compose"
+msgstr "Plantilla de Docker Compose"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__template_odoo_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__template_odoo_conf
+msgid "Template Odoo Conf"
+msgstr "Plantilla de Configuración de Odoo"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__template_postgres_conf
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__template_postgres_conf
+msgid "Template Postgres Conf"
+msgstr "Plantilla de Configuración de Postgres"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template__variable_ids
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__variable_ids
+msgid "Template Variables"
+msgstr "Variables de Plantilla"
+
+#. module: micro_saas
+#: model:ir.ui.menu,name:micro_saas.menu_template
+msgid "Templates"
+msgstr "Plantillas"
+
+#. module: micro_saas
+#: model:ir.model.constraint,message:micro_saas.constraint_docker_compose_template_name_uniq
+#: model:ir.model.constraint,message:micro_saas.constraint_odoo_docker_instance_name_uniq
+msgid "The name of the template must be unique !"
+msgstr "¡El nombre de la plantilla debe ser único!"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Together, we can make a positive impact on the Odoo community and simplify\n"
+"                                    development\n"
+"                                    processes for all users. Thank you for your support!"
+msgstr ""
+"Juntos podemos generar un impacto positivo en la comunidad de Odoo y simplificar\n"
+"                                    los procesos de desarrollo\n"
+"                                    para todos los usuarios. ¡Gracias por su apoyo!"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_docker_compose_template_variable__field_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Use {{1}}, {{2}} as placeholders for dynamic variable"
+msgstr "Use {{1}}, {{2}} como marcadores de posición para variables dinámicas"
+
+#. module: micro_saas
+#: model:ir.model.fields,field_description:micro_saas.field_odoo_docker_instance__user_path
+msgid "User Path"
+msgstr "Ruta del Usuario"
+
+#. module: micro_saas
+#: model:ir.model.constraint,message:micro_saas.constraint_docker_compose_template_variable_name_type_template_unique
+msgid "Variable names must be unique for a given template"
+msgstr "Los nombres de las variables deben ser únicos para una plantilla determinada"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_docker_compose_template_form
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Variables"
+msgstr "Variables"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Verify Git's installation by running <code>git --version</code>."
+msgstr "Verifique la instalación de Git ejecutando <code>git --version</code>."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Visit the Git website and download the appropriate installer for your OS:"
+msgstr ""
+"Visite el sitio web de Git y descargue el instalador correspondiente para su sistema operativo:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid "Visit the official Docker website for installation instructions:"
+msgstr "Visite el sitio web oficial de Docker para obtener instrucciones de instalación:"
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"We're thrilled to offer this module to the community as a free resource for efficient\n"
+"                                    Odoo Docker instance management. We welcome contributions, feedback, and suggestions\n"
+"                                    from the community to enhance and improve this tool further."
+msgstr ""
+"Nos complace ofrecer este módulo a la comunidad como un recurso gratuito para una gestión eficiente\n"
+"                                    de instancias Odoo en Docker. Agradecemos contribuciones, comentarios y sugerencias\n"
+"                                    de la comunidad para seguir mejorando y optimizando esta herramienta."
+
+#. module: micro_saas
+#. odoo-python
+#: code:addons/micro_saas/models/docker_compose_template.py:0
+#, python-format
+msgid "You can not select field of %r."
+msgstr "No puede seleccionar el campo de %r."
+
+#. module: micro_saas
+#: model_terms:ir.ui.view,arch_db:micro_saas.view_odoo_docker_instance_form
+msgid ""
+"Your support can help us create more features, improve stability, and make it even\n"
+"                                    more\n"
+"                                    valuable for users worldwide. Please feel free to get involved by reporting issues,\n"
+"                                    submitting pull requests, or providing feedback on how we can make this module even\n"
+"                                    better."
+msgstr ""
+"Su apoyo puede ayudarnos a crear más funcionalidades, mejorar la estabilidad y hacer que sea aún\n"
+"                                    más\n"
+"                                    valioso para usuarios en todo el mundo. No dude en participar reportando incidencias,\n"
+"                                    enviando pull requests o brindando sugerencias sobre cómo podemos mejorar aún más\n"
+"                                    este módulo."

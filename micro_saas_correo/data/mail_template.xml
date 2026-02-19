@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 
+        Plantilla de correo de Bienvenida 
+        NOTA: En Odoo 17, usamos directivas QWeb (t-out, t-att-href) dentro del body_html
+        para asegurar que las variables se rendericen correctamente.
+    -->
+    <record id="email_template_bienvenida_instancia" model="mail.template">
+        <field name="name">Bienvenida - Tu instancia Odoo está lista</field>
+        <field name="model_id" ref="micro_saas.model_odoo_docker_instance"/>
+        <field name="subject">🎉 ¡Tu instancia Odoo está lista, {{ object.partner_id.name }}!</field>
+        <field name="email_from">{{ (object.env['ir.config_parameter'].sudo().get_param('mail.default.from') or user.email_formatted) }}</field>
+        <field name="partner_to">{{ object.partner_id.id }}</field>
+        <field name="description">Correo enviado automáticamente al cliente cuando su instancia Docker está lista</field>
+        <field name="body_html" type="html">
+<div style="margin:0; padding:0; background-color:#f0f4f8; font-family: 'Segoe UI', Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f4f8; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Card principal -->
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); max-width:600px;">
+                    
+                    <!-- HEADER -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #6C3FC5 0%, #9B59B6 50%, #3498DB 100%); padding: 50px 40px; text-align:center;">
+                            <div style="width:80px; height:80px; background:rgba(255,255,255,0.2); border-radius:50%; margin:0 auto 20px; display:inline-block; line-height:80px; font-size:40px;">
+                                🚀
+                            </div>
+                            <h1 style="color:#ffffff; margin:0 0 8px; font-size:28px; font-weight:700; letter-spacing:-0.5px;">
+                                ¡Tu instancia está lista!
+                            </h1>
+                            <p style="color:rgba(255,255,255,0.85); margin:0; font-size:16px;">
+                                Tu entorno Odoo personalizado ha sido creado exitosamente
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- SALUDO -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px;">
+                            <p style="color:#2d3748; font-size:17px; margin:0 0 16px; line-height:1.6;">
+                                Hola <strong style="color:#6C3FC5;"><t t-out="object.partner_id.name or 'Cliente'"/></strong>,
+                            </p>
+                            <p style="color:#4a5568; font-size:15px; margin:0; line-height:1.7;">
+                                Nos complace informarte que tu instancia Odoo ha sido configurada y está lista para usar.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- DATOS DE ACCESO -->
+                    <tr>
+                        <td style="padding: 10px 40px 30px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #f8f4ff 0%, #eff6ff 100%); border-radius:12px; border: 1px solid #e2d9f3; overflow:hidden;">
+                                <!-- Título -->
+                                <tr>
+                                    <td colspan="2" style="background: linear-gradient(90deg, #6C3FC5, #3498DB); padding:14px 24px;">
+                                        <span style="color:#fff; font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:1px;">
+                                            🔑 Datos de Acceso
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <!-- URL -->
+                                <tr>
+                                    <td style="padding:18px 24px 8px; color:#718096; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; width:35%;">
+                                        🌐 URL de tu Odoo
+                                    </td>
+                                    <td style="padding:18px 24px 8px;">
+                                        <a t-att-href="object.instance_url" style="color:#6C3FC5; font-weight:700; font-size:15px; text-decoration:none; word-break:break-all;">
+                                            <t t-out="object.instance_url"/>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <tr><td colspan="2" style="padding:0 24px;"><hr style="border:none; border-top:1px solid #e2d9f3; margin:4px 0;"/></td></tr>
+
+                                <!-- Instancia -->
+                                <tr>
+                                    <td style="padding:10px 24px 8px; color:#718096; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
+                                        📦 Instancia
+                                    </td>
+                                    <td style="padding:10px 24px 8px; color:#2d3748; font-size:15px; font-weight:600;">
+                                        <t t-out="object.name"/>
+                                    </td>
+                                </tr>
+
+                                <tr><td colspan="2" style="padding:0 24px;"><hr style="border:none; border-top:1px solid #e2d9f3; margin:4px 0;"/></td></tr>
+
+                                <!-- Usuario -->
+                                <tr>
+                                    <td style="padding:10px 24px 8px; color:#718096; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
+                                        👤 Usuario
+                                    </td>
+                                    <td style="padding:10px 24px 8px; color:#2d3748; font-size:15px; font-weight:600;">
+                                        admin
+                                    </td>
+                                </tr>
+
+                                <tr><td colspan="2" style="padding:0 24px;"><hr style="border:none; border-top:1px solid #e2d9f3; margin:4px 0;"/></td></tr>
+
+                                <!-- Contraseña -->
+                                <tr>
+                                    <td style="padding:10px 24px 18px; color:#718096; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
+                                        🔒 Contraseña
+                                    </td>
+                                    <td style="padding:10px 24px 18px; color:#2d3748; font-size:15px; font-weight:600;">
+                                        admin
+                                        <span style="color:#e53e3e; font-size:12px; font-weight:400; display:block; margin-top:4px;">
+                                            ⚠️ Por seguridad, cambia tu contraseña al ingresar.
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- BOTÓN CTA -->
+                    <tr>
+                        <td style="padding: 0 40px 40px; text-align:center;">
+                            <a t-att-href="object.instance_url" style="display:inline-block; background: linear-gradient(135deg, #6C3FC5, #3498DB); color:#ffffff; text-decoration:none; padding:16px 48px; border-radius:50px; font-size:16px; font-weight:700; letter-spacing:0.5px; box-shadow: 0 4px 15px rgba(108,63,197,0.4);">
+                                🚀 Acceder a mi Odoo
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #2d3748, #4a5568); padding:24px 40px; text-align:center; border-radius:0 0 16px 16px;">
+                            <p style="color:rgba(255,255,255,0.6); font-size:12px; margin:0; line-height:1.6;">
+                                Este correo fue generado automáticamente por Micro SaaS.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+        </field>
+    </record>
+</odoo>

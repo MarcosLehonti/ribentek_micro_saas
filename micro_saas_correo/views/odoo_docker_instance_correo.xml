@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Hereda la vista formulario de odoo.docker.instance (micro_saas)
+        para agregar:
+          - Campos: correo_bienvenida_enviado, correo_bienvenida_fecha
+          - Botón "Enviar Correo de Bienvenida" en el header
+          - Botón "Reenviar Correo" si ya fue enviado
+    -->
+    <record id="view_odoo_docker_instance_form_correo_inherit" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.form.correo.inherit</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Agregar campos invisibles al header para usarlos en condiciones -->
+            <xpath expr="//header" position="inside">
+                <field name="correo_bienvenida_enviado" invisible="1"/>
+                <field name="correo_bienvenida_fecha" invisible="1"/>
+            </xpath>
+
+            <!-- Agregar botones de correo DESPUÉS del botón Restart Instance -->
+            <xpath expr="//header/button[@name='restart_instance']" position="after">
+
+                <!-- Botón principal: Enviar correo (cuando NO se ha enviado aún) -->
+                <button name="action_enviar_correo_bienvenida"
+                        string="📧 Enviar Correo de Bienvenida"
+                        type="object"
+                        class="btn-primary"
+                        invisible="correo_bienvenida_enviado == True or not partner_id or not instance_url or state != 'running'"
+                        help="Envía un correo de bienvenida al cliente con la URL de su instancia Odoo"/>
+
+                <!-- Botón secundario: Reenviar correo (cuando YA fue enviado) -->
+                <button name="action_reenviar_correo_bienvenida"
+                        string="🔄 Reenviar Correo"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="correo_bienvenida_enviado == False or state != 'running'"
+                        help="Reenvía el correo de bienvenida al cliente"/>
+
+            </xpath>
+
+            <!-- Agregar sección de estado del correo en el sheet, dentro del primer group -->
+            <xpath expr="//sheet/group/group[1]" position="after">
+                <group string="📧 Correo de Bienvenida" col="2">
+                    <field name="correo_bienvenida_enviado"
+                           widget="boolean_toggle"
+                           readonly="1"
+                           string="Correo enviado"/>
+                    <field name="correo_bienvenida_fecha"
+                           readonly="1"
+                           string="Fecha de envío"
+                           invisible="correo_bienvenida_enviado == False"/>
+                    <field name="partner_id"
+                           readonly="state != 'draft'"
+                           string="Cliente"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--
+        Hereda la vista KANBAN de odoo.docker.instance (micro_saas)
+        para mostrar un indicador visual si el correo fue enviado.
+    -->
+    <record id="view_odoo_docker_instance_kanban_correo_inherit" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.kanban.correo.inherit</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_kanban"/>
+        <field name="arch" type="xml">
+
+            <!-- Agregar campo invisible para condiciones en kanban -->
+            <xpath expr="//kanban" position="inside">
+                <field name="correo_bienvenida_enviado"/>
+                <field name="partner_id"/>
+            </xpath>
+
+            <!-- Agregar badge de correo enviado junto al badge de estado -->
+            <xpath expr="//div[@class='oe_kanban_bottom_right'][1]/div[@class='oe_kanban_card_manage']"
+                   position="before">
+                <div style="margin-bottom:8px; text-align:right;">
+                    <span t-if="record.correo_bienvenida_enviado.raw_value"
+                          style="background:#38a169; color:#fff; border-radius:20px;
+                                 padding:3px 10px; font-size:11px; font-weight:600;">
+                        ✉️ Correo enviado
+                    </span>
+                    <span t-if="!record.correo_bienvenida_enviado.raw_value and record.partner_id.raw_value"
+                          style="background:#e53e3e; color:#fff; border-radius:20px;
+                                 padding:3px 10px; font-size:11px; font-weight:600;">
+                        ✉️ Sin correo
+                    </span>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
