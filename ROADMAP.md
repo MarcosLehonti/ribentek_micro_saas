@@ -860,7 +860,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-002: Scheduled Action para verificación diaria
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -881,7 +881,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-003: Crear Scheduled Action
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -896,7 +896,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-004: Implementar método _cron_check_expired_subscriptions()
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -910,7 +910,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-005: Implementar lógica de búsqueda de instancias expiradas
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -926,7 +926,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-006: Implementar función action_stop_container()
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -940,7 +940,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-007: Implementar comando docker stop
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -954,7 +954,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-008: Actualizar estado en BD a 'suspendido'
-- [ ] Completada
+- [x] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 6
@@ -972,7 +972,7 @@ docker network inspect odoo_network
 ### Tareas - Sprint 7: Reactivación
 
 #### E4-009: Implementar función action_start_container()
-- [ ] Completada
+- [] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Agrega tarjeta "Mis Suscripciones" en /my/home -->
+    <template id="portal_my_home_subscription" name="Portal My Home: Suscripciones" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+        </xpath>
+
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/hr_timesheet/static/description/icon.png'"/>
+                
+                <t t-set="title">Mis Suscripciones</t>
+                <t t-set="url" t-value="'/my/subscriptions'"/>
+                
+                <t t-set="text">Siga, vea sus suscripciones</t>
+                
+                <t t-set="placeholder_count" t-value="'subscriptionCount'"/>
+            </t>
+        </div>
+    </template>
+
+    <!-- Lista de suscripciones en /my/subscriptions -->
+    <template id="portal_my_subscriptions" name="Mis Suscripciones">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Mis Suscripciones</t>
+            </t>
+
+            <t t-if="not subscriptions">
+                <div class="alert alert-info">
+                    No tienes suscripciones activas en este momento.
+                </div>
+            </t>
+
+            <t t-if="subscriptions">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Referencia</th>
+                                    <th>Plan</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Días Restantes</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="subscriptions" t-as="sub">
+                                    <tr>
+                                        <td><span t-esc="sub.name"/></td>
+                                        <td><span t-esc="sub.product_id.name"/></td>
+                                        <td><span t-field="sub.fecha_inicio"/></td>
+                                        <td><span t-field="sub.fecha_fin"/></td>
+                                        <td>
+                                            <t t-if="sub.dias_restantes &lt;= 0">
+                                                <span class="badge bg-danger"><t t-esc="sub.dias_restantes"/> días</span>
+                                            </t>
+                                            <t t-elif="sub.dias_restantes &lt;= 7">
+                                                <span class="badge bg-warning"><t t-esc="sub.dias_restantes"/> días</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-success"><t t-esc="sub.dias_restantes"/> días</span>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="sub.state == 'active'">
+                                                <span class="badge bg-success">Activa</span>
+                                            </t>
+                                            <t t-elif="sub.state == 'expiring_soon'">
+                                                <span class="badge bg-warning">Por Vencer</span>
+                                            </t>
+                                            <t t-elif="sub.state == 'expired'">
+                                                <span class="badge bg-danger">Vencida</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-secondary">Borrador</span>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="sub.factura_id">
+                                                <a t-attf-href="/my/invoices/#{sub.factura_id.id}" class="btn btn-sm btn-primary">
+                                                    Ver factura
+                                                </a>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-secondary">Sin factura</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div t-if="pager" class="o_portal_pager text-center mt-3">
+                    <t t-call="portal.pager"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Detalle de suscripción en /my/subscriptions/{id} -->
+    <template id="portal_subscription_detail" name="Detalle de Suscripción">
+        <t t-call="portal.portal_layout">
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <h5 class="mb-0">
+                        <span t-esc="subscription.name"/>
+                        <t t-if="subscription.state == 'active'">
+                            <span class="badge bg-success float-end">Activa</span>
+                        </t>
+                        <t t-elif="subscription.state == 'expiring_soon'">
+                            <span class="badge bg-warning float-end">Por Vencer</span>
+                        </t>
+                        <t t-elif="subscription.state == 'expired'">
+                            <span class="badge bg-danger float-end">Vencida</span>
+                        </t>
+                        <t t-else="">
+                            <span class="badge bg-secondary float-end">Borrador</span>
+                        </t>
+                    </h5>
+                </t>
+                <t t-set="card_body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Plan:</strong>
+                            <span t-esc="subscription.product_id.name"/><br/>
+                            <strong>Duración:</strong>
+                            <span t-esc="dict(subscription._fields['duracion_suscripcion'].selection).get(subscription.duracion_suscripcion)"/><br/>
+                            <strong>Fecha Inicio:</strong>
+                            <span t-field="subscription.fecha_inicio"/><br/>
+                            <strong>Fecha Fin:</strong>
+                            <span t-field="subscription.fecha_fin"/><br/>
+                            <strong>Días Restantes:</strong>
+                            <t t-if="subscription.dias_restantes &lt;= 0">
+                                <span class="badge bg-danger"><t t-esc="subscription.dias_restantes"/> días</span>
+                            </t>
+                            <t t-elif="subscription.dias_restantes &lt;= 7">
+                                <span class="badge bg-warning"><t t-esc="subscription.dias_restantes"/> días</span>
+                            </t>
+                            <t t-else="">
+                                <span class="badge bg-success"><t t-esc="subscription.dias_restantes"/> días</span>
+                            </t>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>URL de tu instancia:</strong><br/>
+                            <a t-att-href="subscription.instancia_url" target="_blank">
+                                <span t-esc="subscription.instancia_url"/>
+                            </a><br/>
+                            <strong>Estado de la instancia:</strong>
+                            <t t-if="subscription.instancia_state == 'running'">
+                                <span class="badge bg-success">Corriendo</span>
+                            </t>
+                            <t t-elif="subscription.instancia_state == 'stopped'">
+                                <span class="badge bg-warning">Detenida</span>
+                            </t>
+                            <t t-else="">
+                                <span class="badge bg-secondary"><t t-esc="subscription.instancia_state"/></span>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <div class="mt-3">
+                <a href="/my/subscriptions" class="btn btn-secondary">
+                    ← Volver a mis suscripciones
+                </a>
+            </div>
+        </t>
+    </template>
+
+</odoo>
