@@ -4,6 +4,11 @@ from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
+    """
+    Extiende el modelo nativo de facturas de Odoo (account.move)
+    para agregar funcionalidad de gestión de instancias Docker
+    asociadas a cada factura.
+    """    
     _inherit = 'account.move'
     
     # Relación inversa: busca instancias que tengan factura_id = este ID
@@ -27,24 +32,32 @@ class AccountMove(models.Model):
     
     def action_crear_instancia(self):
         """
-        Redirige al formulario de creación de instancia Docker
-        Pre-llena los campos partner_id y factura_id
+        Acción que se ejecuta al presionar el botón 'Crear Instancia' en la factura.
+        Valida que la factura cumpla las condiciones necesarias y luego redirige
+        al formulario de nueva instancia Docker con los datos del cliente prellenados.
         """
         self.ensure_one()
         
-        # Validación 1: Solo facturas de cliente
+        # Validación 1: Solo se pueden crear instancias desde facturas de venta (cliente),
+        # no desde facturas de proveedor u otros tipos de movimientos contables.
         if self.move_type != 'out_invoice':
             raise UserError(_('Solo puedes crear instancias desde facturas de cliente.'))
         
-        # Validación 2: Factura debe estar pagada
+        # Validación 2: La factura debe estar completamente pagada antes de
+        # aprovisionar una instancia, evitando crear recursos sin cobro confirmado.
         if self.payment_state != 'paid':
             raise UserError(_('La factura debe estar completamente pagada para crear la instancia.'))
         
-        # Validación 3: Debe tener cliente
+        # Validación 3: La factura debe tener un cliente asignado para poder
+        # vincular correctamente la instancia a un partner en Odoo.
         if not self.partner_id:
             raise UserError(_('La factura debe tener un cliente asignado.'))
         
-        # Redirigir a crear nueva instancia con datos prellenados
+        # Redirige al formulario de creación de instancia Docker.
+        # Usa el contexto 'default_*' para precargar campos automáticamente:
+        # - default_partner_id: asigna el cliente de la factura
+        # - default_factura_id: vincula la instancia a esta factura
+        # - default_name: genera un nombre descriptivo automático
         return {
             'type': 'ir.actions.act_window',
             'name': _('Nueva Instancia Docker - %s') % self.partner_id.name,
@@ -59,11 +72,16 @@ class AccountMove(models.Model):
     
     def action_ver_instancias(self):
         """
-        Abre la(s) instancia(s) creada(s) desde esta factura
+        Acción que se ejecuta al presionar el botón 'Ver Instancias' en la factura.
+        Navega a la(s) instancia(s) Docker vinculadas a esta factura.
+        Si hay una sola instancia, abre directamente su formulario.
+        Si hay varias, muestra una lista filtrada por esta factura.
         """
+        # Garantiza que la acción se ejecute sobre un único registro
         self.ensure_one()
         
-        # Si solo hay 1 instancia, abrirla directamente
+        # Caso 1: Una sola instancia — abre directamente el formulario
+        # para no obligar al usuario a pasar por una lista innecesaria.
         if self.instancia_count == 1:
             return {
                 'type': 'ir.actions.act_window',
@@ -74,7 +92,8 @@ class AccountMove(models.Model):
                 'target': 'current',
             }
         
-        # Si hay varias, mostrar lista filtrada
+        # Caso 2: Múltiples instancias — muestra una lista filtrada
+        # usando domain para mostrar solo las instancias de esta factura.
         return {
             'type': 'ir.actions.act_window',
             'name': _('Instancias de %s') % self.name,
