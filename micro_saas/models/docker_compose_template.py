@@ -19,10 +19,13 @@ class DockerComposeTemplate(models.Model):
     ]
 
     def _default_template_odoo_conf(self):
-        odoo_conf_content = "[options]\naddons_path =/mnt/extra-addons/ \n"
+        odoo_conf_content = "[options]\naddons_path = {{ADDONS_PATH}}\n"
         odoo_conf_content += "admin_passwd = admin\n"
         odoo_conf_content += "data_dir = /var/lib/odoo\n"
-        odoo_conf_content += "logfile = /var/log/odoo/odoo.log\n"
+        odoo_conf_content += "db_host = {{DB_HOST}}\n"
+        odoo_conf_content += "db_user = {{DB_USER}}\n"
+        odoo_conf_content += "db_password = {{DB_PASSWORD}}\n"
+        odoo_conf_content += "db_port = 5432\n"
         return odoo_conf_content
 
     name = fields.Char(string="Name", required=True)

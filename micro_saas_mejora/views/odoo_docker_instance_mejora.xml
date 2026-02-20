@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================ -->
+    <!-- VISTA: Gestión de Puertos Usados              -->
+    <!-- ============================================ -->
+
+    <!-- Vista Tree de puertos -->
+    <record id="view_puerto_usado_tree" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.tree</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <tree string="Puertos Usados" decoration-success="activo == True"
+                  decoration-muted="activo == False">
+                <field name="puerto"/>
+                <field name="tipo"/>
+                <field name="instancia_nombre"/>
+                <field name="activo" widget="boolean_toggle"/>
+                <field name="fecha_asignacion"/>
+                <field name="fecha_liberacion"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form de puertos -->
+    <record id="view_puerto_usado_form" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.form</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <form string="Puerto Usado">
+                <header>
+                    <button name="action_liberar_puerto"
+                            string="🔓 Liberar Puerto"
+                            type="object"
+                            class="btn-warning"
+                            invisible="activo == False"
+                            help="Libera este puerto para que pueda ser reasignado"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="puerto"/>
+                            <field name="tipo"/>
+                            <field name="activo" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="instancia_nombre"/>
+                            <field name="fecha_asignacion"/>
+                            <field name="fecha_liberacion"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para puertos usados -->
+    <record id="action_puerto_usado" model="ir.actions.act_window">
+        <field name="name">Puertos Usados</field>
+        <field name="res_model">micro.saas.puerto.usado</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_activos': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay puertos registrados aún
+            </p>
+            <p>
+                Los puertos se registran automáticamente cuando se inicia una instancia.
+                Puedes liberar puertos manualmente desde aquí.
+            </p>
+        </field>
+    </record>
+
+    <!-- Filtro de búsqueda para puertos -->
+    <record id="view_puerto_usado_search" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.search</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Puertos">
+                <field name="puerto"/>
+                <field name="instancia_nombre"/>
+                <filter name="activos" string="Activos (En uso)"
+                        domain="[('activo', '=', True)]"/>
+                <filter name="liberados" string="Liberados"
+                        domain="[('activo', '=', False)]"/>
+                <separator/>
+                <filter name="http" string="HTTP"
+                        domain="[('tipo', '=', 'http')]"/>
+                <filter name="longpolling" string="Longpolling"
+                        domain="[('tipo', '=', 'longpolling')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="groupby_tipo" string="Tipo"
+                            context="{'group_by': 'tipo'}"/>
+                    <filter name="groupby_activo" string="Estado"
+                            context="{'group_by': 'activo'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- MENÚ: Puertos Usados bajo Instance Management -->
+    <!-- ============================================ -->
+    <menuitem id="menu_puertos_usados"
+              name="Puertos Usados"
+              parent="micro_saas.menu_odoo_instance_management"
+              action="action_puerto_usado"
+              sequence="30"/>
+
+</odoo>

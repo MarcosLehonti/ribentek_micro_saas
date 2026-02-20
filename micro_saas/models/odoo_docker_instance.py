@@ -58,11 +58,19 @@ class OdooDockerInstance(models.Model):
             self.variable_ids = self.template_id.variable_ids
             self.variable_ids.filtered(lambda r: r.name == '{{HTTP-PORT}}').demo_value = self.http_port
             self.variable_ids.filtered(lambda r: r.name == '{{LONGPOLLING-PORT}}').demo_value = self.longpolling_port
+            self.variable_ids.filtered(lambda r: r.name == '{{DB_HOST}}').demo_value = 'db'
+            self.variable_ids.filtered(lambda r: r.name == '{{DB_USER}}').demo_value = 'odoo'
+            self.variable_ids.filtered(lambda r: r.name == '{{DB_PASSWORD}}').demo_value = 'odoo'
+            self.variable_ids.filtered(lambda r: r.name == '{{ADDONS_PATH}}').demo_value = '/mnt/extra-addons'
 
-    @api.onchange('http_port', 'longpolling_port')
+    @api.onchange('http_port', 'longpolling_port', 'addons_path')
     def onchange_http_port(self):
         self.variable_ids.filtered(lambda r: r.name == '{{HTTP-PORT}}').demo_value = self.http_port
         self.variable_ids.filtered(lambda r: r.name == '{{LONGPOLLING-PORT}}').demo_value = self.longpolling_port
+        self.variable_ids.filtered(lambda r: r.name == '{{ADDONS_PATH}}').demo_value = self.addons_path or '/mnt/extra-addons'
+        self.variable_ids.filtered(lambda r: r.name == '{{DB_HOST}}').demo_value = 'db'
+        self.variable_ids.filtered(lambda r: r.name == '{{DB_USER}}').demo_value = 'odoo'
+        self.variable_ids.filtered(lambda r: r.name == '{{DB_PASSWORD}}').demo_value = 'odoo'
 
     @api.onchange('name')
     def onchange_name(self):
@@ -79,6 +87,8 @@ class OdooDockerInstance(models.Model):
                                                        instance.name.replace('.', '_').replace(' ', '_').lower())
             instance.result_dc_body = self._get_formatted_body(template_body=instance.template_dc_body,
                                                                demo_fallback=True)
+            instance.result_odoo_conf = self._get_formatted_body(template_body=instance.template_odoo_conf,
+                                                                 demo_fallback=True)
 
     @api.depends('repository_line')
     def _compute_addons_path(self):
@@ -119,7 +129,7 @@ class OdooDockerInstance(models.Model):
                     'target': 'new',
                 }
 
-    def _get_available_port(self, start_port=8069, end_port=9000):
+    def _get_available_port(self, start_port=8070, end_port=9000):
         # Define el rango de puertos en el que deseas buscar disponibles
         # buscar todos los puertos de las instancias
         instances = self.env['odoo.docker.instance'].search([])
@@ -215,7 +225,7 @@ class OdooDockerInstance(models.Model):
         # cargar el archivo docker-compose.yml en el campo binario docker_compose_file
         try:
             # Ejecuta el comando de Docker Compose para levantar la instancia
-            cmd = f"docker-compose -f {modified_path} up -d"
+            cmd = f"docker-compose -f \"{modified_path}\" up -d"
             self.excute_command(cmd, shell=True, check=True)
             self.write({'state': 'running'})
         except Exception as e:
@@ -230,7 +240,7 @@ class OdooDockerInstance(models.Model):
 
                 try:
                     # Ejecuta el comando de Docker Compose para detener la instancia
-                    cmd = f"docker-compose -f {modified_path} down"
+                    cmd = f"docker-compose -f \"{modified_path}\" down"
                     self.excute_command(cmd, shell=True, check=True)
                     # Cambia la propiedad 'state' a 'stopped'
                     instance.write({'state': 'stopped'})
