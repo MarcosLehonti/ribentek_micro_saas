@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="restriccion_notificacion_carrito" inherit_id="website_sale.cart_lines">
+        <xpath expr="//div[@id='cart_products']" position="before">
+            <t t-if="request.params.get('notification') == 'un_producto'">
+                <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
+                    <i class="fa fa-exclamation-triangle me-2"/>
+                    <strong>¡Solo se permite un producto por compra!</strong>
+                    Si deseas adquirir más suscripciones, debes realizar
+                    una compra separada por cada una.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"/>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

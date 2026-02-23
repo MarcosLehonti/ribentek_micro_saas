@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Hereda la vista formulario de microsaas.subscription
+        para agregar campos y botones de correo de aviso de vencimiento.
+    -->
+    <record id="view_microsaas_subscription_form_correo_inherit" model="ir.ui.view">
+        <field name="name">microsaas.subscription.form.correo.inherit</field>
+        <field name="model">microsaas.subscription</field>
+        <field name="inherit_id" ref="microsaas_subscription.view_microsaas_subscription_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Campos invisibles para condiciones -->
+            <xpath expr="//header" position="inside">
+                <field name="correo_aviso_enviado" invisible="1"/>
+                <field name="correo_aviso_fecha" invisible="1"/>
+            </xpath>
+
+            <!-- Botones de correo después del botón Cancelar -->
+            <xpath expr="//header/button[@name='action_cancelar']" position="after">
+               <button name="action_enviar_correo_aviso_vencimiento"
+                    string="📧 Enviar Aviso de Vencimiento"
+                    type="object"
+                    class="btn-warning"
+                    invisible="correo_aviso_enviado == True or not partner_id or dias_restantes > 7 or dias_restantes &lt;= 0"
+                    help="Envía un correo al cliente avisando que su suscripción está por vencer."/>
+                <button name="action_reenviar_correo_aviso_vencimiento"
+                        string="🔄 Reenviar Aviso de vencimiento de suscripción"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="correo_aviso_enviado == False"
+                        help="Reenvía el correo de aviso de vencimiento al cliente."/>
+            </xpath>
+
+            <!-- Sección de estado del correo en el formulario -->
+            <xpath expr="//group/group[2]" position="after">
+                <group string="📧 Correo de Aviso" col="2">
+                    <field name="correo_aviso_enviado"
+                           widget="boolean_toggle"
+                           readonly="1"
+                           string="Aviso enviado"/>
+                    <field name="correo_aviso_fecha"
+                           readonly="1"
+                           string="Fecha de envío"
+                           invisible="correo_aviso_enviado == False"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--
+        Vista lista de correos de aviso enviados.
+        Permite ver el historial de todos los avisos enviados.
+    -->
+    <record id="view_microsaas_aviso_correos_tree" model="ir.ui.view">
+        <field name="name">microsaas.subscription.aviso.correos.tree</field>
+        <field name="model">microsaas.subscription</field>
+        <field name="arch" type="xml">
+            <tree string="Correos de Aviso Enviados"
+                  decoration-warning="state == 'expiring_soon'"
+                  decoration-danger="state == 'expired'"
+                  decoration-success="state == 'active'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="fecha_fin"/>
+                <field name="dias_restantes"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'expiring_soon'"
+                       decoration-danger="state == 'expired'"
+                       decoration-success="state == 'active'"/>
+                <field name="correo_aviso_enviado" widget="boolean_toggle" readonly="1"/>
+                <field name="correo_aviso_fecha" string="Fecha Envío Aviso"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir la vista de correos de aviso -->
+    <record id="action_microsaas_correos_aviso" model="ir.actions.act_window">
+        <field name="name">Correos de Aviso Enviados</field>
+        <field name="res_model">microsaas.subscription</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_microsaas_aviso_correos_tree"/>
+        <field name="domain">[('correo_aviso_enviado', '=', True)]</field>
+        <field name="context">{'search_default_correo_aviso_enviado': 1}</field>
+    </record>
+
+    <!-- Ítem de menú para acceder a los correos de aviso -->
+    <menuitem id="menu_microsaas_correos_aviso"
+              name="Correos de Aviso"
+              parent="microsaas_subscription.menu_microsaas_root"
+              action="action_microsaas_correos_aviso"
+              sequence="30"/>
+
+</odoo>

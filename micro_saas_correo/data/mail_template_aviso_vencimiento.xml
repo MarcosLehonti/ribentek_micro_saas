@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="email_template_aviso_vencimiento" model="mail.template">
+        <field name="name">Aviso de Vencimiento de Suscripción</field>
+        <field name="model_id" ref="microsaas_subscription.model_microsaas_subscription"/>
+        <field name="subject">⚠️ Tu suscripción {{ object.product_id.name }} vence pronto</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="email_from">{{ (user.email_formatted or user.company_id.email) }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+
+                <!-- HEADER -->
+                <div style="background-color: #e53e3e; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px;">⚠️ Tu suscripción está por vencer</h1>
+                </div>
+
+                <!-- BODY -->
+                <div style="background-color: #ffffff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+
+                    <p style="color: #333; font-size: 16px;">
+                        Hola <strong><t t-out="object.partner_id.name"/></strong>,
+                    </p>
+
+                    <p style="color: #555; font-size: 15px;">
+                        Te informamos que tu suscripción está próxima a vencer. 
+                        Renuévala para seguir disfrutando del servicio sin interrupciones.
+                    </p>
+
+                    <!-- CAJA DE DATOS -->
+                    <div style="background-color: #fff5f5; border-left: 4px solid #e53e3e; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                        <h3 style="color: #e53e3e; margin: 0 0 15px 0;">📋 Detalles de tu suscripción</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px 0; color: #666; font-weight: bold; width: 40%;">Plan:</td>
+                                <td style="padding: 8px 0; color: #333;">
+                                    <t t-out="object.product_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #666; font-weight: bold;">Referencia:</td>
+                                <td style="padding: 8px 0; color: #333;">
+                                    <t t-out="object.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #666; font-weight: bold;">Fecha de vencimiento:</td>
+                                <td style="padding: 8px 0; color: #e53e3e; font-weight: bold;">
+                                    <t t-out="object.fecha_fin.strftime('%d/%m/%Y') if object.fecha_fin else 'N/A'"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #666; font-weight: bold;">Días restantes:</td>
+                                <td style="padding: 8px 0; color: #e53e3e; font-weight: bold;">
+                                    <t t-out="object.dias_restantes"/> días
+                                </td>
+                            </tr>
+                            <t t-if="object.instancia_url">
+                                <tr>
+                                    <td style="padding: 8px 0; color: #666; font-weight: bold;">URL de tu instancia:</td>
+                                    <td style="padding: 8px 0;">
+                                        <a t-att-href="object.instancia_url" style="color: #3182ce;">
+                                            <t t-out="object.instancia_url"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                    </div>
+
+                    <!-- AVISO -->
+                    <div style="background-color: #fffbeb; border: 1px solid #f6ad55; padding: 15px; border-radius: 4px; margin: 20px 0;">
+                        <p style="color: #744210; margin: 0; font-size: 14px;">
+                            ⚠️ <strong>Importante:</strong> Si no renuevas tu suscripción antes de la fecha de vencimiento, 
+                            tu instancia será detenida automáticamente y perderás acceso al servicio.
+                        </p>
+                    </div>
+
+                    <p style="color: #555; font-size: 15px;">
+                        Para renovar tu suscripción, por favor contacta a nuestro equipo de soporte 
+                        o visita nuestra tienda y adquiere un nuevo plan.
+                    </p>
+
+                    <p style="color: #333; font-size: 15px; margin-top: 30px;">
+                        Gracias por confiar en nosotros.<br/>
+                        <strong>El equipo de MicroSaaS</strong>
+                    </p>
+                </div>
+
+                <!-- FOOTER -->
+                <div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+                    <p>Este correo fue enviado automáticamente, por favor no respondas a este mensaje.</p>
+                </div>
+
+            </div>
+        </field>
+    </record>
+</odoo>

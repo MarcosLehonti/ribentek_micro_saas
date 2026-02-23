@@ -102,3 +102,22 @@ class AccountMove(models.Model):
             'domain': [('factura_id', '=', self.id)],
             'target': 'current',
         }
+
+    def action_post(self):
+        """
+        Sobrescribe la confirmación de factura para validar que
+        solo tenga una línea de producto antes de publicarla.
+        """
+        for record in self:
+            if record.move_type == 'out_invoice':
+                # Filtra líneas reales (excluye secciones, notas, etc.)
+                lineas_producto = record.invoice_line_ids.filtered(
+                    lambda l: l.display_type not in ('line_section', 'line_note')
+                )
+                if len(lineas_producto) > 1:
+                    raise UserError(_(
+                        'Solo se permite un producto por factura. '
+                        'Esta factura tiene %d productos. '
+                        'Por favor, crea una factura separada por cada suscripción.'
+                    ) % len(lineas_producto))
+        return super().action_post()
