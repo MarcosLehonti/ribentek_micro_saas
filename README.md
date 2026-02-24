@@ -140,7 +140,7 @@ microsaas.subscription (Suscripción)
 
 
 
-## Diagramas de flujo 
+## Diagrama de flujo proceso de compra de suscripción (cliente)
 ```mermaid
 flowchart TD
 
@@ -165,6 +165,35 @@ M --> N[Vista Finalizar Pago]
 N --> O[Botón Aceptar y Firmar]
 O --> P[Validar Pedido]
 P --> Q[Pedido Confirmado]
+```
+
+
+
+
+## Diagrama de flujo proceso de verificar un pedido , levantar instancia de docker + suscripción (Administrador)
+
+```mermaid
+flowchart TD
+
+A[Sitio Web] --> B[Comercio Electrónico]
+B --> C[Órdenes]
+C --> D[Seleccionar Orden del Cliente]
+D --> E[Vista de Factura]
+E --> F[Crear Factura]
+F --> G[Confirmar Factura]
+G --> H[Registrar Pago]
+
+H --> I[Crear Instancia Docker]
+I --> J[Llenar Formulario<br/>Seleccionar Plantilla]
+J --> K[Iniciar Instancia]
+K --> L[Enviar Correo de Bienvenida]
+
+L --> E
+
+E --> N[Crear Suscripción]
+N --> O[Definir Fecha de Inicio]
+O --> P[Suscripción Activa]
+
 ```
 
 ## ⚠️ Notas Importantes
