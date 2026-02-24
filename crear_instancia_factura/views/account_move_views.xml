@@ -7,20 +7,21 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             
-            <!-- Agregar campo invisible para usar en condiciones -->
+            <!-- Agregar campos invisibles para usar en condiciones -->
             <xpath expr="//header" position="inside">
                 <field name="instancia_count" invisible="1"/>
+                <field name="es_renovacion" invisible="1"/>  <!-- ← nuevo -->
             </xpath>
             
             <!-- Agregar botones en el header -->
             <xpath expr="//header/button[@name='button_cancel']" position="after">
                 
-                <!-- Botón CREAR INSTANCIA (cuando NO existe) -->
+                <!-- Botón CREAR INSTANCIA (cuando NO existe y NO es renovación) -->
                 <button name="action_crear_instancia" 
                         string="Crear instancia" 
                         type="object" 
                         class="btn-primary"
-                        invisible="move_type != 'out_invoice' or payment_state != 'paid' or instancia_count > 0"
+                        invisible="move_type != 'out_invoice' or payment_state != 'paid' or instancia_count > 0 or es_renovacion == True"
                         help="Crear nueva instancia Docker para este cliente"/>
                 
                 <!-- Botón VER INSTANCIA (cuando YA existe) -->

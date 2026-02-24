@@ -121,3 +121,43 @@ class AccountMove(models.Model):
                         'Por favor, crea una factura separada por cada suscripción.'
                     ) % len(lineas_producto))
         return super().action_post()
+
+
+
+
+    # Campo que detecta si esta factura es una renovación
+    es_renovacion = fields.Boolean(
+        string='Es Renovación',
+        compute='_compute_es_renovacion',
+        store=False,
+    )
+
+    @api.depends('partner_id', 'invoice_line_ids', 'move_type')
+    def _compute_es_renovacion(self):
+        for rec in self:
+            if rec.move_type != 'out_invoice' or not rec.partner_id:
+                rec.es_renovacion = False
+                continue
+
+            if 'microsaas.subscription' not in self.env:
+                rec.es_renovacion = False
+                continue
+
+            linea_plan = None
+            for linea in rec.invoice_line_ids:
+                if linea.product_id and linea.product_id.product_tmpl_id.es_plan_microsaas:
+                    linea_plan = linea
+                    break
+
+            if not linea_plan:
+                rec.es_renovacion = False
+                continue
+
+            suscripcion = self.env['microsaas.subscription'].search([
+                ('partner_id', '=', rec.partner_id.id),
+                ('product_id', '=', linea_plan.product_id.id),
+                ('state', 'in', ('active', 'expiring_soon', 'expired')),
+            ], limit=1)
+
+            rec.es_renovacion = bool(suscripcion)
+

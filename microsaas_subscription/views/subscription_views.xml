@@ -8,8 +8,11 @@
                 <header>
                     <button name="action_activar" string="Activar" type="object" class="btn-primary"
                             invisible="state not in ('draft',)"/>
-                    <button name="action_renovar" string="Renovar" type="object" class="btn-primary"
-                            invisible="state not in ('active','expiring_soon','expired')"/>
+                    <!-- Botón Renovar deshabilitado - la renovación se hace desde la factura -->
+                    <button name="action_renovar" string="Renovar" type="object" class="btn-secondary"
+                            invisible="state not in ('active','expiring_soon','expired')"
+                            disabled="1"
+                            title="Para renovar, genera una nueva factura y usa el botón 'Renovar Suscripción' desde ahí"/>
                     <button name="action_cancelar" string="Cancelar" type="object"
                             invisible="state in ('cancelled',)"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,expiring_soon,expired,cancelled"/>
