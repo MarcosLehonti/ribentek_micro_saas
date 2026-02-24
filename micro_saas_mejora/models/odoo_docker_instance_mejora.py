@@ -109,7 +109,8 @@ class OdooDockerInstanceMejora(models.Model):
             # Longpolling = siguiente puerto disponible
             longpolling_port = self._get_available_port(http_port + 1)
             self.longpolling_port = str(longpolling_port)
-        except UserError:
+        except Exception as e:
+            _logger.warning("Error asignando puertos automáticamente: %s", str(e))
             self.http_port = ''
             self.longpolling_port = ''
             return {
@@ -287,7 +288,7 @@ class OdooDockerInstanceMejora(models.Model):
                 stderr=subprocess.PIPE,
                 timeout=900  # 15 minutos máximo
             )
-            self.add_to_log(f"[INFO] ✅ Imagen {image_name} descargada correctamente")
+            self.add_to_log(f"[INFO] ✅ Imagen {image_name} descargada correctamente312312321321")
         except subprocess.TimeoutExpired:
             self.add_to_log(
                 f"[WARN] ⏰ La descarga de {image_name} tardó más de 15 minutos. "
@@ -535,3 +536,116 @@ class OdooDockerInstanceMejora(models.Model):
                 })
             except (ValueError, TypeError):
                 pass
+
+    # ==========================================
+    #  UTILIDADES Y LOGS
+    # ==========================================
+
+    def add_to_log(self, message):
+        """Override: Limpia el log y evita el 'False' inicial."""
+        self.ensure_one()
+        now = fields.Datetime.now()
+        # Intentar obtener hora local del contexto
+        try:
+            timestamp = fields.Datetime.context_timestamp(self, now).strftime("%d/%m/%Y, %H:%M:%S")
+        except:
+            timestamp = now.strftime("%d/%m/%Y, %H:%M:%S")
+
+        current_log = self.log if self.log and str(self.log) != 'False' else ""
+        
+        # Limitar el tamaño del log para no degradar performance
+        if len(current_log) > 20000:
+            current_log = current_log[:10000] + "...[LOG TRUNCADO PARA AGILIDAD]..."
+
+        new_entry = f"<br/>\n#{timestamp} {message}"
+        self.log = new_entry + current_log
+
+    def _create_odoo_conf(self):
+        """
+        Override: Optimiza odoo.conf para evitar errores de estilos (proxy_mode)
+        y crasheos (logfile).
+        """
+        for instance in self:
+            odoo_conf_path = os.path.join(instance.instance_data_path, "etc", 'odoo.conf')
+            instance._makedirs(os.path.dirname(odoo_conf_path))
+            try:
+                # Obtenemos el contenido del template
+                content = instance.result_odoo_conf or ""
+                
+                lines = content.split('\n')
+                new_lines = []
+                has_proxy_mode = False
+                has_options_header = False
+                
+                for line in lines:
+                    clean_line = line.strip()
+                    # 1. Eliminar logfile (causa crash en Docker oficial)
+                    if clean_line.startswith('logfile'):
+                        continue
+                    # 2. Corregir addons_path para incluir los módulos base de Odoo
+                    if clean_line.startswith('addons_path'):
+                        path_val = line.split('=', 1)[1].strip()
+                        base_path = "/usr/lib/python3/dist-packages/odoo/addons"
+                        if base_path not in path_val:
+                            line = f"addons_path = {base_path},{path_val}"
+                    
+                    # 3. Detectar si ya tiene proxy_mode
+                    if clean_line.startswith('proxy_mode'):
+                        has_proxy_mode = True
+                    if clean_line == '[options]':
+                        has_options_header = True
+                    
+                    new_lines.append(line)
+                
+                # 3. Forzar configuraciones críticas para SaaS
+                if not has_options_header:
+                    new_lines.insert(0, '[options]')
+                    has_options_header = True
+                
+                if not has_proxy_mode:
+                    # Insertar proxy_mode justo debajo de [options]
+                    idx = new_lines.index('[options]')
+                    new_lines.insert(idx + 1, "proxy_mode = True")
+                    new_lines.insert(idx + 1, "db_maxconn = 64") # Mejora estabilidad
+                
+                final_content = '\n'.join(new_lines)
+                instance.create_file(odoo_conf_path, final_content)
+                instance.add_to_log(f"[INFO] Configuración odoo.conf generada correctamente (proxy_mode=ON)")
+                
+            except Exception as e:
+                instance.add_to_log(f"[ERROR] No se pudo generar odoo.conf: {str(e)}")
+                raise UserError(f"Error al crear configuración: {str(e)}")
+
+    def action_view_instance_ports(self):
+        """Acción para el Smart Button de Puertos."""
+        self.ensure_one()
+        return {
+            'name': 'Puertos de Instancia',
+            'type': 'ir.actions.act_window',
+            'res_model': 'micro.saas.puerto.usado',
+            'view_mode': 'tree,form',
+            'domain': [('instancia_nombre', '=', self.name)],
+            'context': {'default_instancia_nombre': self.name, 'default_activo': True},
+        }
+
+    def action_ver_puertos_disponibles(self):
+        """
+        Abre el wizard de escaneo de puertos disponibles.
+        Aparece como botón en el header del formulario de instancia.
+        """
+        self.ensure_one()
+        wizard = self.env['micro.saas.wizard.puertos.disponibles'].create({
+            'instancia_id': self.id,
+            'puerto_inicio': _DEFAULT_PORT_START,
+            'puerto_fin': _DEFAULT_PORT_END,
+            'max_resultados': 30,
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': '🔌 Puertos Disponibles',
+            'res_model': 'micro.saas.wizard.puertos.disponibles',
+            'view_mode': 'form',
+            'res_id': wizard.id,
+            'target': 'new',
+            'context': self.env.context,
+        }

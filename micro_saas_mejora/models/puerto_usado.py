@@ -47,9 +47,43 @@ class PuertoUsado(models.Model):
     ]
 
     def action_liberar_puerto(self):
-        """Permite al administrador liberar manualmente un puerto."""
+        """
+        Libera un puerto. Si la instancia asociada está corriendo,
+        pide confirmación antes de proceder.
+        """
         for record in self:
-            record.write({
-                'activo': False,
-                'fecha_liberacion': fields.Datetime.now(),
-            })
+            if record.activo and record.instancia_nombre:
+                # Verificar si hay una instancia corriendo con este nombre
+                instancia = self.env['odoo.docker.instance'].search([
+                    ('name', '=', record.instancia_nombre),
+                    ('state', '=', 'running'),
+                ], limit=1)
+
+                if instancia:
+                    # Mostrar diálogo de confirmación
+                    return {
+                        'type': 'ir.actions.act_window',
+                        'name': '⚠️ Instancia en Ejecución',
+                        'res_model': 'micro.saas.puerto.usado',
+                        'view_mode': 'form',
+                        'res_id': record.id,
+                        'target': 'new',
+                        'context': {
+                            '_confirmar_liberar': True,
+                        },
+                    }
+
+            # Sin instancia corriendo → liberar directamente
+            record._do_liberar_puerto()
+
+    def action_confirmar_liberar_puerto(self):
+        """Acción llamada cuando el usuario confirma liberar el puerto."""
+        for record in self:
+            record._do_liberar_puerto()
+
+    def _do_liberar_puerto(self):
+        """Lógica real de liberación del puerto."""
+        self.write({
+            'activo': False,
+            'fecha_liberacion': fields.Datetime.now(),
+        })

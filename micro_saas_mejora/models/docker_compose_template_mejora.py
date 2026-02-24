@@ -19,12 +19,10 @@ class DockerComposeTemplateMejora(models.Model):
 
     def _default_template_odoo_conf(self):
         """
-        Override: NO incluir logfile para evitar que Odoo crashee al inicio
-        porque /var/log/odoo/ no existe en las imágenes oficiales.
-        Los logs salen por stdout (visibles con docker logs).
+        Override: NO incluir logfile y asegurar addons_path completo.
         """
         odoo_conf_content = "[options]\n"
-        odoo_conf_content += "addons_path = /mnt/extra-addons\n"
+        odoo_conf_content += "addons_path = /usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons\n"
         odoo_conf_content += "admin_passwd = admin\n"
         odoo_conf_content += "data_dir = /var/lib/odoo\n"
         odoo_conf_content += "db_host = db\n"

@@ -11,21 +11,15 @@
         - Registrar si el correo ya fue enviado para evitar duplicados
         - Plantilla de correo HTML profesional y personalizable
     """,
-    "author": "Marcos Guzman",
+    "author": "Marco-Adolfo-Ribentek",
     "license": "LGPL-3",
     "version": "17.0.1.0.0",
-    "depends": [
-        "base",
-        "mail",
-        "account",
-        "micro_saas",
-        "crear_instancia_factura",
-    ],
+    "depends": ["mail", "micro_saas", "crear_instancia_factura"],
     "data": [
         "data/mail_template.xml",
         "views/odoo_docker_instance_correo.xml",
     ],
     "installable": True,
     "application": False,
-    "auto_install": False,
+    "auto_install": True,
 }

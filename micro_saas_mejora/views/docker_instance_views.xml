@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Herencia de la vista Form para controlar los estados de los botones -->
+    <record id="view_instance_form_inherit" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.form.inherit</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- 1. El botón original "Start Instance" se oculta cuando ya está corriendo -->
+            <xpath expr="//button[@name='start_instance']" position="attributes">
+                <attribute name="invisible">state == 'running'</attribute>
+            </xpath>
+
+            <!-- 2. Agregamos el botón / indicador "En linea" (deshabilitado) que solo se ve al estar corriendo -->
+            <xpath expr="//button[@name='start_instance']" position="after">
+                <button string="En linea" 
+                        class="btn-success" 
+                        invisible="state != 'running'" 
+                        readonly="1"
+                        style="pointer-events: none; opacity: 1;"/>
+            </xpath>
+
+            <!-- 3. Aseguramos que "Stop Instance" solo aparezca cuando la instancia esté corriendo -->
+            <xpath expr="//button[@name='stop_instance']" position="attributes">
+                <attribute name="invisible">state != 'running'</attribute>
+                <attribute name="class">btn-danger</attribute>
+            </xpath>
+
+            <!-- 4. Aseguramos que "Restart Instance" solo aparezca cuando la instancia esté corriendo -->
+            <xpath expr="//button[@name='restart_instance']" position="attributes">
+                <attribute name="invisible">state != 'running'</attribute>
+                <attribute name="class">btn-warning</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Herencia de la vista Kanban para aplicar la misma lógica -->
+    <record id="view_instance_kanban_inherit" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.kanban.inherit</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_kanban"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//div[hasclass('oe_kanban_card_manage')]" position="replace">
+                <div class="oe_kanban_card_manage">
+                    <!-- Botón Start: Visible solo si NO está en ejecución -->
+                    <button t-if="record.state.raw_value != 'running'" 
+                            type="object" name="start_instance" class="btn btn-primary">
+                        Start Instance
+                    </button>
+                    
+                    <!-- Indicador En Linea: Visible solo si SÍ está en ejecución y no es clickeable -->
+                    <button t-if="record.state.raw_value == 'running'" 
+                            class="btn btn-success" disabled="1">
+                        En linea
+                    </button>
+
+                    <!-- Botón Stop: Visible solo si SÍ está en ejecución -->
+                    <button t-if="record.state.raw_value == 'running'" 
+                            type="object" name="stop_instance" class="btn btn-danger">
+                        Stop
+                    </button>
+                    
+                    <!-- Botón Restart: Visible solo si SÍ está en ejecución -->
+                    <button t-if="record.state.raw_value == 'running'" 
+                            type="object" name="restart_instance" class="btn btn-warning">
+                        Restart
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

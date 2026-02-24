@@ -22,18 +22,18 @@
         - Mensajes de log claros con emojis y diagnóstico automático
         - Mejor manejo de errores con soluciones sugeridas
     """,
-    "author": "Marcos Guzman",
+    "author": "Marco-Adolfo-Ribentek",
     "license": "LGPL-3",
     "version": "17.0.2.0.0",
-    "depends": [
-        "base",
-        "micro_saas",
-    ],
+    "depends": ["base", "micro_saas"],
     "data": [
         "security/ir.model.access.csv",
+        "views/prueba.xml",
+        "views/wizard_puertos_disponibles.xml",
         "views/odoo_docker_instance_mejora.xml",
+        "views/docker_instance_views.xml",
     ],
     "installable": True,
     "application": False,
-    "auto_install": False,
+    "auto_install": True,
 }
