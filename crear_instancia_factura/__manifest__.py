@@ -17,7 +17,7 @@
         * Relación directa entre factura e instancia
         * Botón cambia a "Ver Instancia" cuando ya existe
     """,
-    'author': 'Marcos Guzman',
+    'author': 'Marco-Adolfo-Ribentek',
     'website': 'https://www.example.com',
     'license': 'LGPL-3',
     'depends': [
@@ -32,5 +32,5 @@
     ],
     'installable': True,
     'application': False,
-    'auto_install': False,
+    'auto_install': True,
 }

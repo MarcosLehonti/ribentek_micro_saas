@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista form del wizard de puertos disponibles -->
+    <record id="view_wizard_puertos_disponibles_form" model="ir.ui.view">
+        <field name="name">micro.saas.wizard.puertos.disponibles.form</field>
+        <field name="model">micro.saas.wizard.puertos.disponibles</field>
+        <field name="arch" type="xml">
+            <form string="🔌 Puertos Disponibles">
+                <sheet>
+                    <!--
+                        ODOO 17: Todo campo referenciado en 'invisible' DEBE estar
+                        declarado como <field> en la vista (aunque sea invisible="1").
+                    -->
+                    <field name="total_encontrados" invisible="1"/>
+                    <field name="instancia_id" invisible="1"/>
+
+                    <div class="alert alert-info" role="alert">
+                        <strong>ℹ️ Escáner de Puertos Disponibles</strong><br/>
+                        Ajusta el rango y haz clic en <strong>🔍 Escanear</strong>
+                        para ver qué puertos están libres para nuevas instancias.
+                    </div>
+
+                    <group string="Parámetros del Escaneo" col="3">
+                        <field name="puerto_inicio"/>
+                        <field name="puerto_fin"/>
+                        <field name="max_resultados"/>
+                    </group>
+
+                    <div class="text-center" style="margin: 12px 0;">
+                        <button name="action_escanear"
+                                string="🔍 Escanear Puertos"
+                                type="object"
+                                class="btn-primary"/>
+                    </div>
+
+                    <!-- Resumen HTML: visible solo después de escanear -->
+                    <field name="resumen"
+                           widget="html"
+                           nolabel="1"
+                           invisible="total_encontrados == 0"/>
+
+                    <!-- Tabla de puertos disponibles: visible solo si hay resultados -->
+                    <field name="puerto_ids"
+                           nolabel="1"
+                           invisible="total_encontrados == 0">
+                        <tree string="Puertos Disponibles"
+                              create="false"
+                              delete="false"
+                              editable="false">
+                            <field name="puerto" string="Puerto 🔌"/>
+                            <field name="disponible"
+                                   string="Disponible"
+                                   widget="boolean_toggle"/>
+                            <field name="nota" string="Estado"/>
+                        </tree>
+                    </field>
+
+                </sheet>
+                <footer>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard de puertos disponibles -->
+    <record id="action_wizard_puertos_disponibles" model="ir.actions.act_window">
+        <field name="name">🔌 Puertos Disponibles</field>
+        <field name="res_model">micro.saas.wizard.puertos.disponibles</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_wizard_puertos_disponibles_form"/>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

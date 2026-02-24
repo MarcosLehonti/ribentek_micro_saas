@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================ -->
+    <!-- VISTA: Gestión de Puertos Usados              -->
+    <!-- ============================================ -->
+
+    <!-- Vista Tree de puertos -->
+    <record id="view_puerto_usado_tree" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.tree</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <tree string="Puertos Usados" decoration-success="activo == True"
+                  decoration-muted="activo == False">
+                <field name="puerto"/>
+                <field name="tipo"/>
+                <field name="instancia_nombre"/>
+                <field name="activo" widget="boolean_toggle"/>
+                <field name="fecha_asignacion"/>
+                <field name="fecha_liberacion"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form de puertos -->
+    <record id="view_puerto_usado_form" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.form</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <form string="Puerto Usado">
+                <header>
+                    <!-- Botón normal: liberar (verifica si hay instancia running) -->
+                    <button name="action_liberar_puerto"
+                            string="🔓 Liberar Puerto"
+                            type="object"
+                            class="btn-warning"
+                            invisible="activo == False"
+                            help="Libera este puerto para que pueda ser reasignado"/>
+                    <!-- Botón de confirmación: solo aparece en el diálogo modal -->
+                    <button name="action_confirmar_liberar_puerto"
+                            string="⚠️ Sí, liberar de todas formas"
+                            type="object"
+                            class="btn-danger"
+                            invisible="activo == False"
+                            context="{'_confirmar_liberar': True}"
+                            help="Confirma la liberación aunque la instancia esté corriendo"/>
+                </header>
+                <sheet>
+                    <!-- Aviso visual cuando la instancia sigue corriendo -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="activo == False">
+                        <strong>⚠️ Atención:</strong>
+                        Si liberas este puerto y la instancia <em><field name="instancia_nombre" readonly="1" nolabel="1"/></em>
+                        sigue en ejecución, puede quedar inaccesible o generar conflictos de red.
+                        Asegúrate de detener la instancia primero con el botón
+                        <strong>"Stop Instance"</strong> antes de liberar el puerto.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="puerto"/>
+                            <field name="tipo"/>
+                            <field name="activo" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="instancia_nombre"/>
+                            <field name="fecha_asignacion"/>
+                            <field name="fecha_liberacion"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- MENÚ FINAL: Puertos Usados                   -->
+    <!-- Mover la acción y menú DESPUÉS de las vistas -->
+    <!-- ============================================ -->
+
+    <record id="view_puerto_usado_search" model="ir.ui.view">
+        <field name="name">micro.saas.puerto.usado.search</field>
+        <field name="model">micro.saas.puerto.usado</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Puertos">
+                <field name="puerto"/>
+                <field name="instancia_nombre"/>
+                <filter name="activos" string="Activos (En uso)"
+                        domain="[('activo', '=', True)]"/>
+                <filter name="liberados" string="Liberados"
+                        domain="[('activo', '=', False)]"/>
+                <separator/>
+                <filter name="http" string="HTTP"
+                        domain="[('tipo', '=', 'http')]"/>
+                <filter name="longpolling" string="Longpolling"
+                        domain="[('tipo', '=', 'longpolling')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="groupby_tipo" string="Tipo"
+                            context="{'group_by': 'tipo'}"/>
+                    <filter name="groupby_activo" string="Estado"
+                            context="{'group_by': 'activo'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- ============================================ -->
+    <!-- HERENCIA: Botón en Header de Instancia       -->
+    <!-- ============================================ -->
+    <record id="view_odoo_docker_instance_form_mejora_header" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.form.mejora.header</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar botón "Ver Puertos Disponibles" en el header, después de "Restart Instance" -->
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button name="action_ver_puertos_disponibles"
+                        string="🔌 Puertos Disponibles"
+                        type="object"
+                        class="btn-info"
+                        help="Ver qué puertos están libres para asignar a instancias"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- HERENCIA: Smart Button en Sheet de Instancia -->
+    <!-- ============================================ -->
+    <record id="view_odoo_docker_instance_form_mejora_ports" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.form.mejora.ports</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+            <!-- Insertar el botón-caja (button_box) antes del primer group dentro del sheet -->
+            <xpath expr="//sheet/group[1]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_instance_ports"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-plug"
+                            help="Puertos asignados a esta instancia">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Puertos</span>
+                            <span class="o_stat_text">Usados</span>
+                        </div>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    </record>
+
+</odoo>
+

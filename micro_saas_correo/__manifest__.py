@@ -24,6 +24,7 @@
         "crear_instancia_factura",
         "microsaas_subscription",  # ← agregar esto
     ],
+
     "data": [
         "data/mail_template.xml",
         "data/mail_template_aviso_vencimiento.xml",  # ← nuevo
@@ -32,5 +33,6 @@
     ],
     "installable": True,
     "application": False,
-    "auto_install": False,
+    "auto_install": True,
 }
+

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_create,perm_write,perm_unlink
+access_micro_saas_puerto_usado,access_micro_saas_puerto_usado,model_micro_saas_puerto_usado,,1,1,1,1
+access_micro_saas_wizard_puertos_disponibles,access_micro_saas_wizard_puertos_disponibles,model_micro_saas_wizard_puertos_disponibles,,1,1,1,1
+access_micro_saas_linea_puerto_disponible,access_micro_saas_linea_puerto_disponible,model_micro_saas_linea_puerto_disponible,,1,1,1,1

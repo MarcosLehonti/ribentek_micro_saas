@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="action_puertos_usados" model="ir.actions.act_window">
+        <field name="name">Puertos Usados</field>
+        <field name="res_model">micro.saas.puerto.usado</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_activos': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay puertos registrados aún.
+            </p>
+            <p>
+                Los puertos se registran automáticamente cuando se inicia una instancia.
+                Puedes liberar puertos manualmente desde aquí.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_puertos_usados" 
+              name="Puertos usados" 
+              parent="micro_saas.menu_odoo_instance_management" 
+              action="action_puertos_usados" 
+              sequence="20"/>
+</odoo>
