@@ -275,7 +275,7 @@ O --> P[Suscripción Activa]
 ```
 
 ## Diagrama de flujo proceso de Renovación de Suscripción
-
+```mermaid
 flowchart TD
 
 subgraph CLIENTE["👤 Cliente"]
@@ -296,6 +296,7 @@ subgraph ADMIN["🛠️ Administrador"]
 end
 
 H --> I
+```
 
 ## ⚠️ Notas Importantes
 
