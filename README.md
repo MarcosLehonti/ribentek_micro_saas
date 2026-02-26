@@ -112,6 +112,32 @@ Módulo de cara al cliente que expone el flujo de pago de forma simplificada. Co
 
 ---
 
+### 7. `micro_saas_traducciones` — Traducciones del Sistema
+
+Módulo auxiliar encargado de centralizar y distribuir las traducciones de la interfaz de usuario para todos los módulos del ecosistema MicroSaaS. Garantiza que las etiquetas, mensajes de error, nombres de campos y textos de vistas estén correctamente localizados al idioma configurado.
+
+**Responsabilidades:**
+- Proveer archivos `.po` con las cadenas traducidas para cada módulo del sistema
+- Cubrir traducciones de campos, vistas, mensajes de validación y menús
+- Mantener consistencia terminológica entre módulos (`instancia`, `suscripción`, `plantilla`, etc.)
+
+**Módulos cubiertos:**
+
+| Módulo | Cobertura |
+|--------|-----------|
+| `micro_saas` | Campos, vistas, errores y menús |
+| `micro_saas_correo` | Plantillas y mensajes de correo |
+| `microsaas_subscription` | Estados y mensajes de suscripción |
+| `crear_instancia_factura` | Campos y acciones de factura |
+
+**Idiomas soportados:**
+
+| Código | Idioma |
+|--------|--------|
+| `es` | Español |
+
+---
+
 ## 🔄 Flujo General del Sistema
 
 ```
@@ -222,8 +248,6 @@ P --> Q[Pedido Confirmado]
 ```
 
 
-
-
 ## Diagrama de flujo proceso de verificar un pedido , levantar instancia de docker + suscripción (Administrador)
 
 ```mermaid
@@ -250,8 +274,28 @@ O --> P[Suscripción Activa]
 
 ```
 
+## Diagrama de flujo proceso de Renovación de Suscripción
 
+flowchart TD
 
+subgraph CLIENTE["👤 Cliente"]
+    A[Mi Cuenta] --> B[Mis Suscripciones]
+    B --> C[Seleccionar Suscripción]
+    C --> D[Botón Renovar Suscripción]
+    D --> E[Se Procesa el Pedido de Renovación]
+    E --> F[Vista de Pago]
+    F --> G[Aceptar y Firmar]
+    G --> H[Pedido de Renovación Confirmado]
+end
+
+subgraph ADMIN["🛠️ Administrador"]
+    I[Vista de Facturas] --> J[Seleccionar Factura del Cliente]
+    J --> K[Botón Renovar Suscripción]
+    K --> L[Se Agrega Factura al Historial de Renovaciones]
+    L --> M[Suscripción Renovada y Activa]
+end
+
+H --> I
 
 ## ⚠️ Notas Importantes
 
