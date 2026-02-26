@@ -58,6 +58,60 @@ Gestiona el ciclo de vida de las suscripciones asociadas a cada instancia. Se ac
 
 ---
 
+### 4. `micro_saas_correo` — Envío de Correos Transaccionales
+
+Se encarga de gestionar todas las comunicaciones por correo electrónico del sistema MicroSaaS mediante un servidor SMTP configurado. Utiliza plantillas predefinidas para cada evento relevante del ciclo de vida de la instancia y la suscripción.
+
+**Responsabilidades:**
+- Configurar y gestionar la conexión con el servidor SMTP
+- Enviar correo de **bienvenida** al momento de crear la instancia
+- Enviar correo de **instancia levantada** cuando el contenedor pasa a estado `running`
+- Enviar correo de **recordatorio de expiración** cuando la suscripción está próxima a vencer
+
+**Plantillas de correo:**
+
+| Plantilla | Evento disparador |
+|-----------|-------------------|
+| Bienvenida | Creación de la instancia |
+| Instancia activa | Estado cambia a `running` |
+| Recordatorio de expiración | Suscripción en estado `expiring_soon` |
+
+---
+
+### 5. `restriccion_carrito_un_producto` — Restricción de Un Producto por Compra
+
+Módulo de validación que garantiza que cada factura/orden de compra contenga únicamente una suscripción por producto. Evita que el cliente pueda adquirir más de una unidad del mismo producto suscripción en una misma transacción.
+
+**Responsabilidades:**
+- Interceptar la confirmación de la orden o factura antes de procesarla
+- Validar que no exista más de una línea con el mismo producto de tipo suscripción
+- Lanzar un mensaje de error descriptivo si se detecta duplicidad, bloqueando la operación
+
+**Comportamiento de validación:**
+
+| Situación | Resultado |
+|-----------|-----------|
+| Una suscripción por compra | ✅ Permitido |
+| Más de una unidad del mismo producto | ❌ Error: "Es un producto por compra" |
+| Productos distintos en la misma compra | ❌ Error: "Es un producto por compra" |
+
+**Modelo extendido:** `sale.order` / `account.move`
+
+---
+
+### 6. `micro_saas_interfaz_pago` — Interfaz de Pago del Cliente
+
+Módulo de cara al cliente que expone el flujo de pago de forma simplificada. Contiene el botón que redirige directamente a la firma y confirmación dentro del proceso de pago, permitiendo al cliente completar la operación sin navegar por pantallas intermedias innecesarias.
+
+**Responsabilidades:**
+- Renderizar el botón de acción de pago en el portal del cliente
+- Redirigir directamente al paso de firma dentro de la operación de pago
+- Integrarse con el flujo de `account.payment` o el portal de ventas existente
+
+**Modelo extendido:** Portal de cliente / `account.move` (vista cliente)
+
+---
+
 ## 🔄 Flujo General del Sistema
 
 ```
@@ -195,6 +249,9 @@ N --> O[Definir Fecha de Inicio]
 O --> P[Suscripción Activa]
 
 ```
+
+
+
 
 ## ⚠️ Notas Importantes
 
