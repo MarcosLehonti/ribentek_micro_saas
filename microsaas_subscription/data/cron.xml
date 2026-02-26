@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_microsaas_subscription" model="ir.sequence">
+        <field name="name">MicroSaaS Suscripción</field>
+        <field name="code">microsaas.subscription</field>
+        <field name="prefix">SUB/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="cron_verificar_suscripciones" model="ir.cron">
+        <field name="name">MicroSaaS: Verificar Suscripciones Vencidas</field>
+        <field name="model_id" ref="model_microsaas_subscription"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_verificar_suscripciones()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="doall">False</field>
+    </record>
+</odoo>

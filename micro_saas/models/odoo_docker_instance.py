@@ -2,7 +2,7 @@ import logging
 import os
 import socket
 import subprocess
-from datetime import datetime
+from datetime import datetime, date
 
 from odoo import models, fields, api
 
@@ -31,7 +31,7 @@ class OdooDockerInstance(models.Model):
                                    precompute=True, readonly=False)
     
     # ============================================
-    # NUEVOS CAMPOS PARA RELACIÓN CON FACTURAS
+    # CAMPOS PARA RELACIÓN CON FACTURAS
     # ============================================
     factura_id = fields.Many2one(
         'account.move',
@@ -105,7 +105,6 @@ class OdooDockerInstance(models.Model):
         now = datetime.now()
         new_log = "</br> \n#" + str(now.strftime("%m/%d/%Y, %H:%M:%S")) + " " + str(message) + " " + str(self.log)
         if len(new_log) > 10000:
-            # Si el registro supera los 1000 caracteres, límpialo
             new_log = "</br>" + str(now.strftime("%m/%d/%Y, %H:%M:%S")) + " " + str(message)
         self.log = new_log
 
@@ -129,37 +128,29 @@ class OdooDockerInstance(models.Model):
                     'target': 'new',
                 }
 
-    def _get_available_port(self, start_port=8070, end_port=9000):
-        # Define el rango de puertos en el que deseas buscar disponibles
-        # buscar todos los puertos de las instancias
+
+    def _get_available_port(self, start_port=8069, end_port=9000):
         instances = self.env['odoo.docker.instance'].search([])
-        # crear una lista con los puertos de las instancias
         ports = []
         for instance in instances:
             ports.append(int(instance.http_port))
             ports.append(int(instance.longpolling_port))
 
         for port in range(start_port, end_port + 1):
-            # Si el puerto ya está en uso, continúa con el siguiente
             if port in ports:
                 continue
-            # Intenta crear un socket en el puerto
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)  # Establece un tiempo de espera para la conexión
-
+            sock.settimeout(1)
             try:
-                # Intenta vincular el socket al puerto
                 sock.bind(("0.0.0.0", port))
-                return port  # Si tiene éxito, el puerto está disponible
+                return port
             except Exception as e:
-                # Si no tiene éxito, el puerto ya está en uso
                 pass
             finally:
                 sock.close()
         self.add_to_log("[ERROR] No se encontraron puertos disponibles en el rango especificado.")
 
     def _update_docker_compose_file(self):
-        # Ruta donde se guardará el archivo docker-compose.yml modificado
         self._makedirs(self.instance_data_path)
         modified_path = os.path.join(self.instance_data_path, 'docker-compose.yml')
         self.create_file(modified_path, self.result_dc_body)
@@ -186,7 +177,6 @@ class OdooDockerInstance(models.Model):
                 except Exception as e:
                     self.add_to_log(
                         f"[ERROR] Error to clone repository: {line.repository_id.name} (Branch: {line.name})")
-                    # error trace
                     if hasattr(e, 'stderr') and e.stderr:
                         self.add_to_log("[ERROR]  " + e.stderr.decode('utf-8'))
                     else:
@@ -209,25 +199,74 @@ class OdooDockerInstance(models.Model):
                     instance.add_to_log("[ERROR]  " + str(e))
                 instance.write({'state': 'stopped'})
 
+    # ============================================
+    # ACTIVAR SUSCRIPCIÓN AL LEVANTAR INSTANCIA
+    # ============================================
+    def _activar_suscripcion(self):
+        """
+        Busca la suscripción en borrador asociada a esta instancia
+        y la activa, registrando fecha_inicio = hoy.
+        """
+        # Verificar que el módulo de suscripciones esté instalado
+        if 'microsaas.subscription' not in self.env:
+            return
+
+        suscripcion = self.env['microsaas.subscription'].search([
+            ('instancia_id', '=', self.id),
+            ('state', '=', 'draft'),
+        ], limit=1)
+
+        if suscripcion:
+            suscripcion.write({
+                'fecha_inicio': date.today(),
+                'state': 'active',
+            })
+            self.add_to_log(
+                f"[INFO] Suscripción {suscripcion.name} activada. "
+                f"Vence el: {suscripcion.fecha_fin.strftime('%d/%m/%Y')}"
+            )
+        else:
+            self.add_to_log("[INFO] No se encontró suscripción en borrador asociada a esta instancia.")
+
+    def _pausar_suscripcion(self):
+        """
+        Cuando la instancia se detiene, marca la suscripción como pausada
+        pero NO la vence (eso lo hace el cron).
+        """
+        if 'microsaas.subscription' not in self.env:
+            return
+
+        suscripcion = self.env['microsaas.subscription'].search([
+            ('instancia_id', '=', self.id),
+            ('state', 'in', ('active', 'expiring_soon')),
+        ], limit=1)
+
+        if suscripcion:
+            self.add_to_log(
+                f"[INFO] Instancia detenida. Suscripción {suscripcion.name} "
+                f"sigue activa hasta {suscripcion.fecha_fin.strftime('%d/%m/%Y')}."
+            )
+    # ============================================
+
     def start_instance(self):
-        # Obtén un puerto disponible
         self.add_to_log("[INFO] Starting Odoo Instance")
         self._update_docker_compose_file()
 
-        # Clonar repositorios y crear odoo.conf
         self._clone_repositories()
         self._create_odoo_conf()
 
-        # Ruta al archivo docker-compose.yml modificado
         self.add_to_log("[INFO] Path to modified docker-compose.yml file")
         modified_path = self.instance_data_path + '/docker-compose.yml'
 
-        # cargar el archivo docker-compose.yml en el campo binario docker_compose_file
         try:
             # Ejecuta el comando de Docker Compose para levantar la instancia
             cmd = f"docker-compose -f \"{modified_path}\" up -d"
             self.excute_command(cmd, shell=True, check=True)
             self.write({'state': 'running'})
+
+            # ✅ Activar suscripción una vez que la instancia está corriendo
+            self._activar_suscripcion()
+
         except Exception as e:
             self.write({'state': 'error'})
 
@@ -235,51 +274,43 @@ class OdooDockerInstance(models.Model):
         for instance in self:
             if instance.state == 'running':
                 self.add_to_log("[INFO] Stopping Odoo Instance")
-                # Ruta al archivo docker-compose.yml modificado
                 modified_path = instance.instance_data_path + '/docker-compose.yml'
 
                 try:
                     # Ejecuta el comando de Docker Compose para detener la instancia
                     cmd = f"docker-compose -f \"{modified_path}\" down"
                     self.excute_command(cmd, shell=True, check=True)
-                    # Cambia la propiedad 'state' a 'stopped'
                     instance.write({'state': 'stopped'})
+
+                    # ℹ️ Informar en el log que la suscripción sigue corriendo
+                    instance._pausar_suscripcion()
+
                 except Exception as e:
-                    # Maneja cualquier error que pueda ocurrir al detener Docker Compose
                     self.add_to_log(f"[ERROR] Error to stop Odoo Instance: {str(e)}")
 
     def restart_instance(self):
         for instance in self:
             if instance.state == 'running':
                 self.add_to_log("[INFO] Restarting Odoo Instance")
-                # Ruta al archivo docker-compose.yml modificado
                 modified_path = instance.instance_data_path + '/docker-compose.yml'
                 try:
-                    # Ejecuta el comando de Docker Compose para detener la instancia
                     cmd = f"docker-compose -f {modified_path} restart"
                     self.excute_command(cmd, shell=True, check=True)
-                    # Cambia la propiedad 'state' a 'stopped'
                     instance.write({'state': 'running'})
                 except Exception as e:
-                    # Maneja cualquier error que pueda ocurrir al detener Docker Compose
                     self.add_to_log(f"[ERROR] Error to restart Odoo Instance: {str(e)}")
                     self.write({'state': 'stopped'})
 
     def unlink(self):
-        # Detener y eliminar los contenedores asociados antes de borrar el registro
         for instance in self:
             if instance.state == 'running':
-                # Ruta al archivo docker-compose.yml modificado
                 modified_path = instance.instance_data_path + '/docker-compose.yml'
-
                 try:
-                    # Ejecuta el comando de Docker Compose para detener y eliminar los contenedores
                     cmd = f"docker-compose -f {modified_path} down"
                     self.excute_command(cmd, shell=True, check=True)
                 except Exception as e:
                     pass
                 try:
-                    # borra todos los archivos de la instancia y carpetas
                     for root, dirs, files in os.walk(instance.instance_data_path, topdown=False):
                         for name in files:
                             os.remove(os.path.join(root, name))

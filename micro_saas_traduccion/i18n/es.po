@@ -419,7 +419,7 @@ msgstr "Nombre del Repositorio"
 #. module: micro_saas
 #: model:ir.ui.menu,name:micro_saas.menu_repository_repo
 msgid "Repository Repos"
-msgstr "Repositorios"
+msgstr "Repositorios1213232"
 
 #. module: micro_saas
 #: model:ir.model,name:micro_saas.model_repository_repo
@@ -670,3 +670,25 @@ msgstr ""
 "                                    valioso para usuarios en todo el mundo. No dude en participar reportando incidencias,\n"
 "                                    enviando pull requests o brindando sugerencias sobre cómo podemos mejorar aún más\n"
 "                                    este módulo."
+
+#. module: payment
+#: model_terms:payment.provider,pending_msg:payment.payment_provider_transfer
+msgid "Bank Accounts"
+msgstr "Cuentas bancarias"
+
+#. module: payment
+#: model_terms:payment.provider,pending_msg:payment.payment_provider_transfer
+msgid "Please use the following transfer details"
+msgstr "Por favor, utilice los siguientes datos para la transferencia"
+
+#. module: payment
+#: model_terms:payment.provider,pending_msg:payment.payment_provider_transfer
+msgid "You cannot delete the default payment method."
+msgstr "No se puede eliminar el método de pago predeterminado."
+
+#. modules: payment, payment_custom
+#: model:ir.model.fields.selection,name:payment_custom.selection__payment_provider__custom_mode__wire_transfer
+#: model:payment.provider,name:payment.payment_provider_transfer
+msgid "Wire Transfer"
+msgstr "Transferencia bancaria"
+

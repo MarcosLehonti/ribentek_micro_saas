@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_microsaas_subscription_form" model="ir.ui.view">
+        <field name="name">microsaas.subscription.form</field>
+        <field name="model">microsaas.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Suscripción">
+                <header>
+                    <button name="action_activar" string="Activar" type="object" class="btn-primary"
+                            invisible="state not in ('draft',)"/>
+                    <!-- Botón Renovar deshabilitado - la renovación se hace desde la factura -->
+                    <button name="action_renovar" string="Renovar" type="object" class="btn-secondary"
+                            invisible="state not in ('active','expiring_soon','expired')"
+                            disabled="1"
+                            title="Para renovar, genera una nueva factura y usa el botón 'Renovar Suscripción' desde ahí"/>
+                    <button name="action_cancelar" string="Cancelar" type="object"
+                            invisible="state in ('cancelled',)"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,expiring_soon,expired,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_ver_renovaciones" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="renovacion_count" widget="statinfo" string="Renovaciones"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Información Principal">
+                            <field name="partner_id"/>
+                            <field name="product_id"/>
+                            <field name="duracion_suscripcion"/>
+                            <field name="instancia_id"/>
+                            <field name="instancia_template_id" readonly="1"/>
+                            <field name="instancia_url" readonly="1" widget="url"/>
+                            <field name="instancia_state" readonly="1"/>
+                        </group>
+                        <group string="Fechas">
+                            <field name="fecha_inicio"/>
+                            <field name="fecha_fin"/>
+                            <field name="dias_restantes"
+                                   decoration-danger="dias_restantes &lt;= 0"
+                                   decoration-warning="dias_restantes &gt; 0 and dias_restantes &lt;= 7"
+                                   decoration-success="dias_restantes &gt; 7"
+                                   widget="integer"/>
+                            <field name="factura_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Renovaciones" name="renovaciones">
+                            <field name="renovacion_ids">
+                                <tree>
+                                    <field name="fecha_renovacion"/>
+                                    <field name="fecha_fin_anterior"/>
+                                    <field name="fecha_fin_nueva"/>
+                                    <field name="factura_id"/>
+                                    <field name="notas"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notas">
+                            <field name="notas" placeholder="Notas adicionales..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_microsaas_subscription_tree" model="ir.ui.view">
+        <field name="name">microsaas.subscription.tree</field>
+        <field name="model">microsaas.subscription</field>
+        <field name="arch" type="xml">
+            <tree string="Suscripciones"
+                  decoration-danger="state == 'expired'"
+                  decoration-warning="state == 'expiring_soon'"
+                  decoration-success="state == 'active'"
+                  decoration-muted="state in ('cancelled','draft')">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="duracion_suscripcion"/>
+                <field name="fecha_inicio"/>
+                <field name="fecha_fin"/>
+                <field name="dias_restantes"/>
+                <field name="instancia_id"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'expired'"
+                       decoration-warning="state == 'expiring_soon'"
+                       decoration-success="state == 'active'"
+                       decoration-muted="state in ('cancelled','draft')"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_microsaas_subscription_search" model="ir.ui.view">
+        <field name="name">microsaas.subscription.search</field>
+        <field name="model">microsaas.subscription</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Suscripciones">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <filter string="Activas" name="active" domain="[('state','=','active')]"/>
+                <filter string="Por Vencer" name="expiring_soon" domain="[('state','=','expiring_soon')]"/>
+                <filter string="Vencidas" name="expired" domain="[('state','=','expired')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state','=','cancelled')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Cliente" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Plan" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_microsaas_subscription" model="ir.actions.act_window">
+        <field name="name">Suscripciones</field>
+        <field name="res_model">microsaas.subscription</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_microsaas_subscription_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

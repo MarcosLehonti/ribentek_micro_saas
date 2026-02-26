@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_microsaas_subscription_user,microsaas.subscription user,model_microsaas_subscription,base.group_user,1,1,1,0
+access_microsaas_subscription_manager,microsaas.subscription manager,model_microsaas_subscription,base.group_system,1,1,1,1
+access_microsaas_subscription_renovacion_user,microsaas.subscription.renovacion user,model_microsaas_subscription_renovacion,base.group_user,1,1,1,0
+access_microsaas_subscription_renovacion_manager,microsaas.subscription.renovacion manager,model_microsaas_subscription_renovacion,base.group_system,1,1,1,1
+access_microsaas_subscription_portal,microsaas.subscription portal,model_microsaas_subscription,base.group_portal,1,0,0,0
+access_microsaas_subscription_renovacion_portal,microsaas.subscription.renovacion portal,model_microsaas_subscription_renovacion,base.group_portal,1,0,0,0

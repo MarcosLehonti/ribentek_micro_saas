@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_microsaas_root"
+              name="Suscripciones"
+              sequence="50"/>
+
+    <menuitem id="menu_microsaas_subscription"
+              name="Suscripciones"
+              parent="menu_microsaas_root"
+              sequence="10"/>
+
+    <menuitem id="menu_microsaas_subscription_list"
+              name="Todas las Suscripciones"
+              parent="menu_microsaas_subscription"
+              action="action_microsaas_subscription"
+              sequence="10"/>
+
+    <record id="action_subscription_active" model="ir.actions.act_window">
+        <field name="name">Suscripciones Activas</field>
+        <field name="res_model">microsaas.subscription</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ('active', 'expiring_soon'))]</field>
+    </record>
+
+    <record id="action_subscription_expired" model="ir.actions.act_window">
+        <field name="name">Suscripciones Vencidas</field>
+        <field name="res_model">microsaas.subscription</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'expired')]</field>
+    </record>
+
+    <menuitem id="menu_subscription_active"
+              name="Activas"
+              parent="menu_microsaas_subscription"
+              action="action_subscription_active"
+              sequence="20"/>
+
+    <menuitem id="menu_subscription_expired"
+              name="Vencidas"
+              parent="menu_microsaas_subscription"
+              action="action_subscription_expired"
+              sequence="30"/>
+</odoo>
