@@ -972,7 +972,7 @@ docker network inspect odoo_network
 ### Tareas - Sprint 7: Reactivación
 
 #### E4-009: Implementar función action_start_container()
-- [] Completada
+- [x] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -986,7 +986,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-010: Implementar comando docker start
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 7
@@ -1001,7 +1001,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-011: Actualizar estado en BD a 'activo'
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 7
@@ -1016,8 +1016,8 @@ docker network inspect odoo_network
 
 ---
 
-#### E4-012: Implementar trigger de reactivación al pagar
-- [ ] Completada
+#### E4-012: Implementar reactivación al pagar
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -1032,7 +1032,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-013: Detectar pago de renovación
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 7
@@ -1046,7 +1046,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-014: Actualizar fecha de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 7
@@ -1060,7 +1060,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-015: Probar ciclo completo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -1098,7 +1098,7 @@ docker network inspect odoo_network
 ### Tareas
 
 #### E5-001: Vista de instancias en "Mi Cuenta"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como cliente, quiero ver mis instancias en "Mi Cuenta"
@@ -1112,7 +1112,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-002: Botón de acceso a Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero acceder a mi Odoo con un botón
@@ -1127,7 +1127,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-003: Vista de estado de suscripción
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero ver el estado de mi suscripción
@@ -1142,7 +1142,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-004: Crear template XML para portal
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -1155,7 +1155,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-005: Extender portal_my_home
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1167,7 +1167,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-006: Crear controlador para /my/instances
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -1180,7 +1180,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-007: Diseñar tarjetas de instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1196,7 +1196,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-008: Implementar botón "Acceder a mi Odoo"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1208,7 +1208,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-009: Mostrar fecha de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1221,7 +1221,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-010: Mostrar estado visual
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1234,7 +1234,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-011: Implementar mensaje si no hay instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Low
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -1258,7 +1258,7 @@ docker network inspect odoo_network
 ### Tareas
 
 #### E6-001: Email con credenciales al crear instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como cliente, quiero recibir mis credenciales por email al crear instancia
@@ -1272,7 +1272,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-002: Email de recordatorio antes de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero recibir recordatorio antes de expiración

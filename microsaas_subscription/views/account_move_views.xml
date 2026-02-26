@@ -33,7 +33,7 @@
                      - Aún no fue usada para renovar -->
                 <button name="action_renovar_suscripcion" type="object"
                         class="oe_stat_button" icon="fa-refresh"
-                        invisible="move_type != 'out_invoice' or payment_state != 'paid' or subscription_count &gt; 0 or es_factura_renovacion == True">
+                        invisible="move_type != 'out_invoice' or payment_state != 'paid' or es_factura_renovacion == True or subscription_count == 0">
                     <div class="o_field_widget o_stat_info">
                         <span class="o_stat_text">Renovar Suscripción</span>
                     </div>

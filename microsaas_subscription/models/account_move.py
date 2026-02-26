@@ -78,15 +78,27 @@ class AccountMove(models.Model):
         if not self.partner_id:
             raise UserError(_('La factura debe tener un cliente asignado.'))
         
+
+        # Validación 4: debe existir una instancia Docker vinculada a esta factura
+        instancia = self.env['odoo.docker.instance'].search([
+            ('factura_id', '=', self.id)
+        ], limit=1)
+
+        if not instancia:
+            raise UserError(_(
+                'Debes crear una instancia Docker para esta factura'
+                'Anted de crear la suscripción.'
+            ))
+        
         # Busca en las líneas de la factura el primer producto marcado como
         # plan MicroSaaS (es_plan_microsaas = True en la plantilla del producto).
         linea_plan = self._get_linea_plan_microsaas()
 
-        # Validación 4: La factura debe contener al menos un producto MicroSaaS.
+        # Validación 5: La factura debe contener al menos un producto MicroSaaS.
         if not linea_plan:
             raise UserError(_('No se encontró un producto MicroSaaS en esta factura.'))
         
-        # Validación 5: El producto MicroSaaS encontrado debe tener configurada su duración.
+        # Validación 6: El producto MicroSaaS encontrado debe tener configurada su duración.
         if not linea_plan.product_id.product_tmpl_id.duracion_suscripcion:
             raise UserError(_('El producto "%s" no tiene duración configurada.') % linea_plan.product_id.name)
 
