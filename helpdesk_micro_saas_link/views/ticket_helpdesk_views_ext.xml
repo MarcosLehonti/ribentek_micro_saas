@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Herencia de la vista form del ticket para añadir el botón de instancia -->
+    <record id="view_ticket_helpdesk_form_instancia_ext" model="ir.ui.view">
+        <field name="name">ticket.helpdesk.form.instancia.ext</field>
+        <field name="model">ticket.helpdesk</field>
+        <field name="inherit_id" ref="odoo_website_helpdesk.ticket_helpdesk_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Añadir campos invisibles necesarios en el group existente -->
+            <xpath expr="//group/group[field[@name='merge_ticket_invisible']]" position="inside">
+                <field name="tiene_instancia" invisible="1"/>
+                <field name="instancia_id" invisible="1"/>
+            </xpath>
+
+            <!-- Añadir botón de instancia en la barra de botones estadísticos -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <!-- Botón azul cuando SÍ tiene instancia -->
+                <button class="oe_stat_button"
+                        name="action_ir_a_instancia"
+                        type="object"
+                        icon="fa-server"
+                        invisible="tiene_instancia == False"
+                        help="Ver la instancia Docker de este cliente">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Ver</span>
+                        <span class="o_stat_text">Instancia</span>
+                    </div>
+                </button>
+
+                <!-- Botón gris informativo cuando NO tiene instancia -->
+                <button class="oe_stat_button"
+                        type="object"
+                        name="action_ir_a_instancia"
+                        icon="fa-exclamation-circle"
+                        invisible="tiene_instancia == True"
+                        help="Este cliente no tiene una instancia creada aún">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text text-muted">Sin</span>
+                        <span class="o_stat_text text-muted">Instancia</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Añadir alerta informativa en el sheet para que sea bien visible -->
+            <xpath expr="//sheet/div[@class='oe_title']" position="before">
+                <!-- Alerta verde: cliente SÍ tiene instancia -->
+                <div class="alert alert-success d-flex align-items-center"
+                     role="alert"
+                     invisible="tiene_instancia == False">
+                    <i class="fa fa-check-circle me-2 fa-lg"/>
+                    <span>
+                        ✅ Este cliente <strong>SÍ tiene una instancia activa</strong> en Micro SaaS.
+                        Usa el botón <strong>"Ver Instancia"</strong> arriba para acceder a ella.
+                    </span>
+                </div>
+
+                <!-- Alerta amarilla: cliente NO tiene instancia -->
+                <div class="alert alert-warning d-flex align-items-center"
+                     role="alert"
+                     invisible="tiene_instancia == True">
+                    <i class="fa fa-info-circle me-2 fa-lg"/>
+                    <span>
+                        ⚠️ No se encontró ninguna instancia Micro SaaS para el email de este cliente.
+                    </span>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

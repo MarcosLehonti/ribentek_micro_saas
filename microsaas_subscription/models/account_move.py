@@ -79,6 +79,7 @@ class AccountMove(models.Model):
             raise UserError(_('La factura debe tener un cliente asignado.'))
         
 
+
         # Validación 4: debe existir una instancia Docker vinculada a esta factura
         instancia = self.env['odoo.docker.instance'].search([
             ('factura_id', '=', self.id)
@@ -89,10 +90,10 @@ class AccountMove(models.Model):
                 'Debes crear una instancia Docker para esta factura'
                 'Anted de crear la suscripción.'
             ))
-        
         # Busca en las líneas de la factura el primer producto marcado como
         # plan MicroSaaS (es_plan_microsaas = True en la plantilla del producto).
         linea_plan = self._get_linea_plan_microsaas()
+
 
         # Validación 5: La factura debe contener al menos un producto MicroSaaS.
         if not linea_plan:

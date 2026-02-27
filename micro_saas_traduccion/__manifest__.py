@@ -9,7 +9,7 @@
     "website": "https://github.com/davidmonterocrespo24/odoo_micro_saas",
     "license": "AGPL-3",
     "version": "17.0.1.0",
-    "depends": ["micro_saas", "account", "sale_management"],
+    "depends": ["micro_saas"],
     "data": [],
     "installable": True,
     "application": False,

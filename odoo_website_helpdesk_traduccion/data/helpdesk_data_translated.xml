@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Traducción de Etapas de Tickets (ticket.stage) -->
+        <record id="odoo_website_helpdesk.stage_inbox" model="ticket.stage">
+            <field name="name">Bandeja de entrada</field>
+        </record>
+        <record id="odoo_website_helpdesk.stage_draft" model="ticket.stage">
+            <field name="name">Borrador</field>
+        </record>
+        <record id="odoo_website_helpdesk.stage_in_progress" model="ticket.stage">
+            <field name="name">En progreso</field>
+        </record>
+        <record id="odoo_website_helpdesk.stage_done" model="ticket.stage">
+            <field name="name">Hecho</field>
+        </record>
+        <record id="odoo_website_helpdesk.stage_closed" model="ticket.stage">
+            <field name="name">Cerrado</field>
+        </record>
+        <record id="odoo_website_helpdesk.stage_canceled" model="ticket.stage">
+            <field name="name">Cancelado</field>
+        </record>
+
+        <!-- Traducción de Categorías de Tickets (helpdesk.category) -->
+        <record id="odoo_website_helpdesk.ticket_categories_1" model="helpdesk.category">
+            <field name="name">Interno</field>
+        </record>
+        <record id="odoo_website_helpdesk.ticket_categories_2" model="helpdesk.category">
+            <field name="name">Técnico</field>
+        </record>
+
+        <!-- Traducción de Tipos de Tickets (helpdesk.type) -->
+        <record id="odoo_website_helpdesk.ticket_type_1" model="helpdesk.type">
+            <field name="name">Consulta</field>
+        </record>
+        <record id="odoo_website_helpdesk.ticket_type_2" model="helpdesk.type">
+            <field name="name">Incidencia / Problema</field>
+        </record>
+        <record id="odoo_website_helpdesk.ticket_type_3" model="helpdesk.type">
+            <field name="name">Reparación</field>
+        </record>
+        <record id="odoo_website_helpdesk.ticket_type_4" model="helpdesk.type">
+            <field name="name">Mantenimiento</field>
+        </record>
+
+        <!-- Traducción de Títulos y Cuerpo de Plantillas de Correo (mail.template) -->
+        <record id="odoo_website_helpdesk.ticket_created" model="mail.template">
+            <field name="subject">Ticket Creado: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Estimado/a <t t-out="object.customer_id.name"/><br/>
+                    Su ticket <strong><t t-out="object.name"/></strong> ha sido creado y asignado correctamente. 
+                    Por favor, espere mientras procesamos su consulta.<br/><br/>
+                    Gracias por su paciencia.
+                </p>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.helpdesk_rating" model="mail.template">
+            <field name="subject">Ticket Cerrado: {{ object.name }} - Tu opinión nos importa</field>
+            <field name="body_html" type="html">
+                <p>
+                    Estimado/a <t t-out="object.customer_id.name"/><br/>
+                    Su ticket <strong><t t-out="object.name"/></strong> ha sido cerrado.<br/><br/>
+                    Nos gustaría conocer su experiencia con nuestro servicio:
+                    <br/><br/>
+                    <button class="btn btn-info" role="button"
+                            style="border:1px solid black;background-color:purple;padding:10px 20px;border-radius:10px;">
+                        <a t-attf-href="/rating/{{object.id}}"
+                           style="text-decoration:none;color:white;font-weight:bold;font-size:16px;">
+                            Calificar Ahora
+                        </a>
+                    </button>
+                    <br/><br/>
+                    Muchas gracias.
+                </p>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.ticket_reopened" model="mail.template">
+            <field name="subject">Ticket Reabierto: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Estimado/a <t t-out="object.customer_id.name"/><br/>
+                    Su ticket <strong><t t-out="object.name"/></strong> ha sido reabierto.<br/><br/>
+                    Gracias.
+                </p>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.ticket_approved" model="mail.template">
+            <field name="subject">Ticket Solucionado: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Estimado/a <t t-out="object.customer_id.name"/><br/>
+                    Consideramos que su problema ha sido resuelto. Su ticket <strong><t t-out="object.name"/></strong> ha sido marcado como terminado.<br/><br/>
+                    Gracias por confiar en nosotros.
+                </p>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.ticket_canceled" model="mail.template">
+            <field name="subject">Ticket Cancelado: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <p>
+                    Estimado/a <t t-out="object.customer_id.name"/><br/>
+                    Su ticket <strong><t t-out="object.name"/></strong> ha sido cancelado.<br/><br/>
+                    Saludos.
+                </p>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.odoo_website_helpdesk_assign" model="mail.template">
+            <field name="subject">Nuevo Ticket Asignado a su Equipo: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Hola <t t-esc="object.team_head_id.name"/>,</p>
+                    <p>Se ha asignado el ticket <strong>[<t t-esc="object.name"/>]</strong> a su equipo. Por favor, proceda con su gestión.</p>
+                    <br/>
+                    <h2>Detalles</h2>
+                    <p><strong>Asunto:</strong> <t t-esc="object.subject"/></p>
+                    <p><strong>Cliente:</strong> <t t-esc="object.customer_id.name"/></p>
+                    <p><strong>Descripción:</strong> <t t-esc="object.description"/></p>
+                    <br/>
+                    <p>Saludos cordiales.</p>
+                </div>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.odoo_website_helpdesk_assign_user" model="mail.template">
+            <field name="subject">Ticket Asignado: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Hola <t t-esc="object.assigned_user_id.name"/>,</p>
+                    <p>El ticket <strong>[<t t-esc="object.name"/>]</strong> le ha sido asignado. Por favor, inicie su gestión lo antes posible.</p>
+                    <br/>
+                    <h2>Detalles</h2>
+                    <p><strong>Asunto:</strong> <t t-esc="object.subject"/></p>
+                    <p><strong>Cliente:</strong> <t t-esc="object.customer_id.name"/></p>
+                    <p><strong>Descripción:</strong> <t t-esc="object.description"/></p>
+                    <br/>
+                    <p>Saludos cordiales.</p>
+                </div>
+            </field>
+        </record>
+
+        <record id="odoo_website_helpdesk.odoo_website_helpdesk_to_customer" model="mail.template">
+            <field name="subject">Ticket Asignado a un Especialista: {{ object.name }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Estimado/a <t t-esc="object.customer_id.name"/>,</p>
+                    <p>Su ticket <strong>[<t t-esc="object.name"/>]</strong> ha sido asignado con éxito al especialista <strong>"<t t-esc="object.assigned_user_id.name"/>"</strong>.</p>
+                    <br/>
+                    <p>Saludos cordiales.</p>
+                </div>
+            </field>
+        </record>
+        <record id="odoo_website_helpdesk.helpdesk_replay_email_template" model="mail.template">
+            <field name="subject">{{ object.name }} - Respuesta de Soporte</field>
+            <field name="body_html" type="html">
+                <div class="container">
+                    <h4 style="text-align:center">Respuesta de Soporte Técnico</h4>
+                    <div style="min-height:30vh;">[MENSAJE DE RESPUESTA]</div>
+                    <t t-set="base_url" t-value="request.env['ir.config_parameter'].sudo().get_param('web.base.url')"/>
+                    <h6>
+                        <a t-attf-href="{{base_url}}/my/tickets/{{object.id}}" class="btn btn-primary">
+                            Ver Ticket
+                        </a>
+                    </h6>
+                    <table class="table table-light" width="100%">
+                        <tbody>
+                            <tr>
+                                <th>Nombre del Agente</th>
+                                <td>
+                                    <t t-if="object.assigned_user_id">
+                                        <t t-esc="object.assigned_user_id.name"/>
+                                    </t>
+                                    <t t-else="">Agente de soporte</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Equipo</th>
+                                <td>
+                                    <t t-if="object.team_id">
+                                        <t t-esc="object.team_id.name"/>
+                                    </t>
+                                    <t t-else="">Soporte General</t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Respuesta</th>
+                                <td>
+                                    <t t-set="date" t-value="(datetime.date.today())"/>
+                                    <t t-esc="date"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

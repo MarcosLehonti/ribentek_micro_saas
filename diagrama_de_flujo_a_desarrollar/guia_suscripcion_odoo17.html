@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Explicada — Módulo de Suscripción Odoo 17</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f7f9fc;
+  --surface: #ffffff;
+  --border:  #e2e8f0;
+  --border2: #cbd5e1;
+
+  --cyan:    #0891b2;
+  --blue:    #2563eb;
+  --purple:  #7c3aed;
+  --gold:    #d97706;
+  --red:     #dc2626;
+  --green:   #059669;
+  --orange:  #ea580c;
+  --slate:   #475569;
+
+  --text:    #0f172a;
+  --body:    #334155;
+  --muted:   #64748b;
+  --faint:   #f1f5f9;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── Sidebar navigation ── */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 2rem 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.sidebar-logo .logo-pill {
+  display: inline-block;
+  background: #eff6ff;
+  color: var(--blue);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  padding: .25rem .7rem;
+  border-radius: 100px;
+  margin-bottom: .5rem;
+}
+.sidebar-logo h2 {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.nav-section-title {
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--muted);
+  padding: .75rem 1.5rem .35rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem 1.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 500;
+  border-right: 2px solid transparent;
+  transition: all .15s;
+}
+.nav-item:hover { background: var(--faint); color: var(--text); }
+.nav-item.active { background: #eff6ff; color: var(--blue); border-right-color: var(--blue); font-weight: 600; }
+.nav-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem; font-weight: 700;
+  flex-shrink: 0;
+  background: var(--faint);
+  color: var(--muted);
+}
+.nav-item.active .nav-num { background: var(--blue); color: #fff; }
+
+/* ── Main content ── */
+.main {
+  flex: 1;
+  padding: 3rem 3rem 6rem;
+  max-width: 820px;
+}
+
+/* ── Page header ── */
+.page-hdr {
+  margin-bottom: 3.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-hdr .eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  margin-bottom: .75rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.page-hdr .eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 2px;
+  background: var(--blue);
+  border-radius: 2px;
+}
+.page-hdr h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.25;
+  margin-bottom: .75rem;
+}
+.page-hdr p {
+  color: var(--body);
+  font-size: .95rem;
+  max-width: 580px;
+  line-height: 1.7;
+}
+
+/* ── Section ── */
+.section {
+  margin-bottom: 4rem;
+  scroll-margin-top: 2rem;
+}
+
+.sec-hdr {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+.sec-num-big {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .85rem; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.sec-hdr-text {}
+.sec-hdr-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: .2rem;
+}
+.sec-hdr-sub {
+  font-size: .78rem;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── Prose body ── */
+.prose p {
+  color: var(--body);
+  font-size: .93rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { color: var(--text); font-weight: 700; }
+.prose em { color: var(--muted); font-style: italic; }
+
+/* ── Info box ── */
+.info-box {
+  background: var(--faint);
+  border: 1px solid var(--border2);
+  border-left: 4px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  font-size: .85rem;
+  line-height: 1.8;
+  color: var(--body);
+}
+.info-box.green  { border-left-color: var(--green);  background: #f0fdf4; }
+.info-box.gold   { border-left-color: var(--gold);   background: #fffbeb; }
+.info-box.red    { border-left-color: var(--red);    background: #fef2f2; }
+.info-box.purple { border-left-color: var(--purple); background: #faf5ff; }
+.info-box.orange { border-left-color: var(--orange); background: #fff7ed; }
+.info-box-title {
+  font-weight: 700;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .4rem;
+  display: flex; align-items: center; gap: .4rem;
+}
+.info-box.green  .info-box-title { color: var(--green); }
+.info-box.gold   .info-box-title { color: var(--gold); }
+.info-box.red    .info-box-title { color: var(--red); }
+.info-box.purple .info-box-title { color: var(--purple); }
+.info-box.orange .info-box-title { color: var(--orange); }
+.info-box .info-box-title { color: var(--blue); }
+
+/* ── Step list ── */
+.steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 1.25rem 0;
+}
+.steps li {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  align-items: flex-start;
+}
+.steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  width: 28px; height: 28px; min-width: 28px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .7rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.steps li strong { display: block; font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .2rem; }
+.steps li span { font-size: .83rem; color: var(--body); line-height: 1.7; }
+
+/* ── Bullet list ── */
+.bullets {
+  list-style: none;
+  margin: 1rem 0;
+}
+.bullets li {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: .6rem;
+  font-size: .87rem;
+  color: var(--body);
+  line-height: 1.6;
+  align-items: flex-start;
+}
+.bullets li::before {
+  content: '→';
+  color: var(--blue);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Model field table ── */
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: .82rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.field-table thead th {
+  background: var(--faint);
+  color: var(--muted);
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  padding: .6rem .85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+}
+.field-table tbody td {
+  padding: .6rem .85rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.field-table tbody tr:last-child td { border-bottom: none; }
+.field-table tbody tr:hover td { background: var(--faint); }
+.fn { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--blue); font-size: .78rem; }
+.ft { font-family: 'IBM Plex Mono', monospace; color: var(--orange); font-size: .73rem; }
+.fd { color: var(--body); }
+.fk { font-size: .68rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+
+/* ── Example box ── */
+.example {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.25rem 0;
+}
+.example-title {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .6rem;
+  display: flex; align-items: center; gap: .4rem;
+}
+.example-title::before { content: '▶'; font-size: .55rem; }
+.example-body { font-size: .87rem; color: var(--body); line-height: 1.8; }
+.example-body strong { color: var(--text); }
+
+/* ── Warning box ── */
+.warn {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: .9rem 1.1rem;
+  font-size: .83rem;
+  color: #9a3412;
+  line-height: 1.7;
+  margin: 1rem 0;
+  display: flex; gap: .65rem; align-items: flex-start;
+}
+.warn-icon { font-size: 1rem; flex-shrink:0; }
+
+/* ── Model card ── */
+.model-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: .75rem;
+  position: relative;
+}
+.model-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+  background: var(--cc, var(--blue));
+  border-radius: 10px 0 0 10px;
+}
+.model-card-header {
+  display: flex; align-items: center; gap: .65rem;
+  margin-bottom: .65rem;
+}
+.model-name { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: .83rem; color: var(--cc, var(--blue)); }
+.model-desc { font-size: .78rem; color: var(--muted); }
+.model-body { font-size: .83rem; color: var(--body); line-height: 1.8; }
+
+/* ── Flow diagram inline ── */
+.flow-inline {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;
+  margin: 1rem 0;
+}
+.flow-node {
+  background: var(--faint);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: .35rem .75rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.flow-node.hi { background: #eff6ff; border-color: #bfdbfe; color: var(--blue); }
+.flow-arr { color: var(--muted); font-size: .9rem; }
+
+/* ── Timeline visual ── */
+.timeline {
+  margin: 1.25rem 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.tl-head {
+  background: var(--faint);
+  padding: .65rem 1rem;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.tl-body { padding: .85rem 1rem; }
+.tl-row { margin-bottom: .6rem; }
+.tl-label-row { font-size: .68rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; margin-bottom: .25rem; }
+.tl-bar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; }
+.tl-seg {
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; font-weight: 600;
+  white-space: nowrap; overflow: hidden; padding: 0 .5rem;
+}
+
+/* ── State list ── */
+.state-list { margin: 1rem 0; }
+.state-row {
+  display: flex; align-items: flex-start; gap: .75rem;
+  padding: .65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.state-row:last-child { border-bottom: none; }
+.state-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.state-content {}
+.state-name { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: .8rem; color: var(--text); margin-bottom: .2rem; }
+.state-desc { font-size: .82rem; color: var(--body); line-height: 1.6; }
+
+/* ── Module card ── */
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: .75rem;
+}
+.module-title {
+  display: flex; align-items: center; gap: .65rem;
+  margin-bottom: .75rem;
+}
+.module-icon { font-size: 1.2rem; }
+.module-name { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: .88rem; color: var(--text); }
+.module-tag {
+  font-size: .65rem; font-family: 'IBM Plex Mono', monospace;
+  background: var(--faint); border: 1px solid var(--border2);
+  color: var(--muted); padding: .15rem .5rem; border-radius: 4px;
+}
+.module-body { font-size: .83rem; color: var(--body); line-height: 1.8; }
+
+/* ── divider ── */
+.divider { height: 1px; background: var(--border); margin: 3rem 0; }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { padding: 1.5rem 1.25rem 4rem; }
+  .page-hdr h1 { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ══ SIDEBAR ══ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-pill">Odoo 17 · micro_SaaS</div>
+      <h2>Guía del Módulo<br>de Suscripción</h2>
+    </div>
+
+    <div class="nav-section-title">Contenido</div>
+
+    <a href="#sec0" class="nav-item active">
+      <div class="nav-num">0</div>
+      Modelos de datos
+    </a>
+    <a href="#sec1" class="nav-item">
+      <div class="nav-num">1</div>
+      Compra inicial
+    </a>
+    <a href="#sec2" class="nav-item">
+      <div class="nav-num">2</div>
+      Instancias Odoo
+    </a>
+    <a href="#sec3" class="nav-item">
+      <div class="nav-num">3</div>
+      Gestión de usuarios
+    </a>
+    <a href="#sec4" class="nav-item">
+      <div class="nav-num">4</div>
+      Agregar usuario
+    </a>
+    <a href="#sec5" class="nav-item">
+      <div class="nav-num">5</div>
+      Vencimiento y bloqueo
+    </a>
+    <a href="#sec6" class="nav-item">
+      <div class="nav-num">6</div>
+      Renovación
+    </a>
+    <a href="#sec7" class="nav-item">
+      <div class="nav-num">7</div>
+      Estados de suscripción
+    </a>
+    <a href="#sec8" class="nav-item">
+      <div class="nav-num">8</div>
+      Módulos a crear
+    </a>
+  </nav>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <div class="page-hdr">
+      <div class="eyebrow">Guía completa</div>
+      <h1>Cómo funciona el Módulo<br>de Suscripción Dinámica</h1>
+      <p>
+        Esta guía explica en lenguaje sencillo cada parte del sistema de suscripciones que vamos a construir para Odoo 17. Está pensada para que cualquier persona del equipo pueda entender el flujo completo: desde que el cliente compra hasta que se le bloquea el acceso si no renueva.
+      </p>
+    </div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 0 — MODELOS
+    ═════════════════════════ -->
+    <section class="section" id="sec0">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#eff6ff;color:var(--cyan);">0</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Modelos de datos — Los "cajones" del sistema</div>
+          <div class="sec-hdr-sub">La base de datos: qué guardamos y por qué</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Antes de entender el flujo, hay que entender <strong>dónde vive cada dato</strong>. En Odoo, los "modelos" son como las tablas de una base de datos: cada uno guarda un tipo específico de información. Vamos a necesitar 6 modelos principales.
+        </p>
+      </div>
+
+      <div class="model-card" style="--cc: var(--cyan);">
+        <div class="model-card-header">
+          <span>🗂️</span>
+          <span class="model-name">Plan de Suscripción</span>
+          <span class="model-desc">— Define cuánto cuesta el servicio</span>
+        </div>
+        <div class="model-body">
+          Es el <strong>catálogo de precios</strong>. Aquí defines que un usuario cuesta, por ejemplo, 100 Bs al mes. Si en el futuro cambias el precio, solo cambias el plan. No afecta a los clientes que ya tienen suscripción activa porque sus facturas ya fueron generadas.
+        </div>
+      </div>
+
+      <div class="model-card" style="--cc: var(--blue);">
+        <div class="model-card-header">
+          <span>📄</span>
+          <span class="model-name">Suscripción Principal</span>
+          <span class="model-desc">— El "contrato" con el cliente</span>
+        </div>
+        <div class="model-body">
+          Es el <strong>registro central de cada cliente</strong>. Piénsalo como el contrato firmado: dice quién es el cliente, qué plan tiene, en qué instancia está y en qué estado se encuentra (activa, pausada, cancelada). Cada empresa cliente tiene exactamente <strong>una suscripción</strong>.
+        </div>
+      </div>
+
+      <div class="model-card" style="--cc: var(--purple);">
+        <div class="model-card-header">
+          <span>👤</span>
+          <span class="model-name">Línea por Usuario ← La pieza más importante</span>
+          <span class="model-desc">— Un registro por cada empleado</span>
+        </div>
+        <div class="model-body">
+          Este es el <strong>corazón del sistema</strong>. En lugar de decir "esta empresa tiene 5 usuarios hasta el mes 7", el sistema dice "<strong>este usuario específico está pagado desde el día X hasta el día Y</strong>". Esto permite que cada empleado tenga su propia fecha de vencimiento independiente, lo cual resuelve exactamente el problema de agregar usuarios a mitad del período.
+        </div>
+      </div>
+
+      <div class="info-box green">
+        <div class="info-box-title">💡 ¿Por qué una línea por usuario y no una por empresa?</div>
+        Imagina que la empresa ABC tiene 5 empleados pagados por 7 meses y al mes 4 entra un empleado nuevo. Si usáramos un solo registro para toda la empresa, sería muy difícil saber cuándo vence el nuevo. Con <strong>una línea por usuario</strong>, el nuevo simplemente tiene su propia línea que dice "pagado desde hoy hasta dentro de 7 meses". Sin líos, sin prorrateos complicados.
+      </div>
+
+      <div class="model-card" style="--cc: var(--gold);">
+        <div class="model-card-header">
+          <span>🏗️</span>
+          <span class="model-name">Instancia Odoo</span>
+          <span class="model-desc">— El servidor donde corre el Odoo del cliente</span>
+        </div>
+        <div class="model-body">
+          Cada instancia es <strong>una instalación de Odoo</strong> con su propia base de datos y su propia URL (ej: <em>empresa.tuapp.com</em>). Una instancia puede alojar a varias empresas clientes al mismo tiempo para aprovechar mejor el servidor. Este modelo registra cuántos usuarios puede tener como máximo y cuántos tiene actualmente.
+        </div>
+      </div>
+
+      <div class="model-card" style="--cc: var(--green);">
+        <div class="model-card-header">
+          <span>🧾</span>
+          <span class="model-name">Factura</span>
+          <span class="model-desc">— El cobro por el servicio</span>
+        </div>
+        <div class="model-body">
+          Es el modelo estándar de Odoo para facturas, pero le agregamos un campo que la vincula a la suscripción. Se genera <strong>una factura por cada evento de cobro</strong>: la compra inicial, agregar un usuario nuevo, renovar, etc. Esto da una trazabilidad completa de todos los pagos.
+        </div>
+      </div>
+
+      <div class="model-card" style="--cc: var(--orange);">
+        <div class="model-card-header">
+          <span>🛒</span>
+          <span class="model-name">Orden de Venta</span>
+          <span class="model-desc">— La solicitud de compra del cliente</span>
+        </div>
+        <div class="model-body">
+          Es el modelo estándar de Odoo para ventas, al que le agregamos tres campos clave: <strong>cuántos meses compra</strong>, <strong>cuántos usuarios</strong>, y el <strong>tipo de orden</strong> (nueva suscripción, agregar usuario, o renovación). Es el punto de partida de todo: sin orden de venta no hay factura, sin factura no hay suscripción.
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">📐 La fórmula de cobro</div>
+        <strong>Total = Precio del plan × Cantidad de usuarios × Meses elegidos</strong><br>
+        Ejemplo: 100 Bs × 5 usuarios × 7 meses = <strong>3,500 Bs</strong> — se cobra todo por adelantado en una sola factura.
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 1 — COMPRA
+    ═════════════════════════ -->
+    <section class="section" id="sec1">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#eff6ff;color:var(--blue);">1</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Compra Inicial desde el Portal</div>
+          <div class="sec-hdr-sub">Del primer clic del cliente hasta que su Odoo está listo</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Este es el flujo que recorre un cliente nuevo: desde que entra a la tienda del portal hasta que tiene su Odoo funcionando. Son <strong>7 pasos</strong> que mezclan acciones del cliente, del sistema y del administrador.
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <strong>El cliente entra a la tienda del portal</strong>
+          <span>Ve un único producto llamado "Suscripción Odoo". Solo puede agregar uno al carrito (el sistema lo valida). No hay opciones confusas de mensual/semestral/anual: eso se elige en el siguiente paso.</span>
+        </li>
+        <li>
+          <strong>Configura su suscripción con el widget dinámico</strong>
+          <span>En la ficha del producto aparece un configurador interactivo: un selector de meses (de 1 a 36) y un campo para escribir cuántos usuarios necesita. El precio total se actualiza automáticamente en tiempo real. <em>Ej: mueve el selector a 7 meses, escribe 5 usuarios → se muestra "Total: 3,500 Bs".</em></span>
+        </li>
+        <li>
+          <strong>Agrega al carrito y paga</strong>
+          <span>El sistema guarda en la orden de venta los meses y usuarios elegidos (no solo el precio). El cliente paga por transferencia, QR u otro método disponible.</span>
+        </li>
+        <li>
+          <strong>La orden llega al Odoo Maestro</strong>
+          <span>El administrador recibe la orden de venta en su panel. Puede ver el cliente, los meses comprados y la cantidad de usuarios. La orden llega en estado "borrador".</span>
+        </li>
+        <li>
+          <strong>El admin verifica el pago</strong>
+          <span>Una vez que confirma que el dinero llegó (revisando el banco, el QR escaneado, etc.), confirma la orden. Esto es manual por ahora, pero podría automatizarse con una pasarela de pago.</span>
+        </li>
+        <li>
+          <strong>Se genera la factura automáticamente</strong>
+          <span>Al confirmar la orden, el sistema crea la factura y la marca como pagada. La factura dice exactamente: N usuarios × X meses × 100 Bs = Total.</span>
+        </li>
+        <li>
+          <strong>Se crean la suscripción y las líneas por usuario</strong>
+          <span>Cuando la factura queda como pagada, se dispara una acción automática que crea la suscripción principal y una línea de suscripción por cada usuario comprado, con fecha de inicio hoy y fecha de fin en X meses.</span>
+        </li>
+      </ol>
+
+      <div class="info-box gold">
+        <div class="info-box-title">⚙️ ¿Qué es la "acción automática"?</div>
+        En Odoo existe la posibilidad de configurar reglas que digan "cuando pase X, hacer Y automáticamente". En este caso, la regla dice: <strong>cuando una factura vinculada a una suscripción cambie a estado pagada → crear suscripción + líneas de usuario</strong>. No hace falta que el admin haga nada manualmente.
+      </div>
+
+      <div class="example">
+        <div class="example-title">Ejemplo: Empresa Boticas del Sur</div>
+        <div class="example-body">
+          El dueño entra al portal, elige <strong>7 meses y 5 usuarios</strong>. Ve que el total es <strong>3,500 Bs</strong>. Paga por QR. El admin recibe la orden, confirma que llegó el pago y la aprueba. En ese momento, el sistema crea automáticamente la suscripción de Boticas del Sur con 5 líneas de usuario, cada una con fecha inicio hoy y fecha fin en 7 meses.
+        </div>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 2 — INSTANCIAS
+    ═════════════════════════ -->
+    <section class="section" id="sec2">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#faf5ff;color:var(--purple);">2</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Asignación de Instancias (micro_SaaS)</div>
+          <div class="sec-hdr-sub">Dónde y cómo se aloja el Odoo del cliente</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Una vez creada la suscripción, el módulo <strong>micro_SaaS</strong> se encarga de preparar el Odoo donde el cliente va a trabajar. Aquí hay una decisión importante: ¿crear una instalación nueva o agregar al cliente a una instalación que ya existe?
+        </p>
+        <p>
+          Una <strong>instancia</strong> es básicamente un Odoo instalado con su propia base de datos. La idea es que varias empresas clientes puedan compartir la misma instancia para aprovechar mejor los recursos del servidor, siempre y cuando no se exceda el límite de usuarios configurado.
+        </p>
+      </div>
+
+      <div class="info-box purple">
+        <div class="info-box-title">🏗️ ¿Cuándo se crea una instancia nueva?</div>
+        Se crea una instancia nueva cuando: (1) el cliente es el primero o (2) todas las instancias existentes ya llegaron a su límite de usuarios. En los demás casos, se agrega la empresa cliente a una instancia que tenga espacio disponible.
+      </div>
+
+      <ol class="steps">
+        <li>
+          <strong>El sistema busca una instancia con cupo disponible</strong>
+          <span>Al activarse la suscripción, el módulo revisa si existe alguna instancia donde la suma de usuarios activos sea menor al máximo permitido. Si encuentra una, asigna el nuevo cliente ahí.</span>
+        </li>
+        <li>
+          <strong>Si no hay cupo: crear instancia nueva</strong>
+          <span>micro_SaaS crea una nueva base de datos PostgreSQL, configura el subdominio (ej: <em>boticasdelsur.tuapp.com</em>), instala los módulos base de Odoo y crea el usuario administrador del cliente.</span>
+        </li>
+        <li>
+          <strong>Se vincula la suscripción con la instancia</strong>
+          <span>El campo "instancia" de la suscripción se llena con la instancia asignada. Así el sistema siempre sabe en qué servidor está cada cliente.</span>
+        </li>
+        <li>
+          <strong>Se notifica al cliente por email</strong>
+          <span>El cliente recibe un correo con su URL de acceso, usuario, contraseña temporal, fecha de vencimiento y el número de usuarios que puede crear.</span>
+        </li>
+      </ol>
+
+      <div class="warn">
+        <span class="warn-icon">⚠️</span>
+        <span><strong>Regla de negocio crítica:</strong> La instancia siempre debe tener como límite máximo la <strong>suma de líneas de suscripción activas</strong> de todas las empresas que aloja. Si en una instancia hay 2 empresas con 5 usuarios cada una, el límite máximo es 10 usuarios totales. Intentar crear el usuario 11 debe ser bloqueado.</span>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 3 — USUARIOS
+    ═════════════════════════ -->
+    <section class="section" id="sec3">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#f0fdf4;color:var(--green);">3</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Gestión de Usuarios en Período Activo</div>
+          <div class="sec-hdr-sub">Qué pasa cuando un empleado se va o llega uno nuevo</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Una vez que la suscripción está activa, el día a día consiste en que el administrador del cliente va agregando o quitando empleados de su Odoo. El sistema necesita reaccionar de forma diferente según lo que pase.
+        </p>
+      </div>
+
+      <div class="info-box green">
+        <div class="info-box-title">✅ Estado normal</div>
+        Todos los usuarios tienen una línea de suscripción activa y vigente. El acceso a la instancia funciona normalmente. No hay ninguna acción requerida hasta que alguien se vaya o llegue alguien nuevo.
+      </div>
+
+      <div class="info-box orange">
+        <div class="info-box-title">➖ Cuando un empleado se va</div>
+        El administrador desactiva al usuario en su Odoo (<em>res.users.active = False</em>). Esto bloquea el acceso de esa persona inmediatamente. <strong>Sin embargo, la línea de suscripción sigue activa hasta su fecha de vencimiento original</strong>. ¿Por qué? Porque ese período ya fue pagado por adelantado y no hay reembolso. El "cupo" librado se podría usar para un nuevo empleado — pero solo si ese nuevo empleado también paga su período.
+      </div>
+
+      <div class="info-box red">
+        <div class="info-box-title">➕ Cuando llega un empleado nuevo</div>
+        El administrador intenta crear un usuario nuevo en su Odoo. El sistema detecta que no existe una línea de suscripción activa para ese usuario y <strong>bloquea la creación hasta que se pague el addon correspondiente</strong>. También envía una notificación automática al administrador explicando qué debe hacer.
+      </div>
+
+      <div class="timeline">
+        <div class="tl-head">📅 Ejemplo visual — Empresa: 5 empleados · 7 meses · 3,500 Bs pagados</div>
+        <div class="tl-body">
+          <div class="tl-row">
+            <div class="tl-label-row">Usuarios 1–5 · Período completo pagado (3,500 Bs)</div>
+            <div class="tl-bar">
+              <div class="tl-seg" style="width:100%;background:rgba(5,150,105,.15);color:var(--green);border:1px solid rgba(5,150,105,.3);">Mes 1 ────── Mes 3 ────── Mes 5 ────── Mes 7</div>
+            </div>
+          </div>
+          <div class="tl-row" style="margin-top:.6rem;">
+            <div class="tl-label-row">Empleado 5 sale en el mes 3 · La línea sigue activa sin acceso · Sin reembolso</div>
+            <div class="tl-bar">
+              <div class="tl-seg" style="width:42%;background:rgba(5,150,105,.12);color:var(--green);border:1px solid rgba(5,150,105,.2);">Emp.1–4 activos</div>
+              <div class="tl-seg" style="width:14%;background:rgba(220,38,38,.18);color:var(--red);border:1px solid rgba(220,38,38,.25);">Emp.5 sale</div>
+              <div class="tl-seg" style="width:44%;background:rgba(234,88,12,.08);color:var(--muted);border:1px solid rgba(234,88,12,.15);">Línea Emp.5: sin acceso · no reembolso</div>
+            </div>
+          </div>
+          <div class="tl-row" style="margin-top:.6rem;">
+            <div class="tl-label-row">Día 15 del mes 4: el jefe agrega a un nuevo empleado</div>
+            <div class="tl-bar">
+              <div class="tl-seg" style="width:50%;background:rgba(37,99,235,.06);color:var(--muted);border:1px dashed rgba(37,99,235,.2);">← Bloqueado hasta pagar</div>
+              <div class="tl-seg" style="width:50%;background:rgba(37,99,235,.15);color:var(--blue);border:1px solid rgba(37,99,235,.3);">Emp.Nuevo · Paga addon · Inicia día 15 mes 4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">🔑 La regla más importante de esta sección</div>
+        El sistema no rebaja el precio porque un empleado se fue. <strong>El precio pagado es fijo para el período comprado</strong>. Lo que sí puede hacer el cliente es: cuando llegue el momento de renovar, renovar solo con los empleados activos y no pagar por el que ya no está.
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 4 — ADDON
+    ═════════════════════════ -->
+    <section class="section" id="sec4">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#eff6ff;color:var(--blue);">4</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Agregar un Nuevo Usuario (Addon)</div>
+          <div class="sec-hdr-sub">El flujo completo cuando entra un empleado nuevo a mitad del período</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Este es probablemente el flujo más frecuente después de la compra inicial. Alguien del equipo deja la empresa o el negocio crece y hay que incorporar un nuevo empleado que ya quiere trabajar en el Odoo del cliente.
+        </p>
+        <p>
+          Lo llamamos <strong>"addon"</strong> (o complemento) porque no es una suscripción nueva, sino un usuario adicional que se agrega a una suscripción ya existente.
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <strong>El admin crea el usuario en su Odoo</strong>
+          <span>El administrador del cliente intenta crear un nuevo usuario en su instancia. El sistema detecta que no hay una línea de suscripción activa para ese usuario.</span>
+        </li>
+        <li>
+          <strong>El sistema genera una alerta automática</strong>
+          <span>Se envía un correo al admin del cliente (y al admin del sistema maestro) diciendo que se detectó un usuario sin suscripción, con el nombre del usuario y un enlace directo para pagar el addon.</span>
+        </li>
+        <li>
+          <strong>El admin va al portal y configura el addon</strong>
+          <span>En la sección "Mi Suscripción" del portal, el admin ve el usuario pendiente y puede elegir cuántos meses quiere pagar para ese empleado. El precio se calcula automáticamente.</span>
+        </li>
+        <li>
+          <strong>Paga y el sistema activa al usuario</strong>
+          <span>Se genera una orden de venta tipo "addon", se crea la factura, el admin paga, y al confirmarse el pago se crea la línea de suscripción para ese usuario. El usuario queda habilitado en la instancia.</span>
+        </li>
+      </ol>
+
+      <div class="example">
+        <div class="example-title">Ejemplo detallado — Empresa ABC · Día 15 del Mes 4</div>
+        <div class="example-body">
+          El equipo tiene 5 empleados pagados por 7 meses desde el mes 1. El jefe contrata a <strong>María García</strong>. El jefe la agrega a su Odoo → el sistema bloquea el acceso y avisa. El jefe va al portal y elige <strong>7 meses para María</strong> → el sistema calcula 700 Bs (1 usuario × 7 meses × 100 Bs). El jefe paga. El sistema crea una nueva línea para María: <strong>inicio día 15 del mes 4, vencimiento día 15 del mes 11</strong>. El resto del equipo vence al final del mes 7. Las fechas son independientes.
+        </div>
+      </div>
+
+      <div class="info-box gold">
+        <div class="info-box-title">💡 Opción "Sincronizar con el equipo"</div>
+        Para clientes que prefieren que todos sus empleados venzan el mismo día, se puede ofrecer en el portal una opción de "sincronizar". Si el equipo vence en 3.5 meses, el sistema redondea hacia arriba y cobra 4 meses para el nuevo usuario. Así todos quedan con la misma fecha de vencimiento y la renovación es más sencilla.
+      </div>
+
+      <div class="warn">
+        <span class="warn-icon">⚠️</span>
+        <span><strong>¿Qué pasa si el usuario nuevo intenta trabajar antes de pagar?</strong> No puede. El sistema solo habilita el acceso (<em>res.users.active = True</em>) cuando la factura del addon queda marcada como pagada. Mientras no haya pago, el usuario existe en el sistema pero no puede iniciar sesión.</span>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 5 — VENCIMIENTO
+    ═════════════════════════ -->
+    <section class="section" id="sec5">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#fffbeb;color:var(--gold);">5</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Control de Vencimiento y Suspensión</div>
+          <div class="sec-hdr-sub">Qué hace el sistema cada día para gestionar los plazos</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Todos los días a medianoche, el sistema ejecuta un proceso automático llamado "proceso diario". Este proceso revisa todas las líneas de suscripción y toma decisiones según las fechas de vencimiento.
+        </p>
+        <p>
+          El objetivo es que los clientes siempre sepan con antelación cuándo vencen, para que puedan renovar sin perder acceso. Y si no renuevan, el sistema debe bloquear el acceso de forma ordenada y segura.
+        </p>
+      </div>
+
+      <div class="info-box gold">
+        <div class="info-box-title">📢 Sistema de avisos escalonados</div>
+        El sistema envía 4 correos de aviso antes del vencimiento. Cada uno tiene un tono más urgente:
+        <ul class="bullets" style="margin-top:.5rem;">
+          <li><strong>30 días antes:</strong> correo informativo tranquilo — "Tu suscripción vence en un mes"</li>
+          <li><strong>15 días antes:</strong> correo con más urgencia — "Renueva pronto para no perder acceso"</li>
+          <li><strong>7 días antes:</strong> correo urgente + banner visible en el portal del cliente</li>
+          <li><strong>1 día antes:</strong> correo de última llamada + notificación al administrador del sistema</li>
+        </ul>
+        Todos los correos incluyen un botón directo de renovación.
+      </div>
+
+      <div class="prose">
+        <p>
+          Cuando llega la <strong>fecha de vencimiento</strong>, el proceso diario actúa de la siguiente manera según cuántos usuarios hayan vencido:
+        </p>
+      </div>
+
+      <div class="info-box orange">
+        <div class="info-box-title">🟡 Suspensión parcial — Solo algunos usuarios vencieron</div>
+        Solo se bloquean los usuarios cuya línea de suscripción venció. Los demás siguen trabajando normalmente. El estado de la suscripción pasa a <strong>"parcialmente activa"</strong>. El admin recibe un aviso con los usuarios bloqueados y la opción de renovarlos.
+      </div>
+
+      <div class="info-box red">
+        <div class="info-box-title">🔴 Suspensión total — Todos los usuarios vencieron</div>
+        Se bloquea el acceso de todos los usuarios de esa empresa. La suscripción pasa a estado <strong>"pausada"</strong>. La instancia sigue funcionando (los datos están seguros) pero nadie puede entrar. Empieza el período de gracia de 30 días.
+      </div>
+
+      <ol class="steps">
+        <li>
+          <strong>Período de gracia: 30 días para renovar</strong>
+          <span>Durante 30 días después del vencimiento total, el cliente puede renovar y recuperar el acceso inmediatamente. Los datos no se tocan durante este tiempo.</span>
+        </li>
+        <li>
+          <strong>Último aviso antes de cancelar</strong>
+          <span>Si pasan 30 días sin renovar, el sistema envía un último correo explicando que los datos se eliminarán pronto y ofreciendo descargar un backup.</span>
+        </li>
+        <li>
+          <strong>Cancelación de la suscripción</strong>
+          <span>El administrador del sistema puede optar por archivar la instancia o dar más tiempo. Si no hay respuesta, la instancia se detiene y la suscripción pasa a "cancelada".</span>
+        </li>
+        <li>
+          <strong>Retención de datos por 90 días adicionales</strong>
+          <span>Los datos del cliente se guardan en backup por 90 días más después de la cancelación, por si el cliente decide reactivar o necesita recuperar información.</span>
+        </li>
+      </ol>
+
+      <div class="warn">
+        <span class="warn-icon">⚠️</span>
+        <span><strong>Nunca eliminar datos sin backup previo</strong> y sin haber notificado al cliente con suficiente antelación. Esta es una regla de negocio no negociable para proteger la confianza del cliente y evitar problemas legales.</span>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 6 — RENOVACIÓN
+    ═════════════════════════ -->
+    <section class="section" id="sec6">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#ecfdf5;color:var(--cyan);">6</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Flujo de Renovación</div>
+          <div class="sec-hdr-sub">Cómo el cliente extiende su suscripción</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Renovar es muy parecido a comprar por primera vez, con una diferencia clave: el sistema ya sabe quiénes son los usuarios y puede calcular inteligentemente las nuevas fechas de vencimiento.
+        </p>
+        <p>
+          El cliente puede renovar desde el portal en cualquier momento: antes de que venza (para no perder continuidad), justo al vencer, o incluso después de haber sido bloqueado (mientras esté en período de gracia).
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <strong>El admin entra al portal y va a "Mi Suscripción"</strong>
+          <span>Allí puede ver todos sus usuarios, cuáles están activos, cuáles vencieron, y las fechas exactas de cada uno. Hay un botón de "Renovar" visible y accesible.</span>
+        </li>
+        <li>
+          <strong>Elige qué renovar y por cuántos meses</strong>
+          <span>Puede renovar todos los usuarios a la vez o seleccionar solo algunos. Por ejemplo, si salió un empleado, puede renovar solo los 4 restantes y no pagar por el que ya no está. Elige cuántos meses quiere pagar.</span>
+        </li>
+        <li>
+          <strong>El sistema calcula las nuevas fechas automáticamente</strong>
+          <span>Si renueva antes de vencer, la nueva fecha de inicio es la fecha de fin actual (sin perder días). Si renueva después de vencer, la nueva fecha de inicio es el día del pago.</span>
+        </li>
+        <li>
+          <strong>Paga y el sistema reactiva el acceso</strong>
+          <span>Se genera una orden de tipo "renovación" y su factura correspondiente. Al pagar, las líneas de suscripción se actualizan, los usuarios se reactivan y el cliente recibe un correo de confirmación.</span>
+        </li>
+      </ol>
+
+      <div class="flow-inline">
+        <div class="flow-node">Portal: "Renovar"</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-node hi">Elegir usuarios + meses</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-node">Orden tipo "renovación"</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-node">Pago</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-node hi">Líneas actualizadas</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-node">Acceso restaurado ✓</div>
+      </div>
+
+      <div class="info-box green">
+        <div class="info-box-title">✅ Buenas prácticas para la renovación</div>
+        <ul class="bullets" style="margin-top:.4rem;">
+          <li>Mostrar siempre cuánto se ahorra si renueva por más meses (si hubiera descuentos por volumen en el futuro)</li>
+          <li>Ofrecer la opción de que el sistema recuerde automaticamente al cliente 30 días antes</li>
+          <li>Permitir renovar usuario por usuario para mayor flexibilidad</li>
+          <li>Mostrar el historial completo de facturas anteriores en el mismo panel</li>
+        </ul>
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 7 — ESTADOS
+    ═════════════════════════ -->
+    <section class="section" id="sec7">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#faf5ff;color:var(--purple);">7</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Los Estados de la Suscripción</div>
+          <div class="sec-hdr-sub">Cómo saber en qué momento está cada cliente</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Cada suscripción tiene un <strong>estado</strong> que indica en qué punto del ciclo de vida se encuentra. Esto es lo que el administrador ve en el panel de Odoo Maestro y lo que controla qué puede hacer el cliente.
+        </p>
+      </div>
+
+      <div class="state-list">
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--muted)"></div>
+          <div class="state-content">
+            <div class="state-name">borrador</div>
+            <div class="state-desc">La orden de venta fue creada pero todavía no se ha confirmado el pago. El cliente puede haber llenado el formulario pero aún no pagó. El acceso a la instancia no está disponible todavía.</div>
+          </div>
+        </div>
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--gold)"></div>
+          <div class="state-content">
+            <div class="state-name">pago_pendiente</div>
+            <div class="state-desc">La orden fue confirmada y se generó la factura, pero el pago no ha sido registrado aún en el sistema. El admin está esperando que el dinero llegue o que se confirme la transacción.</div>
+          </div>
+        </div>
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--green)"></div>
+          <div class="state-content">
+            <div class="state-name">activa</div>
+            <div class="state-desc">Todo en orden. Todos los usuarios tienen líneas vigentes y pueden acceder normalmente a su instancia Odoo. Este es el estado "feliz" del sistema.</div>
+          </div>
+        </div>
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--orange)"></div>
+          <div class="state-content">
+            <div class="state-name">parcialmente_activa</div>
+            <div class="state-desc">Algunos usuarios tienen líneas vencidas y están bloqueados, pero otros siguen activos. El acceso a la instancia funciona para los usuarios vigentes. El admin debe renovar o retirar a los usuarios bloqueados.</div>
+          </div>
+        </div>
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--red)"></div>
+          <div class="state-content">
+            <div class="state-name">pausada</div>
+            <div class="state-desc">Todos los usuarios están bloqueados. Nadie puede entrar a la instancia. Los datos están seguros y la instancia sigue corriendo. El cliente tiene 30 días para renovar antes de que se inicie el proceso de cancelación.</div>
+          </div>
+        </div>
+        <div class="state-row">
+          <div class="state-dot" style="background:var(--muted)"></div>
+          <div class="state-content">
+            <div class="state-name">cancelada</div>
+            <div class="state-desc">La suscripción terminó definitivamente. La instancia fue detenida o archivada. Los datos se guardan en backup por 90 días adicionales por política de retención, luego se eliminan permanentemente.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box purple">
+        <div class="info-box-title">🔄 ¿Puede una suscripción volver de "cancelada" a "activa"?</div>
+        Sí, pero requiere intervención manual del administrador. Si el cliente quiere reactivar después de una cancelación, el admin puede restaurar el backup y crear una nueva suscripción desde cero. No es automático porque implica trabajo técnico de restauración.
+      </div>
+    </section>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ════════════════════════
+         SECCIÓN 8 — MÓDULOS
+    ═════════════════════════ -->
+    <section class="section" id="sec8">
+      <div class="sec-hdr">
+        <div class="sec-num-big" style="background:#fffbeb;color:var(--gold);">8</div>
+        <div class="sec-hdr-text">
+          <div class="sec-hdr-title">Módulos a Desarrollar</div>
+          <div class="sec-hdr-sub">Qué hay que programar y en qué orden hacerlo</div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>
+          Todo lo que describe esta guía se implementa en <strong>tres módulos de Odoo</strong>. Uno ya existe (micro_SaaS) y solo necesita ampliarse. Los otros dos son nuevos y se construyen desde cero.
+        </p>
+        <p>
+          El orden recomendado de desarrollo es de abajo hacia arriba: primero la base de datos y la lógica, luego el portal y finalmente la integración con micro_SaaS.
+        </p>
+      </div>
+
+      <div class="module-card">
+        <div class="module-title">
+          <span class="module-icon">📦</span>
+          <span class="module-name">subscription_dynamic</span>
+          <span class="module-tag">Módulo nuevo · Desarrollar primero</span>
+        </div>
+        <div class="module-body">
+          <strong>¿Qué hace?</strong> Es el núcleo de todo el sistema. Define los modelos de datos (plan, suscripción, línea), contiene toda la lógica de negocio y controla los estados.<br><br>
+          <strong>Incluye:</strong> los 6 modelos de datos descritos en la sección 0, el proceso diario automático que revisa vencimientos, las reglas de automatización (cuando factura = pagada → crear suscripción), las 4 plantillas de correo para los avisos de vencimiento, y las acciones sobre res.users (bloquear / desbloquear acceso).<br><br>
+          <strong>Depende de:</strong> sale, account, mail (módulos estándar de Odoo).
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-title">
+          <span class="module-icon">🌐</span>
+          <span class="module-name">subscription_portal</span>
+          <span class="module-tag">Módulo nuevo · Desarrollar segundo</span>
+        </div>
+        <div class="module-body">
+          <strong>¿Qué hace?</strong> Agrega toda la experiencia del cliente en el portal web: el configurador de compra, el panel de gestión y los flujos de addon y renovación.<br><br>
+          <strong>Incluye:</strong> el widget de JavaScript con el selector de meses y usuarios (con cálculo en tiempo real), la página "Mi Suscripción" donde el cliente ve todos sus usuarios y fechas, el flujo de compra de addon para nuevos empleados, el flujo de renovación con selección de usuarios, y el historial completo de facturas.<br><br>
+          <strong>Depende de:</strong> subscription_dynamic, website_sale (módulos de Odoo).
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-title">
+          <span class="module-icon">🔧</span>
+          <span class="module-name">micro_saas (ampliar el existente)</span>
+          <span class="module-tag">Módulo existente · Ampliar tercero</span>
+        </div>
+        <div class="module-body">
+          <strong>¿Qué cambia?</strong> El módulo que ya tienes necesita conocer el concepto de suscripción para poder controlar el acceso de los usuarios según si están pagados o no.<br><br>
+          <strong>Se agrega:</strong> el campo "empresas cliente" (para que una instancia pueda tener N empresas), el método para verificar si hay cupo antes de habilitar un usuario, el hook que se activa cuando una suscripción se activa (para habilitar o deshabilitar usuarios automáticamente), y la relación con la suscripción para saber cuántos usuarios está pagando cada empresa en esa instancia.<br><br>
+          <strong>Importante:</strong> al ser una ampliación del módulo existente, hay que tener cuidado de no romper el comportamiento actual. Se recomienda usar herencia de modelos de Odoo.
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">📋 Reglas de negocio que nunca deben olvidarse al programar</div>
+        <ul class="bullets" style="margin-top:.4rem;">
+          <li>Un usuario solo puede tener <strong>una línea activa</strong> por suscripción para evitar cobros dobles</li>
+          <li>Al desactivar un usuario, su línea <strong>no se elimina</strong> — se guarda el registro porque ya fue cobrado</li>
+          <li>Todo SO de addon debe <strong>referenciar la suscripción padre</strong> para mantener trazabilidad completa</li>
+          <li>La instancia solo puede tener usuarios que sean <strong>menor o igual a la suma de líneas activas</strong></li>
+          <li>Siempre debe existir un <strong>período de gracia de 30 días</strong> antes de bloquear la instancia</li>
+          <li><strong>Nunca eliminar datos</strong> sin backup previo y sin notificar al cliente con tiempo suficiente</li>
+        </ul>
+      </div>
+
+    </section>
+
+
+  </main>
+</div>
+
+<script>
+// Active nav highlighting on scroll
+const sections = document.querySelectorAll('.section');
+const navItems = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navItems.forEach(item => {
+        item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(sec => observer.observe(sec));
+</script>
+</body>
+</html>

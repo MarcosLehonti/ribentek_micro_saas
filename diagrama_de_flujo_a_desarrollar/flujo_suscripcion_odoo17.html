@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo de Suscripción Dinámica — Odoo 17</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07090f;
+  --surface:  #0e1420;
+  --card:     #131b2e;
+  --border:   #1e2d45;
+  --border2:  #263650;
+
+  --cyan:   #00c9b8;
+  --blue:   #4f8fff;
+  --purple: #9c6cff;
+  --gold:   #f4a836;
+  --red:    #ff5370;
+  --green:  #00d48a;
+  --orange: #ff8c42;
+  --slate:  #7899be;
+
+  --text:   #dce9f5;
+  --muted:  #4d6b88;
+  --faint:  #0b1220;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 2.5rem 1.5rem 4rem;
+  min-height: 100vh;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,201,184,.06), transparent);
+  pointer-events:none; z-index:0;
+}
+
+/* ── layout ── */
+.page { max-width: 1080px; margin: 0 auto; position: relative; z-index:1; }
+
+/* ── header ── */
+.hdr {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  animation: rise .6s ease both;
+}
+.hdr-pill {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background: rgba(0,201,184,.08);
+  border: 1px solid rgba(0,201,184,.25);
+  color: var(--cyan);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing:.15em; text-transform:uppercase;
+  padding: .3rem 1rem; border-radius:100px; margin-bottom:1.2rem;
+}
+.hdr-pill i { width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:blink 1.4s infinite; }
+h1 {
+  font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+  font-weight: 800; line-height: 1.2;
+  background: linear-gradient(130deg, #fff 0%, var(--cyan) 55%, var(--blue) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hdr-desc { color: var(--muted); font-size:.85rem; margin-top:.6rem; }
+
+/* ── section ── */
+.sec { margin-bottom: 2.8rem; animation: rise .5s ease both; }
+.sec:nth-child(2){animation-delay:.05s}
+.sec:nth-child(3){animation-delay:.10s}
+.sec:nth-child(4){animation-delay:.15s}
+.sec:nth-child(5){animation-delay:.20s}
+.sec:nth-child(6){animation-delay:.25s}
+.sec:nth-child(7){animation-delay:.30s}
+.sec:nth-child(8){animation-delay:.35s}
+
+.sec-head {
+  display:flex; align-items:center; gap:.75rem;
+  margin-bottom:1.2rem;
+}
+.sec-badge {
+  width:30px; height:30px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono',monospace; font-size:.68rem; font-weight:700;
+  flex-shrink:0;
+}
+.sec-label {
+  font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.18em;
+}
+.sec-line { flex:1; height:1px; background:var(--border); }
+
+/* ── grid rows ── */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.75rem; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:.75rem; }
+.g21 { display:grid; grid-template-columns:2fr 1fr; gap:.75rem; }
+
+/* ── card ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius:12px;
+  padding: 1.1rem 1.2rem;
+  position:relative; overflow:hidden;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cc, var(--blue));
+  box-shadow: 0 10px 30px -12px var(--cc, var(--blue));
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background: var(--cc, var(--blue));
+  border-radius:12px 12px 0 0;
+}
+.card::after {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,.02), transparent 55%);
+  pointer-events:none;
+}
+
+/* card colors */
+.cc  { --cc: var(--cyan); }
+.cb  { --cc: var(--blue); }
+.cp  { --cc: var(--purple); }
+.cg  { --cc: var(--gold); }
+.cr  { --cc: var(--red); }
+.cgr { --cc: var(--green); }
+.co  { --cc: var(--orange); }
+.cs  { --cc: var(--slate); }
+
+.card-icon { font-size:1.3rem; margin-bottom:.45rem; display:block; }
+.card-title { font-size:.85rem; font-weight:700; color:#deeeff; margin-bottom:.35rem; line-height:1.3; }
+.card-body {
+  font-size:.72rem; line-height:1.75; color: var(--muted);
+  font-family:'IBM Plex Mono', monospace;
+}
+.card-body strong { color: var(--cc, var(--blue)); font-weight:600; }
+.card-body .note { color:#3d5a76; font-style:italic; }
+.tag {
+  display:inline-block; margin-top:.6rem;
+  padding:.15rem .55rem; border-radius:4px;
+  font-family:'IBM Plex Mono',monospace; font-size:.58rem;
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+  color: var(--cc, var(--blue));
+}
+
+/* ── connector arrow ── */
+.arrow {
+  display:flex; flex-direction:column; align-items:center; gap:1px;
+  margin:.5rem 0;
+}
+.arrow-line { width:2px; height:24px; background:linear-gradient(var(--border2), rgba(79,143,255,.4)); }
+.arrow-tip { width:0;height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid rgba(79,143,255,.45); }
+.arrow-label {
+  font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted);
+  background:var(--bg); padding:.1rem .55rem; border-radius:3px;
+  border:1px solid var(--border); margin:2px 0;
+}
+
+/* ── decision diamond ── */
+.decision-box {
+  display:flex; flex-direction:column; align-items:center; gap:.75rem;
+}
+.diamond {
+  background: var(--card);
+  border:2px solid var(--gold);
+  box-shadow: 0 0 22px -8px var(--gold);
+  padding:1rem 2.5rem;
+  clip-path: polygon(8% 50%, 50% 8%, 92% 50%, 50% 92%);
+  width:290px; height:90px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+.diamond-title { font-size:.75rem; font-weight:700; color:var(--gold); line-height:1.3; }
+.diamond-sub { font-size:.58rem; font-family:'IBM Plex Mono',monospace; color:var(--muted); margin-top:.2rem; }
+
+.branches { display:grid; grid-template-columns:1fr 40px 1fr; gap:.75rem; width:100%; align-items:start; }
+.branch { display:flex; flex-direction:column; align-items:center; gap:.4rem; }
+.br-mid { display:flex; align-items:center; color:var(--muted); font-size:.8rem; padding-top:1.5rem; }
+
+.badge-yn {
+  font-family:'IBM Plex Mono',monospace; font-size:.63rem; font-weight:700;
+  padding:.22rem .75rem; border-radius:100px;
+}
+.yes { background:rgba(0,212,138,.1); color:var(--green); border:1px solid rgba(0,212,138,.3); }
+.no  { background:rgba(255,83,112,.1); color:var(--red); border:1px solid rgba(255,83,112,.3); }
+.alt { background:rgba(244,168,54,.1); color:var(--gold); border:1px solid rgba(244,168,54,.3); }
+
+/* ── formula / rule box ── */
+.rule-box {
+  background:var(--faint); border:1px solid var(--border2);
+  border-left:3px solid var(--cyan); border-radius:8px;
+  padding:1rem 1.25rem; margin-top:.75rem;
+  font-family:'IBM Plex Mono',monospace; font-size:.7rem; line-height:2;
+  color:var(--text);
+}
+.rule-box .k  { color:var(--cyan); font-weight:700; }
+.rule-box .v  { color:var(--gold); }
+.rule-box .cm { color:var(--muted); font-style:italic; font-size:.63rem; }
+.rule-box .r  { color:var(--red); }
+.rule-box .g  { color:var(--green); }
+
+/* ── timeline ── */
+.timeline {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:1.2rem 1.4rem; margin-top:.75rem;
+}
+.tl-title {
+  font-size:.7rem; font-family:'IBM Plex Mono',monospace;
+  color:var(--cyan); text-transform:uppercase; letter-spacing:.1em; margin-bottom:.9rem;
+}
+.tl-row { margin-bottom:.4rem; }
+.tl-meta {
+  font-family:'IBM Plex Mono',monospace; font-size:.6rem;
+  color:var(--muted); margin-bottom:.25rem;
+}
+.tl-bar { display:flex; height:32px; border-radius:6px; overflow:hidden; }
+.tl-seg {
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono',monospace; font-size:.58rem; font-weight:600;
+  white-space:nowrap; overflow:hidden; padding:0 .5rem;
+}
+.tl-legend { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:.75rem; }
+.tl-item { display:flex; align-items:center; gap:.35rem; font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted); }
+.tl-dot { width:10px; height:10px; border-radius:3px; }
+
+/* ── states flow ── */
+.states-flow { display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; }
+.state-pill {
+  display:flex; align-items:center; overflow:hidden;
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:6px;
+}
+.state-color { width:4px; height:100%; padding:.45rem .2rem; }
+.state-name { padding:.35rem .8rem; font-family:'IBM Plex Mono',monospace; font-size:.65rem; }
+.state-arr { color:var(--muted); font-size:.75rem; }
+
+/* ── table ── */
+.table-wrap { border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-top:.75rem; }
+table { width:100%; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.67rem; }
+thead th {
+  background:rgba(79,143,255,.08); color:var(--blue);
+  text-transform:uppercase; letter-spacing:.1em; font-size:.6rem;
+  padding:.55rem .85rem; text-align:left; border-bottom:1px solid var(--border2);
+}
+tbody td { padding:.45rem .85rem; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.6; }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:rgba(255,255,255,.012); }
+.fn { color:var(--cyan); font-weight:600; }
+.ft { color:var(--gold); }
+.fd { color:var(--muted); font-size:.62rem; }
+
+/* ── example code ── */
+.code-box {
+  background:rgba(0,212,138,.04); border:1px solid rgba(0,212,138,.18);
+  border-radius:8px; padding:1rem 1.25rem; margin-top:.75rem;
+}
+.code-title {
+  font-family:'IBM Plex Mono',monospace; font-size:.63rem; color:var(--green);
+  text-transform:uppercase; letter-spacing:.1em; margin-bottom:.6rem;
+  display:flex; align-items:center; gap:.4rem;
+}
+.code-title::before { content:'▶'; font-size:.5rem; }
+pre {
+  font-family:'IBM Plex Mono',monospace; font-size:.7rem;
+  line-height:1.9; color:var(--text); white-space:pre-wrap;
+}
+pre .k { color:var(--cyan); }
+pre .v { color:var(--gold); }
+pre .cm { color:var(--muted); font-style:italic; }
+pre .r { color:var(--red); }
+pre .g { color:var(--green); }
+
+/* ── notice ── */
+.notice {
+  background:var(--faint); border:1px solid var(--border);
+  border-radius:8px; padding:.85rem 1.1rem; margin-top:.75rem;
+  font-family:'IBM Plex Mono',monospace; font-size:.65rem;
+  color:var(--muted); line-height:1.8;
+}
+.notice strong { color:var(--gold); }
+
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border2),transparent); margin:2rem 0; }
+
+/* ── animations ── */
+@keyframes rise { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+@media(max-width:680px){
+  .g2,.g3,.g4,.g21 { grid-template-columns:1fr; }
+  .branches { grid-template-columns:1fr; }
+  .br-mid { display:none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════════════
+     ENCABEZADO
+════════════════════════════════ -->
+<header class="hdr">
+  <div class="hdr-pill"><i></i>Odoo 17 · micro_SaaS · Suscripción Dinámica</div>
+  <h1>Módulo de Suscripción por Usuario<br>y Período Dinámico</h1>
+  <p class="hdr-desc">Flujo completo: Compra · Instancia · Usuarios · Renovación · Vencimiento</p>
+</header>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 0 — MODELOS DE DATOS
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(0,201,184,.12);color:var(--cyan);">0</div>
+    <span class="sec-label" style="color:var(--cyan);">Modelos de datos — Estructura del módulo</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g3">
+
+    <div class="card cc">
+      <span class="card-icon">🗂️</span>
+      <div class="card-title">Plan de Suscripción</div>
+      <div class="card-body">
+        Modelo: <strong>subscription.plan</strong><br>
+        ─────────────────────<br>
+        nombre: Texto<br>
+        <strong>precio_por_usuario_mes</strong>: Decimal<br>
+        moneda: Referencia<br>
+        activo: Sí/No
+      </div>
+      <span class="tag">Ej: "Plan Estándar · 100 Bs/usuario/mes"</span>
+    </div>
+
+    <div class="card cb">
+      <span class="card-icon">📄</span>
+      <div class="card-title">Suscripción Principal</div>
+      <div class="card-body">
+        Modelo: <strong>subscription.subscription</strong><br>
+        ─────────────────────<br>
+        empresa_cliente: Referencia<br>
+        <strong>instancia: Referencia</strong><br>
+        plan: Referencia<br>
+        <strong>estado: borrador/activa/pausada/cancelada</strong><br>
+        orden_venta: Referencia
+      </div>
+      <span class="tag">1 suscripción por empresa cliente</span>
+    </div>
+
+    <div class="card cp">
+      <span class="card-icon">👤</span>
+      <div class="card-title">Línea por Usuario</div>
+      <div class="card-body">
+        Modelo: <strong>subscription.line</strong><br>
+        ─────────────────────<br>
+        suscripcion: Referencia<br>
+        <strong>usuario: Referencia (res.users)</strong><br>
+        <strong>meses_pagados: Entero</strong><br>
+        <strong>fecha_inicio: Fecha</strong><br>
+        <strong>fecha_fin: Fecha (calculada)</strong><br>
+        factura: Referencia<br>
+        estado: activa/expirada/inactiva
+      </div>
+      <span class="tag">1 línea independiente por usuario ← CLAVE</span>
+    </div>
+
+    <div class="card cg">
+      <span class="card-icon">🏗️</span>
+      <div class="card-title">Instancia Odoo</div>
+      <div class="card-body">
+        Modelo: <strong>saas.instance</strong><br>
+        ─────────────────────<br>
+        nombre_base_datos: Texto<br>
+        <strong>empresas_cliente: Muchos (many2many)</strong><br>
+        url_acceso: Texto<br>
+        estado: creando/activa/detenida<br>
+        max_usuarios: Entero<br>
+        <strong>usuarios_activos: Entero (calculado)</strong>
+      </div>
+      <span class="tag">Una instancia puede tener N empresas</span>
+    </div>
+
+    <div class="card cgr">
+      <span class="card-icon">🧾</span>
+      <div class="card-title">Factura</div>
+      <div class="card-body">
+        Modelo: <strong>account.move</strong><br>
+        ─────────────────────<br>
+        <strong>suscripcion: Referencia (campo nuevo)</strong><br>
+        tipo: factura de cliente<br>
+        origen: referencia de la orden<br>
+        <strong>estado_pago: pagada / pendiente</strong><br>
+        lineas: N usuarios × precio
+      </div>
+      <span class="tag">1 factura por cada evento de cobro</span>
+    </div>
+
+    <div class="card co">
+      <span class="card-icon">🛒</span>
+      <div class="card-title">Orden de Venta</div>
+      <div class="card-body">
+        Modelo: <strong>sale.order</strong><br>
+        ─────────────────────<br>
+        suscripcion: Referencia (campo nuevo)<br>
+        <strong>meses: Entero (campo nuevo)</strong><br>
+        <strong>cantidad_usuarios: Entero</strong><br>
+        <strong>tipo_orden: nueva / addon / renovacion</strong>
+      </div>
+      <span class="tag">genera factura → activa suscripción</span>
+    </div>
+
+  </div>
+
+  <div class="rule-box">
+    <span class="k">FÓRMULA DE COBRO:</span>
+    &nbsp; Total = <span class="v">precio_plan</span> × <span class="v">cantidad_usuarios</span> × <span class="v">meses_elegidos</span>
+    <span class="cm"> // Ej: 100 Bs × 5 usuarios × 7 meses = 3,500 Bs</span><br>
+    <span class="k">FECHA FIN:</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fecha_fin = fecha_inicio + meses_pagados
+    <span class="cm"> // cada usuario tiene sus propias fechas</span><br>
+    <span class="k">SALIDA DE USUARIO:</span> la línea queda vigente hasta fecha_fin → <span class="r">sin reembolso</span><br>
+    <span class="k">NUEVO USUARIO:</span>
+    &nbsp; nueva orden "addon" → nueva factura → nueva línea para ese usuario → <span class="g">independiente</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 1 — COMPRA INICIAL
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(79,143,255,.12);color:var(--blue);">1</div>
+    <span class="sec-label" style="color:var(--blue);">Compra Inicial desde el Portal</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g4">
+    <div class="card cb">
+      <span class="card-icon">🏪</span>
+      <div class="card-title">1. Tienda del Portal</div>
+      <div class="card-body">
+        Cliente entra a la tienda online<br>
+        Ve el producto <strong>"Suscripción Odoo"</strong><br>
+        Solo puede agregar <strong>1 al carrito</strong><br>
+        (validación en website_sale)
+      </div>
+      <span class="tag">website_sale · product.template</span>
+    </div>
+
+    <div class="card cb">
+      <span class="card-icon">⚙️</span>
+      <div class="card-title">2. Configurador Dinámico</div>
+      <div class="card-body">
+        Widget personalizado en la ficha:<br>
+        ・Selector: <strong>1 a 36 meses</strong><br>
+        ・Campo: <strong>número de usuarios</strong><br>
+        ・Total: se actualiza en tiempo real<br>
+        <strong>Ej: 3 meses × 4 usuarios = 1,200 Bs</strong>
+      </div>
+      <span class="tag">JS widget · product configurator</span>
+    </div>
+
+    <div class="card cb">
+      <span class="card-icon">🛒</span>
+      <div class="card-title">3. Carrito y Pago</div>
+      <div class="card-body">
+        Se guardan en la orden:<br>
+        ・<strong>meses elegidos</strong><br>
+        ・<strong>cantidad de usuarios</strong><br>
+        ・precio total calculado<br>
+        Cliente paga (QR / transferencia)
+      </div>
+      <span class="tag">sale.order · payment.provider</span>
+    </div>
+
+    <div class="card cb">
+      <span class="card-icon">📤</span>
+      <div class="card-title">4. Orden al Odoo Maestro</div>
+      <div class="card-body">
+        La orden llega al sistema admin<br>
+        Estado: <strong>Borrador → Confirmada</strong><br>
+        Admin verifica los datos<br>
+        y confirma el pago recibido
+      </div>
+      <span class="tag">sale.order → Odoo Maestro</span>
+    </div>
+  </div>
+
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">pago verificado por admin → confirmar orden</div>
+    <div class="arrow-tip"></div>
+  </div>
+
+  <div class="g3">
+    <div class="card cc">
+      <span class="card-icon">✅</span>
+      <div class="card-title">5. Generar Factura</div>
+      <div class="card-body">
+        Al confirmar la orden se genera:<br>
+        Factura = <strong>N usuarios × X meses × 100 Bs</strong><br>
+        Estado: <strong>Publicada y Pagada</strong><br>
+        Tipo: <strong>nueva suscripción</strong>
+      </div>
+      <span class="tag">account.move · tipo: nueva</span>
+    </div>
+
+    <div class="card cc">
+      <span class="card-icon">📋</span>
+      <div class="card-title">6. Crear Suscripción</div>
+      <div class="card-body">
+        Al registrar factura pagada:<br>
+        → Se crea <strong>subscription.subscription</strong><br>
+        → Se crean <strong>N líneas (una por usuario)</strong><br>
+        → fecha_inicio = hoy<br>
+        → fecha_fin = hoy + meses elegidos
+      </div>
+      <span class="tag">acción automática · on_payment</span>
+    </div>
+
+    <div class="card cc">
+      <span class="card-icon">📧</span>
+      <div class="card-title">7. Notificar al Cliente</div>
+      <div class="card-body">
+        Email automático con:<br>
+        ・URL de su instancia Odoo<br>
+        ・Usuario y contraseña<br>
+        ・<strong>Fecha de vencimiento</strong><br>
+        ・N usuarios habilitados
+      </div>
+      <span class="tag">mail.template → send()</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 2 — INSTANCIA
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(156,108,255,.12);color:var(--purple);">2</div>
+    <span class="sec-label" style="color:var(--purple);">Asignación de Instancia (micro_SaaS)</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g2">
+
+    <div>
+      <div class="decision-box">
+        <div class="diamond">
+          <div class="diamond-title">¿El cliente ya tiene<br>una instancia asignada?</div>
+        </div>
+        <div class="branches">
+          <div class="branch">
+            <span class="badge-yn no">✗ No tiene instancia</span>
+            <div class="card cr" style="width:100%;margin-top:.4rem;">
+              <span class="card-icon">🏗️</span>
+              <div class="card-title">Crear Nueva Instancia</div>
+              <div class="card-body">
+                micro_SaaS ejecuta:<br>
+                ・Crea base de datos PostgreSQL<br>
+                ・Configura subdominio propio<br>
+                ・Instala módulos base<br>
+                ・Crea usuario administrador
+              </div>
+              <span class="tag">saas.instance.create()</span>
+            </div>
+          </div>
+          <div class="br-mid">│</div>
+          <div class="branch">
+            <span class="badge-yn yes">✓ Ya tiene instancia</span>
+            <div class="card cgr" style="width:100%;margin-top:.4rem;">
+              <span class="card-icon">🔗</span>
+              <div class="card-title">Asignar a Instancia Existente</div>
+              <div class="card-body">
+                Se agrega la empresa a la instancia<br>
+                Se verifica el <strong>cupo disponible</strong>:<br>
+                usuarios_actuales &lt; max_usuarios<br>
+                Si no hay cupo → crear nueva instancia
+              </div>
+              <span class="tag">instance.partner_ids.add()</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card cp">
+      <span class="card-icon">🌐</span>
+      <div class="card-title">Instancia Multi-empresa</div>
+      <div class="card-body" style="line-height:2;">
+        Una instancia puede alojar <strong>N empresas</strong><br>
+        Cada empresa es un cliente distinto<br>
+        <span class="note">// ahorra recursos del servidor</span><br><br>
+        Cada empresa tiene su:<br>
+        → propia <strong>suscripción</strong><br>
+        → propios <strong>usuarios</strong><br>
+        → propia <strong>factura</strong><br><br>
+        El sistema controla el cupo total:<br>
+        <strong>suma(líneas activas) ≤ max_usuarios</strong><br><br>
+        Si se llena el cupo →<br>
+        se crea una nueva instancia automáticamente
+      </div>
+      <span class="tag">multi-empresa · control de cupo</span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 3 — GESTIÓN DE USUARIOS
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(0,212,138,.12);color:var(--green);">3</div>
+    <span class="sec-label" style="color:var(--green);">Gestión de Usuarios en Período Activo</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g3">
+
+    <div class="card cgr">
+      <span class="card-icon">✅</span>
+      <div class="card-title">Estado Normal</div>
+      <div class="card-body">
+        Suscripción activa y al corriente<br>
+        <strong>5 usuarios</strong> con líneas vigentes<br>
+        Todos con acceso activo<br>
+        Estado: <strong>Activa</strong><br>
+        Fecha fin: en X meses
+      </div>
+      <span class="tag">state = activa</span>
+    </div>
+
+    <div class="card co">
+      <span class="card-icon">➖</span>
+      <div class="card-title">Un Empleado se Va</div>
+      <div class="card-body">
+        Admin desactiva al usuario en Odoo<br>
+        <strong>res.users.active = False</strong><br><br>
+        La <strong>línea de suscripción sigue activa</strong><br>
+        hasta su fecha_fin original<br><br>
+        <strong>No hay reembolso</strong><br>
+        El pago fue por adelantado<br>
+        La línea queda como "inactiva_usuario"
+      </div>
+      <span class="tag">line.state = inactiva_usuario · sin reembolso</span>
+    </div>
+
+    <div class="card cr">
+      <span class="card-icon">➕</span>
+      <div class="card-title">Entra un Nuevo Empleado</div>
+      <div class="card-body">
+        Admin crea usuario en la instancia<br><br>
+        El sistema detecta que <strong>no tiene<br>línea de suscripción activa</strong><br><br>
+        → Se genera alerta automática<br>
+        → Se solicita nueva compra ("addon")<br>
+        → El usuario queda <strong>pendiente de pago</strong>
+      </div>
+      <span class="tag">FLUJO CRÍTICO → ver Sección 4</span>
+    </div>
+
+  </div>
+
+  <!-- Timeline de ejemplo -->
+  <div class="timeline">
+    <div class="tl-title">📅 Ejemplo real — Empresa: 5 empleados, pago por 7 meses (3,500 Bs)</div>
+
+    <div class="tl-row">
+      <div class="tl-meta">Usuarios 1–5 · Período completo pagado</div>
+      <div class="tl-bar">
+        <div class="tl-seg" style="width:100%;background:rgba(0,212,138,.18);color:var(--green);border:1px solid rgba(0,212,138,.3);">
+          Mes 1 ──────── Mes 3 ──────── Mes 5 ──────── Mes 7 &nbsp; · &nbsp; 3,500 Bs pagados
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-row" style="margin-top:.6rem;">
+      <div class="tl-meta">Empleado 5 se va en el mes 3 · Sin reembolso</div>
+      <div class="tl-bar">
+        <div class="tl-seg" style="width:42%;background:rgba(0,212,138,.12);color:var(--green);border:1px solid rgba(0,212,138,.2);">
+          Usuarios 1–4 activos
+        </div>
+        <div class="tl-seg" style="width:14%;background:rgba(255,83,112,.15);color:var(--red);border:1px solid rgba(255,83,112,.25);">
+          Emp.5 sale
+        </div>
+        <div class="tl-seg" style="width:44%;background:rgba(255,140,66,.08);color:var(--muted);border:1px solid rgba(255,140,66,.15);">
+          Línea Emp.5: sigue activa, sin acceso · no reembolso
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-row" style="margin-top:.6rem;">
+      <div class="tl-meta">Día 15 del mes 4: el jefe agrega un nuevo empleado</div>
+      <div class="tl-bar">
+        <div class="tl-seg" style="width:50%;background:rgba(79,143,255,.07);color:var(--muted);border:1px dashed rgba(79,143,255,.2);">
+          ← Días anteriores (emp. nuevo sin pagar)
+        </div>
+        <div class="tl-seg" style="width:50%;background:rgba(79,143,255,.18);color:var(--blue);border:1px solid rgba(79,143,255,.3);">
+          Emp.Nuevo · Paga 7 meses · Inicio: día 15 mes 4
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-legend">
+      <div class="tl-item"><div class="tl-dot" style="background:var(--green)"></div>Usuarios activos y pagados</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--red)"></div>Usuario saliente (línea sin reembolso)</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--blue)"></div>Usuario nuevo (pago independiente)</div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--muted)"></div>Pendiente de pago (bloqueado)</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 4 — AGREGAR USUARIO
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(79,143,255,.12);color:var(--blue);">4</div>
+    <span class="sec-label" style="color:var(--blue);">Flujo para Agregar un Nuevo Usuario (Addon)</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g4">
+    <div class="card cb">
+      <span class="card-icon">👁️</span>
+      <div class="card-title">1. Detección Automática</div>
+      <div class="card-body">
+        El sistema compara cada día:<br>
+        <strong>usuarios activos en instancia</strong><br>
+        vs <strong>líneas de suscripción activas</strong><br><br>
+        Si hay usuario sin línea →<br>
+        se genera una alerta interna
+      </div>
+      <span class="tag">ir.cron · diario · o hook en res.users</span>
+    </div>
+
+    <div class="card cb">
+      <span class="card-icon">🔔</span>
+      <div class="card-title">2. Aviso al Administrador</div>
+      <div class="card-body">
+        Email automático al admin:<br>
+        <strong>"Nuevo usuario sin suscripción"</strong><br>
+        Nombre: Juan Pérez<br>
+        Empresa: ABC S.R.L.<br>
+        Enlace directo para pagar
+      </div>
+      <span class="tag">mail.message · activity · portal link</span>
+    </div>
+
+    <div class="card cp">
+      <span class="card-icon">🛒</span>
+      <div class="card-title">3. Compra del Addon</div>
+      <div class="card-body">
+        Admin va al portal y configura:<br>
+        ・<strong>Para qué usuario</strong><br>
+        ・<strong>Cuántos meses pagar</strong><br>
+        ・Precio: N meses × 100 Bs<br>
+        ・Opción: sincronizar con el equipo
+      </div>
+      <span class="tag">SO tipo = addon · subscription_id heredado</span>
+    </div>
+
+    <div class="card cgr">
+      <span class="card-icon">✅</span>
+      <div class="card-title">4. Activar Usuario</div>
+      <div class="card-body">
+        Pago recibido → factura pagada:<br>
+        → Nueva <strong>línea de suscripción</strong><br>
+        → fecha_inicio = hoy<br>
+        → fecha_fin = hoy + N meses<br>
+        → <strong>res.users.active = True</strong>
+      </div>
+      <span class="tag">subscription.line.create() · acción automática</span>
+    </div>
+  </div>
+
+  <div class="code-box">
+    <div class="code-title">Ejemplo: Empresa ABC · Día 15 del Mes 4 — Nuevo empleado entra al equipo</div>
+    <pre>
+<span class="cm"># Contexto: 5 usuarios ya pagados por 7 meses desde el mes 1</span>
+<span class="cm"># Hoy es el día 15 del mes 4. El jefe quiere agregar a María García.</span>
+
+nueva_orden = orden_venta.create({
+    <span class="k">tipo_orden</span>:           <span class="v">"addon"</span>,
+    <span class="k">empresa_cliente</span>:      empresa_abc,
+    <span class="k">suscripcion_padre</span>:    sub_abc,      <span class="cm"># vincula con la suscripción existente</span>
+    <span class="k">usuario_nuevo</span>:        maria_garcia,
+    <span class="k">meses</span>:               <span class="v">7</span>,             <span class="cm"># el jefe elige los mismos 7 meses</span>
+    <span class="k">total</span>:               <span class="v">700 Bs</span>        <span class="cm"># 1 usuario × 7 meses × 100 Bs</span>
+})
+
+<span class="cm"># Al confirmar el pago se crea automáticamente:</span>
+nueva_linea = subscription_line.create({
+    <span class="k">usuario</span>:       maria_garcia,
+    <span class="k">fecha_inicio</span>: <span class="v">15/mes4</span>,
+    <span class="k">fecha_fin</span>:    <span class="v">15/mes11</span>,      <span class="cm"># fecha independiente del resto del equipo</span>
+    <span class="k">factura</span>:      factura_addon,
+    <span class="k">estado</span>:       <span class="g">"activa"</span>
+})
+
+<span class="cm"># Resultado: el resto del equipo vence al final del mes 7</span>
+<span class="cm"># María vence el día 15 del mes 11. Fechas independientes ✓</span></pre>
+  </div>
+
+  <div class="notice">
+    <strong>💡 Opción "Sincronizar con el equipo":</strong> Si el admin activa esta opción en el portal,
+    el sistema calcula automáticamente los meses restantes hasta la fecha de vencimiento del grupo
+    (Ej: el equipo vence en mes 7, faltan 3.5 meses → se cobran 4 meses → María vence en mes 8).
+    Esto simplifica la gestión pero aumenta ligeramente el costo para el usuario nuevo.
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 5 — VENCIMIENTO
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(244,168,54,.12);color:var(--gold);">5</div>
+    <span class="sec-label" style="color:var(--gold);">Control de Vencimiento y Suspensión</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g3">
+    <div class="card cg">
+      <span class="card-icon">⏰</span>
+      <div class="card-title">Proceso Diario Automático</div>
+      <div class="card-body">
+        Se ejecuta todos los días:<br>
+        Busca líneas donde<br>
+        <strong>fecha_fin &lt; hoy</strong> y estado = activa<br><br>
+        Agrupa por suscripción<br>
+        Decide qué acción tomar<br>
+        según cuántas líneas venzan
+      </div>
+      <span class="tag">ir.cron · todos los días medianoche</span>
+    </div>
+
+    <div class="card co">
+      <span class="card-icon">📢</span>
+      <div class="card-title">Avisos de Vencimiento</div>
+      <div class="card-body">
+        <strong>30 días antes:</strong> correo informativo<br>
+        <strong>15 días antes:</strong> correo urgente<br>
+        <strong>7 días antes:</strong> correo + banner en portal<br>
+        <strong>1 día antes:</strong> correo final al admin<br><br>
+        Todos los avisos incluyen<br>
+        botón directo de renovación
+      </div>
+      <span class="tag">4 plantillas de correo · mail.template</span>
+    </div>
+
+    <div class="card cr">
+      <span class="card-icon">🔴</span>
+      <div class="card-title">Al Vencer: Bloqueo</div>
+      <div class="card-body">
+        Línea vencida:<br>
+        → <strong>línea.estado = expirada</strong><br>
+        → <strong>res.users.active = False</strong><br>
+        &nbsp;&nbsp;(el usuario no puede entrar)<br><br>
+        Si toda la suscripción vence:<br>
+        → <strong>suscripcion.estado = pausada</strong><br>
+        → datos preservados 30 días
+      </div>
+      <span class="tag">acción automática · grace period 30 días</span>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-top:.75rem;">
+
+    <div class="decision-box">
+      <div class="diamond">
+        <div class="diamond-title">¿Cuántos usuarios<br>han vencido?</div>
+      </div>
+      <div class="branches">
+        <div class="branch">
+          <span class="badge-yn alt">↙ Solo algunos</span>
+          <div class="card co" style="width:100%;margin-top:.4rem;">
+            <div class="card-title">Suspensión Parcial</div>
+            <div class="card-body">
+              Solo se bloquean los usuarios<br>con línea vencida.<br>
+              Los demás siguen activos.<br>
+              Estado: <strong>parcialmente activa</strong>
+            </div>
+            <span class="tag">state = parcialmente_activa</span>
+          </div>
+        </div>
+        <div class="br-mid">│</div>
+        <div class="branch">
+          <span class="badge-yn no">↘ Todos</span>
+          <div class="card cr" style="width:100%;margin-top:.4rem;">
+            <div class="card-title">Suspensión Total</div>
+            <div class="card-body">
+              Todos los usuarios bloqueados.<br>
+              Estado: <strong>pausada</strong><br>
+              Instancia sigue corriendo.<br>
+              Datos guardados 30 días.
+            </div>
+            <span class="tag">state = pausada · grace period</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card cr">
+      <span class="card-icon">⚠️</span>
+      <div class="card-title">Después de 30 días sin renovar</div>
+      <div class="card-body" style="line-height:2;">
+        1. <strong>Último aviso por email</strong><br>
+        &nbsp;&nbsp;&nbsp;(incluye backup de datos)<br>
+        2. Admin tiene opción de <strong>archivar</strong><br>
+        &nbsp;&nbsp;&nbsp;o dar más tiempo al cliente<br>
+        3. Si no hay respuesta:<br>
+        &nbsp;&nbsp;&nbsp;→ <strong>Instancia detenida</strong><br>
+        &nbsp;&nbsp;&nbsp;→ <strong>Suscripción cancelada</strong><br>
+        &nbsp;&nbsp;&nbsp;→ Datos en backup por 90 días<br>
+        4. Después de 90 días → <strong>eliminación definitiva</strong>
+      </div>
+      <span class="tag">state = cancelada · política de retención</span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 6 — RENOVACIÓN
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(0,201,184,.12);color:var(--cyan);">6</div>
+    <span class="sec-label" style="color:var(--cyan);">Flujo de Renovación</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g4">
+    <div class="card cc">
+      <span class="card-icon">🖥️</span>
+      <div class="card-title">1. Portal del Cliente</div>
+      <div class="card-body">
+        Sección <strong>"Mi Suscripción"</strong>:<br>
+        ・Usuarios activos con fechas<br>
+        ・Usuarios vencidos<br>
+        ・Botón <strong>"Renovar"</strong> visible<br>
+        ・Historial de facturas
+      </div>
+      <span class="tag">my.subscription portal view</span>
+    </div>
+
+    <div class="card cc">
+      <span class="card-icon">🗓️</span>
+      <div class="card-title">2. Elegir qué Renovar</div>
+      <div class="card-body">
+        Admin puede renovar:<br>
+        ・<strong>Todos los usuarios</strong> a la vez<br>
+        ・<strong>Solo algunos</strong> usuarios<br>
+        ・Elegir <strong>N meses</strong> por grupo<br>
+        ・Ver precio total antes de pagar
+      </div>
+      <span class="tag">SO tipo = renovacion</span>
+    </div>
+
+    <div class="card cc">
+      <span class="card-icon">📅</span>
+      <div class="card-title">3. Cálculo de Fechas</div>
+      <div class="card-body">
+        <strong>Si renueva antes de vencer:</strong><br>
+        nueva_fecha_inicio = fecha_fin_actual<br>
+        (se acumula sin perder días)<br><br>
+        <strong>Si renueva después de vencer:</strong><br>
+        nueva_fecha_inicio = fecha del pago
+      </div>
+      <span class="tag">computed fields · lógica de acumulación</span>
+    </div>
+
+    <div class="card cc">
+      <span class="card-icon">🟢</span>
+      <div class="card-title">4. Reactivación</div>
+      <div class="card-body">
+        Factura pagada →<br>
+        → líneas de suscripción actualizadas<br>
+        → <strong>res.users.active = True</strong><br>
+        → Estado: <strong>Activa</strong><br>
+        → Email de confirmación al cliente
+      </div>
+      <span class="tag">acción automática · on_payment</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 7 — ESTADOS
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(156,108,255,.12);color:var(--purple);">7</div>
+    <span class="sec-label" style="color:var(--purple);">Estados de la Suscripción</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="card cp">
+    <div class="card-title" style="margin-bottom:.85rem;">Ciclo de vida completo — subscription.subscription.state</div>
+    <div class="states-flow">
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--muted)"></div>
+        <div class="state-name">borrador</div>
+      </div>
+      <span class="state-arr">→</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--gold)"></div>
+        <div class="state-name">pago_pendiente</div>
+      </div>
+      <span class="state-arr">→</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--green)"></div>
+        <div class="state-name">activa</div>
+      </div>
+      <span class="state-arr">→</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--orange)"></div>
+        <div class="state-name">parcialmente_activa</div>
+      </div>
+      <span class="state-arr">→</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--red)"></div>
+        <div class="state-name">pausada</div>
+      </div>
+      <span class="state-arr">⟳</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--cyan)"></div>
+        <div class="state-name">activa (renovada)</div>
+      </div>
+      <span class="state-arr">→</span>
+      <div class="state-pill">
+        <div class="state-color" style="background:var(--muted)"></div>
+        <div class="state-name">cancelada</div>
+      </div>
+    </div>
+
+    <div class="card-body" style="margin-top:1rem;line-height:2.1;">
+      <strong>borrador</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Orden de venta creada, sin pago todavía<br>
+      <strong>pago_pendiente</strong> &nbsp;&nbsp;&nbsp;&nbsp;→ Orden confirmada, esperando recibir el pago<br>
+      <strong>activa</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Todos los usuarios tienen líneas vigentes<br>
+      <strong>parcialmente_activa</strong> → Algunos usuarios vigentes, otros ya vencieron<br>
+      <strong>pausada</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Todos vencidos · acceso bloqueado · grace period 30 días<br>
+      <strong>cancelada</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Sin renovación tras grace period · instancia archivada
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     SECCIÓN 8 — MÓDULOS A CREAR
+════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-badge" style="background:rgba(244,168,54,.12);color:var(--gold);">8</div>
+    <span class="sec-label" style="color:var(--gold);">Módulos a Desarrollar</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="g3">
+    <div class="card cg">
+      <span class="card-icon">📦</span>
+      <div class="card-title">subscription_dynamic</div>
+      <div class="card-body">
+        Módulo principal con toda la lógica:<br>
+        ・Modelos: plan, suscripción, línea<br>
+        ・Proceso diario de vencimientos<br>
+        ・Reglas de automatización<br>
+        ・4 plantillas de correo<br>
+        ・Acciones sobre res.users<br>
+        ・Integración con account.move
+      </div>
+      <span class="tag">módulo nuevo · depende de sale, account</span>
+    </div>
+
+    <div class="card cg">
+      <span class="card-icon">🌐</span>
+      <div class="card-title">subscription_portal</div>
+      <div class="card-body">
+        Extensión del portal web:<br>
+        ・Widget JS: slider meses + usuarios<br>
+        ・Vista "Mi Suscripción"<br>
+        ・Flujo de compra addon<br>
+        ・Flujo de renovación<br>
+        ・Historial de facturas<br>
+        ・Panel de usuarios por estado
+      </div>
+      <span class="tag">hereda website_sale · qweb templates</span>
+    </div>
+
+    <div class="card cg">
+      <span class="card-icon">🔧</span>
+      <div class="card-title">micro_saas (ampliar)</div>
+      <div class="card-body">
+        Cambios en el módulo existente:<br>
+        ・Agregar campo: empresas_cliente (m2m)<br>
+        ・Método: verificar_cupo_usuarios()<br>
+        ・Hook: al activar suscripción<br>
+        ・Relación con subscription.subscription<br>
+        ・Control de max_usuarios por instancia
+      </div>
+      <span class="tag">ampliar módulo existente · herencia</span>
+    </div>
+  </div>
+
+  <div class="rule-box" style="margin-top:.75rem;">
+    <span class="k">REGLAS DE NEGOCIO CLAVE — NO OLVIDAR:</span><br>
+    <span class="g">✓</span> &nbsp;Un usuario solo puede tener <span class="v">1 línea activa</span> por suscripción &nbsp;<span class="cm">// evitar cobro doble</span><br>
+    <span class="g">✓</span> &nbsp;Al desactivar un usuario, la línea <span class="v">no se elimina</span> &nbsp;<span class="cm">// ya fue cobrado, se guarda el registro</span><br>
+    <span class="g">✓</span> &nbsp;Todo SO de tipo addon debe <span class="v">referenciar la suscripción padre</span> &nbsp;<span class="cm">// trazabilidad completa</span><br>
+    <span class="g">✓</span> &nbsp;La instancia solo puede tener usuarios <span class="v">≤ suma(líneas activas)</span> &nbsp;<span class="cm">// control de cupo</span><br>
+    <span class="g">✓</span> &nbsp;Grace period de <span class="v">30 días</span> antes de bloquear instancia &nbsp;<span class="cm">// proteger datos del cliente</span><br>
+    <span class="r">✗</span> &nbsp;Nunca eliminar datos sin <span class="v">backup previo</span> y aviso al cliente &nbsp;<span class="cm">// política de retención de datos</span>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
