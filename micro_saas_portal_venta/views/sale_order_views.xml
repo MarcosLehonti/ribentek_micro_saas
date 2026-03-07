@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_saas" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.saas</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add fields to the group in the first page -->
+            <xpath expr="//group[@name='order_details']" position="inside">
+                <field name="subscription_months" readonly="1" invisible="subscription_months == 0"/>
+                <field name="subscription_users" readonly="1" invisible="subscription_users == 0"/>
+            </xpath>
+            <!-- Also show them in the lines tree if needed -->
+            <xpath expr="//tree/field[@name='product_uom_qty']" position="after">
+                <field name="saas_months" optional="hide"/>
+                <field name="saas_users" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

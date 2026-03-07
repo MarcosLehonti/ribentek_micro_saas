@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odoo_docker_instance_form_inherit_coupons" model="ir.ui.view">
+        <field name="name">odoo.docker.instance.form.inherit.coupons</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+            <!-- Add a smart button inside class oe_button_box -->
+            <xpath expr="//sheet" position="before">
+                <header></header> <!-- Safety first -->
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box" position="inside">
+                    <button class="oe_stat_button" type="action" name="%(subscription_mejora_cupones.action_saas_coupon)d" 
+                        context="{'search_default_instancia_id': active_id, 'default_instancia_id': active_id}"
+                        icon="fa-ticket">
+                        <field name="max_usuarios" widget="statinfo" string="Usr Permitidos"/>
+                    </button>
+                </div>
+            </xpath>
+            
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="max_usuarios" readonly="1" decoration-info="max_usuarios > 0"/>
+            </xpath>
+            
+            <xpath expr="//notebook" position="inside">
+                <page string="Cupones Activos / Historial">
+                    <field name="coupon_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="start_date"/>
+                            <field name="expiration_date"/>
+                            <field name="user_count" sum="Capacidad Total" />
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

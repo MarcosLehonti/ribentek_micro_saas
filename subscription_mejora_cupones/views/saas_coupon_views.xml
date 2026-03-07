@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_saas_coupon_tree" model="ir.ui.view">
+        <field name="name">saas.coupon.tree</field>
+        <field name="model">saas.coupon</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'expired'" decoration-success="state == 'active'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="subscription_id"/>
+                <field name="instancia_id"/>
+                <field name="start_date"/>
+                <field name="expiration_date"/>
+                <field name="user_count" sum="Usuarios Totales"/>
+                <field name="invoice_id" readonly="1"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_saas_coupon_form" model="ir.ui.view">
+        <field name="name">saas.coupon.form</field>
+        <field name="model">saas.coupon</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Ej: Venta de Abril 2026"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subscription_id"/>
+                            <field name="instancia_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="user_count"/>
+                            <field name="start_date"/>
+                            <field name="expiration_date"/>
+                            <field name="invoice_id"/>
+                            <field name="sale_line_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_saas_coupon" model="ir.actions.act_window">
+        <field name="name">Cupones SaaS</field>
+        <field name="res_model">saas.coupon</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Submenú en el ecosistema (puedes ubicarlo donde desees) -->
+    <menuitem id="menu_saas_coupon" name="Cupones Asíncronos" parent="micro_saas.menu_odoo_instance_management" action="action_saas_coupon" sequence="15"/>
+</odoo>

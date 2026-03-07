@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_saas_tunel" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.saas.tunel</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <!-- BOTÓN 1: Crear desde cero (Solo si NO existe instancia vinculada en el sistema para este cliente) -->
+                <button name="action_crear_entorno_saas" 
+                        type="object" 
+                        string="Aprobar y Crear Entorno SaaS" 
+                        class="oe_highlight btn-success" 
+                        icon="fa-magic"
+                        invisible="state != 'posted' or payment_state not in ('paid', 'in_payment', 'partial') or instance_id or subscription_months == 0 or has_saas_instance == True"/>
+
+                <!-- BOTÓN 2: Actualizar / Acumular (Si ya detectamos una instancia del partner y falta procesar factura) -->
+                <button name="action_actualizar_capacidad_saas" 
+                        type="object" 
+                        string="Actualizar Instancia Existente" 
+                        class="oe_highlight btn-info" 
+                        icon="fa-refresh"
+                        invisible="state != 'posted' or payment_state not in ('paid', 'in_payment', 'partial') or instance_id or subscription_months == 0 or has_saas_instance == False"/>
+
+                <!-- BOTÓN 3: Ver la instancia asociada al partner (Esté o no procesada esta factura) -->
+                <button name="action_ver_instancia_asociada" 
+                        type="object" 
+                        string="Ver Instancia Asociada" 
+                        class="oe_highlight" 
+                        icon="fa-server"
+                        invisible="has_saas_instance == False"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <!-- Variables lógicas de visualización silenciosa -->
+                <field name="has_saas_instance" invisible="1"/>
+                <field name="instance_id" readonly="1" invisible="not instance_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menus adicionales para subscription_package directos en mejora_base,
+         aunque el menu de cupones pasó a subscription_mejora_cupones -->
+</odoo>

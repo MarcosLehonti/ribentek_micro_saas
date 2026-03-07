@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_subscription_package_form_inherit_coupons" model="ir.ui.view">
+        <field name="name">subscription.package.form.inherit.coupons</field>
+        <field name="model">subscription.package</field>
+        <field name="inherit_id" ref="subscription_package.subscription_package_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Capa Financiera visual -->
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="instancia_id" widget="many2one"/>
+                <field name="total_active_users" readonly="1"/>
+            </xpath>
+            
+            <!-- Mostrar la URL de la instancia relacionada -->
+            <xpath expr="//field[@name='start_date']" position="before">
+                <field name="instancia_id_url" string="URL Acceso (Instancia)" widget="url" readonly="1" />
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Asientos / Cupones de Tiempo">
+                    <field name="coupon_ids">
+                        <tree editable="bottom" decoration-warning="state == 'expired'" decoration-success="state == 'active'">
+                            <field name="name"/>
+                            <field name="instancia_id"/>
+                            <field name="user_count"/>
+                            <field name="start_date"/>
+                            <field name="expiration_date"/>
+                            <field name="state" widget="badge" decoration-success="state == 'active'" decoration-danger="state == 'expired'"/>
+                            <field name="invoice_id" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
