@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Los cambios fueron migrados a subscription_mejora_cupones -->
+    <record id="view_subscription_package_form_inherit" model="ir.ui.view">
+        <field name="name">subscription.package.form.inherit</field>
+        <field name="model">subscription.package</field>
+        <field name="inherit_id" ref="subscription_package.subscription_package_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Punteo visual: Hacemos readonly el plan ya que lo dictan las compras.
+                 También puedes usar invisible="1" si ya no quieres ni mirarlo. -->
+            <xpath expr="//field[@name='plan_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="invisible">0</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

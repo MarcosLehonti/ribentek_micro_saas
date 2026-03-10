@@ -5,7 +5,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     subscription_months = fields.Float(string='Meses de Suscripción', compute='_compute_saas_summary', store=True)
-    subscription_users = fields.Integer(string='Usuarios Permetidos', compute='_compute_saas_summary', store=True)
+    subscription_users = fields.Integer(string='Usuarios Permitidos', compute='_compute_saas_summary', store=True)
 
     @api.depends('invoice_line_ids.saas_months', 'invoice_line_ids.saas_users')
     def _compute_saas_summary(self):

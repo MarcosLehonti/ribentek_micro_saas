@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inyección del widget en la ficha de producto del eCommerce -->
+        <template id="product_saas_configurator" inherit_id="website_sale.product" name="Configurador SaaS">
+            <xpath expr="//form[@action='/shop/cart/update']//div[hasclass('js_product')]" position="before">
+                <!-- Se muestra el bloque solo si el producto es una suscripción (campo del módulo base) -->
+                <t t-if="product.is_subscription">
+                    <div class="saas-configurator card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Configura tu Suscripción SaaS Odoo</h5>
+                            
+                            <!-- Campo: Cantidad de Meses -->
+                            <div class="form-group mb-2">
+                                <label for="x_months">Meses de Suscripción (1-36):</label>
+                                <input type="number" 
+                                       name="x_months" 
+                                       id="x_months" 
+                                       class="form-control" 
+                                       value="1" 
+                                       min="1" 
+                                       max="36" 
+                                       required="required"/>
+                            </div>
+                            
+                            <!-- Campo: Cantidad de Usuarios -->
+                            <div class="form-group mb-3">
+                                <label for="x_users">Cantidad de Usuarios:</label>
+                                <input type="number" 
+                                       name="x_users" 
+                                       id="x_users" 
+                                       class="form-control" 
+                                       value="1" 
+                                       min="1" 
+                                       required="required"/>
+                            </div>
+
+                            <!-- Cálculo del precio dinámico -->
+                            <div class="alert alert-info">
+                                <strong>Precio Dinámico Total: </strong> 
+                                <span id="saas_dynamic_price">50</span> <span> Bs.</span>
+                                <br/>
+                                <small class="text-muted">(Costo: 50 Bs. por usuario al mes)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Script nativo para calcular el total dinámicamente -->
+                    <script type="text/javascript">
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const monthsInput = document.getElementById('x_months');
+                            const usersInput = document.getElementById('x_users');
+                            const priceDisplay = document.getElementById('saas_dynamic_price');
+                            
+                            // Seleccionamos los elementos de precio estándar de Odoo en la página
+                            const odooPriceElement = document.querySelector('.oe_price .oe_currency_value');
+                            
+                            // Tomamos el precio dinámico desde el catálogo de Odoo para no hardcodearlo
+                            // Ojo: usamos product.list_price de forma segura parseandolo como float
+                            const BSS_PER_USER_MONTH = parseFloat('<t t-esc="product.list_price"/>') || 50.0;
+
+                            function updateSaasPrice() {
+                                let months = parseInt(monthsInput.value) || 1;
+                                let users = parseInt(usersInput.value) || 1;
+                                let total = months * users * BSS_PER_USER_MONTH;
+                                
+                                let formattedTotal = total.toLocaleString('es-BO', {minimumFractionDigits: 2});
+                                priceDisplay.textContent = formattedTotal;
+                                
+                                // Actualizamos el precio principal de la página si existe
+                                if(odooPriceElement) {
+                                    odooPriceElement.textContent = formattedTotal;
+                                }
+                            }
+
+                            monthsInput.addEventListener('input', updateSaasPrice);
+                            usersInput.addEventListener('input', updateSaasPrice);
+
+                            // Ejecutar una vez al cargar para sincronizar el precio inicial
+                            updateSaasPrice();
+                        });
+                    </script>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

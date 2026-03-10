@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista extendida de subscription.package para añadir el botón Preparar Instancia -->
+        <record id="view_subscription_package_form_saas_inherit" model="ir.ui.view">
+            <field name="name">subscription.package.form.saas.inherit</field>
+            <field name="model">subscription.package</field>
+            <field name="inherit_id" ref="subscription_package.subscription_package_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Añadir el botón en el header -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_prepare_instance" 
+                            type="object" 
+                            string="Preparar Instancia" 
+                            class="oe_highlight" 
+                            invisible="stage_category in ['draft', 'closed']"/>
+                </xpath>
+                
+                <!-- Agregar los campos de meses y usuarios y el enlace de la instancia -->
+                <xpath expr="//field[@name='plan_id']" position="after">
+                    <field name="x_max_users" string="Usuarios (SaaS)" readonly="1"/>
+                    <field name="x_instance_id" string="Instancia Vinculada" readonly="1"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

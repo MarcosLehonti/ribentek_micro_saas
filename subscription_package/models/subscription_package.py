@@ -190,20 +190,46 @@ class SubscriptionPackage(models.Model):
             rec.current_stage = rec.env['subscription.package.stage'].search(
                 [('id', '=', rec.stage_id.id)]).category
 
-    @api.depends('start_date')
+    @api.depends('start_date', 'sale_order_id')
     def _compute_next_invoice_date(self):
         """The compute function is the next invoice date for subscription
-        packages based on the start date and renewal time."""
-        for sub in self.env['subscription.package'].search([]):
-            if sub.start_date:
-                sub.next_invoice_date = sub.start_date + relativedelta(
-                    days=sub.plan_id.renewal_time)
+        packages based on dynamic months from sale order or plan renewal."""
+        for sub in self:
+            if not sub.start_date:
+                sub.next_invoice_date = False
+                continue
+
+            months = 0
+            # Buscamos de forma directa si la orden de venta tiene los meses dinámicos
+            if sub.sale_order_id:
+                # Del módulo micro_saas_portal_venta
+                if hasattr(sub.sale_order_id, 'subscription_months') and sub.sale_order_id.subscription_months > 0:
+                    months = int(sub.sale_order_id.subscription_months)
+                else:
+                    # Alternativamente, buscar en las líneas (subscription_package_mejora)
+                    saas_lines = sub.sale_order_id.order_line.filtered(
+                        lambda l: getattr(l.product_id, 'is_subscription', False) or getattr(l.product_template_id, 'is_saas_package', False)
+                    )
+                    if saas_lines:
+                        line = saas_lines[0]
+                        if hasattr(line, 'saas_months') and line.saas_months > 0:
+                            months = int(line.saas_months)
+                        elif hasattr(line, 'x_months') and line.x_months > 0:
+                            months = int(line.x_months)
+
+            # Lógica dinámica: Los meses comprados tienen prioridad sobre el plan
+            if months > 0:
+                sub.next_invoice_date = sub.start_date + relativedelta(months=months)
+            elif sub.plan_id:
+                sub.next_invoice_date = sub.start_date + relativedelta(days=sub.plan_id.renewal_time)
+            else:
+                sub.next_invoice_date = False
 
     def _inverse_next_invoice_date(self):
         """Inverse function for next invoice date"""
-        for sub in self.env['subscription.package'].search([]):
-            if sub.start_date:
-                return
+        for sub in self:
+            pass
+
 
     def button_invoice_count(self):
         """ It displays invoice based on subscription package """

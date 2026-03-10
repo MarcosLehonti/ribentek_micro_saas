@@ -47,9 +47,10 @@ class AccountMove(models.Model):
         """
         ROBUSTA LÓGICA DE TÚNEL SAAS (Refactorizada para Acumulación):
         1. Identifica al Partner.
-        2. Busca Instancia y Suscripción existentes para evitar duplicidad técnica.
-        3. Si existen, vincula la nueva compra de usuarios como un Cupón Adicional.
-        4. Si no existen, crea el entorno desde cero.
+        2. Limpia cualquier suscripción Draft huérfana del partner ANTES de continuar.
+        3. Busca Instancia y Suscripción existentes para evitar duplicidad técnica.
+        4. Si existen, vincula la nueva compra de usuarios como un Cupón Adicional.
+        5. Si no existen, crea el entorno desde cero.
         """
         self.ensure_one()
         
@@ -73,6 +74,13 @@ class AccountMove(models.Model):
             return
             
         partner = self.partner_id
+
+        # ══════════════════════════════════════════════════════════════
+        # PASO 0: LIMPIEZA ANTI-HUÉRFANAS
+        # Antes de operar, cerramos cualquier Draft que exista para este partner.
+        # Esto elimina cualquier Draft escapado del _action_confirm.
+        # ══════════════════════════════════════════════════════════════
+        self._limpiar_drafts_de_partner(partner)
         
         # PASO 1: LOCALIZACIÓN - Buscar activos existentes del Cliente
         # Buscamos por partner_id para centralizar todas sus facturas en una sola instancia
@@ -137,6 +145,51 @@ class AccountMove(models.Model):
         
         # Auditoría Final
         self.message_post(body=f"🚀 **SaaS Unificado**: Se detectó instancia existente '{instancia.name}'. Capacidad sumada correctamente.")
+
+    def _limpiar_drafts_de_partner(self, partner):
+        """
+        Limpieza transaccional (con sudo()) de suscripciones Draft para un partner específico
+        que ya tiene una suscripción 'In Progress'.
+        Se llama durante el procesamiento del pago de factura para garantizar máxima coherencia.
+        """
+        SubPackage = self.env['subscription.package'].sudo()
+
+        # Solo hay trabajo si el partner tiene ya una suscripción activa
+        tiene_activa = SubPackage.search_count([
+            ('partner_id', '=', partner.id),
+            ('stage_category', '=', 'progress'),
+        ])
+        if not tiene_activa:
+            return  # Cliente nuevo, nada que limpiar
+
+        # Buscar etapa 'closed' para mover los Drafts
+        stage_cerrado = self.env['subscription.package.stage'].sudo().search([
+            ('category', '=', 'closed')
+        ], limit=1)
+        if not stage_cerrado:
+            return  # No hay etapa cerrada configurada, imposible continuar
+
+        # Buscar Drafts huérfanos para este partner específico
+        drafts_huerfanos = SubPackage.search([
+            ('partner_id', '=', partner.id),
+            ('stage_category', '=', 'draft'),
+        ])
+
+        if drafts_huerfanos:
+            drafts_huerfanos.write({
+                'stage_id': stage_cerrado.id,
+                'is_closed': True,
+            })
+            for draft in drafts_huerfanos:
+                draft.message_post(
+                    body=(
+                        f"🧹 <b>Limpieza Automática (Pago Registrado):</b> "
+                        f"Esta suscripción Draft fue cerrada automáticamente porque "
+                        f"el partner ya tiene una suscripción activa y la factura "
+                        f"{self.name} fue pagada."
+                    )
+                )
+
 
 
     def action_gestionar_instancia_saas(self):
