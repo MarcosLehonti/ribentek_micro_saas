@@ -285,6 +285,270 @@ Instancia lista para el cliente
 ```
 
 
+### 9. `micro_saas_portal_cliente` — Portal de Suscripciones del Cliente
+
+Módulo que extiende el **portal web de Odoo** para permitir que los clientes visualicen y gestionen sus suscripciones SaaS desde su cuenta.
+
+Proporciona una interfaz amigable dentro del portal donde cada cliente puede:
+
+- Ver todas sus suscripciones SaaS
+- Consultar el estado de su servicio
+- Acceder directamente a su instancia de Odoo
+- Revisar la capacidad de usuarios activos de su plan
+- Consultar la factura asociada a su suscripción
+
+Este módulo permite que los clientes **administren y consulten su servicio SaaS sin necesidad de acceder al backend de Odoo**, ofreciendo una experiencia similar a plataformas SaaS profesionales.
+
+---
+
+## Funcionalidades principales
+
+El portal del cliente incluye:
+
+- **Contador de suscripciones** en el dashboard del portal
+- **Listado paginado de suscripciones**
+- **Acceso directo a la instancia Odoo del cliente**
+- **Visualización de facturas asociadas**
+- **Detalle técnico de capacidad de usuarios**
+- **Sistema de seguridad para evitar accesos a suscripciones de otros clientes**
+
+---
+
+## Integración con el Portal de Odoo
+
+El módulo extiende el controlador estándar:
+
+```
+odoo.addons.portal.controllers.portal.CustomerPortal
+```
+
+para integrar las suscripciones SaaS dentro del portal del cliente.
+
+Se agrega una nueva sección llamada:
+
+```
+Mis Suscripciones SaaS
+```
+
+visible dentro del dashboard del portal.
+
+---
+
+## Contador de suscripciones en el portal
+
+En la página principal del portal (`/my/home`) se muestra el número de suscripciones activas del cliente.
+
+El contador se obtiene filtrando registros del modelo:
+
+```
+subscription.package
+```
+
+Condiciones utilizadas:
+
+| Campo | Condición |
+|------|-----------|
+| `partner_id` | Cliente actual |
+| `stage_id.category` | Distinto de `closed` |
+
+Esto asegura que el cliente solo vea **suscripciones activas o en progreso**.
+
+---
+
+## Listado de suscripciones
+
+Ruta del portal:
+
+```
+/my/subscriptions
+```
+
+Esta página muestra todas las suscripciones del cliente autenticado.
+
+Características:
+
+- Listado paginado
+- Ordenado por fecha de inicio (`start_date desc`)
+- Visualización exclusiva de registros del cliente
+- Acceso al detalle de cada suscripción
+
+Ejemplo de rutas:
+
+```
+/my/subscriptions
+/my/subscriptions/page/2
+```
+
+---
+
+## Información mostrada en el listado
+
+Cada fila de la tabla muestra información clave de la suscripción:
+
+| Campo | Descripción |
+|------|-------------|
+| Referencia | Código único de la suscripción |
+| Plan | Nombre del plan contratado |
+| Usuarios | Número total de usuarios activos |
+| Estado | Estado actual de la suscripción |
+| Factura | Última factura asociada |
+| Acceso | Enlace directo a la instancia Odoo |
+
+El botón:
+
+```
+Ir a mi Odoo
+```
+
+abre la instancia SaaS del cliente en una nueva pestaña.
+
+---
+
+## Facturación asociada
+
+El portal también permite acceder a la factura relacionada con la suscripción.
+
+El sistema obtiene la factura buscando dentro de los cupones de la suscripción:
+
+```
+subscription.coupon_ids
+```
+
+y filtrando aquellos que tengan:
+
+```
+invoice_id
+```
+
+Esto permite mostrar la **última factura asociada al servicio**.
+
+---
+
+## Vista de detalle de suscripción
+
+Cada suscripción tiene su propia página de detalle accesible desde el listado.
+
+Ruta:
+
+```
+/my/subscriptions/<subscription_id>
+```
+
+Ejemplo:
+
+```
+/my/subscriptions/15
+```
+
+La vista de detalle muestra:
+
+- Código de referencia de la suscripción
+- Plan contratado
+- Acceso directo a la instancia SaaS
+- Información de capacidad del plan
+
+---
+
+## Detalle de capacidad (asientos)
+
+El portal muestra el historial de capacidad de usuarios a través de los **cupones de suscripción**.
+
+Cada cupón representa un período de servicio con cierta cantidad de usuarios permitidos.
+
+Información mostrada:
+
+| Campo | Descripción |
+|------|-------------|
+| Fecha inicio | Inicio del período |
+| Fecha vencimiento | Fin del período |
+| Usuarios | Número de usuarios permitidos |
+| Estado | Estado del cupón |
+
+Estados posibles:
+
+| Estado | Descripción |
+|------|-------------|
+| `active` | Cupón activo |
+| `expired` | Cupón vencido |
+
+Esto permite al cliente ver **la evolución de su capacidad de usuarios en el tiempo**.
+
+---
+
+## Seguridad de acceso
+
+El módulo implementa una validación de seguridad para evitar accesos indebidos.
+
+Antes de mostrar una suscripción se valida que:
+
+| Validación | Resultado |
+|------------|-----------|
+| La suscripción existe | Permitido |
+| El `partner_id` coincide con el usuario logueado | Permitido |
+| La suscripción pertenece a otro cliente | Redirección |
+
+Si el usuario intenta acceder a una suscripción que **no le pertenece**, será redirigido automáticamente a:
+
+```
+/my/subscriptions
+```
+
+Esto evita accesos directos mediante URL manipuladas.
+
+---
+
+## Modelos utilizados
+
+| Modelo | Descripción |
+|------|-------------|
+| `subscription.package` | Suscripción SaaS del cliente |
+| `subscription.coupon` | Periodos de servicio con capacidad de usuarios |
+| `account.move` | Facturas asociadas a la suscripción |
+
+---
+
+## Plantillas utilizadas
+
+El módulo utiliza plantillas QWeb para renderizar las páginas del portal.
+
+| Plantilla | Función |
+|-----------|--------|
+| `portal_my_home_subscription` | Agrega el acceso a suscripciones en el portal |
+| `portal_my_subscriptions_list` | Listado de suscripciones |
+| `portal_subscription_detail_view` | Vista de detalle de la suscripción |
+| `portal_my_home_menu_subscription` | Breadcrumbs del portal |
+
+---
+
+## Dependencias
+
+| Módulo | Motivo |
+|------|------|
+| `portal` | Infraestructura del portal web |
+| `subscription_package` | Modelo principal de suscripciones |
+| `subscription_mejora_cupones` | Campos de usuarios activos y capacidad |
+
+---
+
+## Flujo de uso
+
+El flujo típico para un cliente es:
+
+```
+Cliente inicia sesión en el portal
+        ↓
+Accede a "Mis Suscripciones SaaS"
+        ↓
+Visualiza la lista de servicios activos
+        ↓
+Selecciona una suscripción
+        ↓
+Consulta el detalle de capacidad y estado
+        ↓
+Accede directamente a su instancia Odoo
+```
+
+
 ## 🔄 Flujo General del Sistema
 
 ```

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_subscription" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'subscription' or subscription" class="breadcrumb-item active">
+                <a t-if="subscription" t-attf-href="/my/subscriptions?#{keep_query()}">Mis Suscripciones</a>
+                <t t-else="">Mis Suscripciones</t>
+            </li>
+            <li t-if="subscription" class="breadcrumb-item active">
+                <span t-field="subscription.reference_code"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_subscription" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Mis Suscripciones SaaS</t>
+                <t t-set="url" t-value="'/my/subscriptions'"/>
+                <t t-set="placeholder_count" t-value="'subscription_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_subscriptions_list">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Suscripciones</t>
+            </t>
+            
+            <t t-if="not subscriptions">
+                <div class="alert alert-warning mt-3">No tienes suscripciones activas.</div>
+            </t>
+
+            <div t-if="subscriptions" class="table-responsive mt-3">
+                <table class="table table-hover bg-white border shadow-sm" style="color: #212529 !important;">
+                    <thead class="bg-light">
+                        <tr style="color: #212529 !important;">
+                            <th class="border-0">Referencia</th>
+                            <th class="border-0">Plan</th>
+                            <th class="text-center border-0">Usuarios</th>
+                            <th class="border-0">Estado</th>
+                            <th class="text-center border-0">Factura</th>
+                            <th class="text-right border-0">Acceso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="subscriptions" t-as="sub" style="color: #212529 !important;">
+                            <td class="align-middle">
+                                <a t-attf-href="/my/subscriptions/#{sub.id}" class="font-weight-bold" style="color: #0056b3 !important;">
+                                    <span t-field="sub.reference_code"/>
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <span t-field="sub.plan_id.name" style="color: #212529 !important;"/>
+                            </td>
+                            <td class="text-center align-middle">
+                                <span class="badge badge-pill badge-info" style="font-size: 0.9rem; padding: 5px 10px; color: #000 !important;">
+                                    <t t-esc="sub.total_active_users"/>
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                <t t-set="badge_class" t-value="'badge-success' if sub.stage_id.category == 'progress' else 'badge-warning'"/>
+                                <span t-attf-class="badge badge-pill #{badge_class}" style="font-size: 0.85rem; padding: 5px 10px; color: #000 !important;">
+                                    <span t-field="sub.stage_id.name"/>
+                                </span>
+                            </td>
+                            <td class="text-center align-middle">
+                                <!-- Busca en todos los cupones de esta suscripcíon y quedate solo con los que tengan el campos invoide_id -->
+                                <t t-set="last_coupon" t-value="sub.coupon_ids.filtered(lambda c: c.invoice_id)[:1]"/>
+                                <a t-if="last_coupon" t-attf-href="/my/invoices/#{last_coupon.invoice_id.id}" class="btn btn-sm btn-outline-info" title="Ver Factura">
+                                    <i class="fa fa-file-text-o"/> <span t-field="last_coupon.invoice_id.name"/>
+                                </a>
+                                <span t-else="" class="text-muted small">N/A</span>
+                            </td>
+                            <td class="text-right align-middle">
+                                <a t-if="sub.instancia_id_url" t-att-href="sub.instancia_id_url" target="_blank" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-external-link"/> Ir a mi Odoo
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div t-if="pager" class="o_portal_pager mt-3">
+                <t t-call="portal.pager"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_subscription_detail_view">
+        <t t-call="portal.portal_layout">
+            <div class="container bg-white p-4 shadow-sm rounded" style="color: #212529 !important;">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="font-weight-bold" style="color: #212529 !important;">
+                            Suscripción: <span t-field="subscription.reference_code"/>
+                        </h3>
+                        <p class="text-muted" style="font-size: 1.1rem;">
+                            Plan: <span class="text-dark font-weight-bold" t-field="subscription.plan_id.name"/>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <a t-if="subscription.instancia_id_url" t-att-href="subscription.instancia_id_url" 
+                           target="_blank" class="btn btn-lg btn-success shadow-sm">
+                            <i class="fa fa-rocket mr-1"/> Acceder a mi Instancia
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="my-4"/>
+
+                <h4 class="mb-3" style="color: #212529 !important;"><i class="fa fa-ticket mr-2"/>Detalle de Capacidad (Asientos)</h4>
+                <div class="table-responsive">
+                    <table class="table border" style="color: #212529 !important;">
+                        <thead class="thead-light">
+                            <tr style="color: #212529 !important;">
+                                <th>Fecha Inicio</th>
+                                <th>Vencimiento</th>
+                                <th class="text-center">Usuarios</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="subscription.coupon_ids" t-as="coupon" style="color: #212529 !important;">
+                                <td class="align-middle"><span t-field="coupon.start_date"/></td>
+                                <td class="align-middle"><span t-field="coupon.expiration_date"/></td>
+                                <td class="text-center align-middle font-weight-bold">
+                                    <span t-field="coupon.user_count"/>
+                                </td>
+                                <td class="align-middle">
+                                    <span t-attf-class="badge #{'badge-success' if coupon.state == 'active' else 'badge-danger'}" 
+                                          style="padding: 5px 10px; color: #000 !important;"
+                                          t-field="coupon.state"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_subscription_package_portal,subscription.package.portal,subscription_package.model_subscription_package,base.group_portal,1,0,0,0
+access_saas_coupon_portal,saas.coupon.portal,subscription_mejora_cupones.model_saas_coupon,base.group_portal,1,0,0,0
+access_subscription_package_stage_portal,subscription.package.stage.portal,subscription_package.model_subscription_package_stage,base.group_portal,1,0,0,0
+access_subscription_package_plan_portal,subscription.package.plan.portal,subscription_package.model_subscription_package_plan,base.group_portal,1,0,0,0
+access_recurrence_period_portal,recurrence.period.portal,subscription_package.model_recurrence_period,base.group_portal,1,0,0,0
