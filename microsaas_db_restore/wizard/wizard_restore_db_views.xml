@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_wizard_restore_db_form">
+        <field name="name">wizard.restore.db.form</field>
+        <field name="model">wizard.restore.db</field>
+        <field name="arch" type="xml">
+            <form string="Restaurar Base de Datos Plantilla">
+                <sheet>
+
+                    <!-- Alerta principal -->
+                    <div class="alert alert-warning mb-3" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fa fa-database"/> ¿Restaurar la BD plantilla en esta instancia?
+                        </h4>
+                        <p>
+                            Se enviará el archivo ZIP a la instancia
+                            <strong><field name="instance_id" readonly="1" nolabel="1"/></strong>
+                            que lo procesará internamente usando su endpoint
+                            <code>/web/database/restore</code>.
+                        </p>
+                        <hr/>
+                        <p class="mb-0">
+                            <i class="fa fa-clock-o"/> Esta operación puede tardar
+                            <strong>varios minutos</strong> dependiendo del tamaño del ZIP.
+                            No cierres la ventana mientras se procesa.
+                        </p>
+                    </div>
+
+                    <!-- Campo requerido por el modificador invisible, no se muestra -->
+                    <field name="file_exists" invisible="1"/>
+
+                    <group string="Detalle de la Operación">
+                        <group>
+                            <field name="zip_plantilla" readonly="1" string="Archivo ZIP"/>
+                            <field name="file_size" readonly="1" string="Tamaño"/>
+                            <field name="instance_url" readonly="1" string="URL Instancia"/>
+                        </group>
+                        <group>
+                            <field name="db_name" string="Nombre de la BD a crear"
+                                   placeholder="ej: cliente_empresa"/>
+                            <field name="master_password" string="Master Password"
+                                   password="True"
+                                   help="Master password del Odoo de la instancia nueva (no del servidor principal)"/>
+                        </group>
+                    </group>
+
+                    <!-- Alerta si el archivo no existe -->
+                    <div class="alert alert-danger" role="alert"
+                         invisible="file_exists == True">
+                        <i class="fa fa-exclamation-triangle"/>
+                        <strong>Archivo ZIP no encontrado.</strong>
+                        Verifica que el archivo esté en
+                        <code>microsaas_db_restore/static/db_backups/</code>
+                    </div>
+
+                </sheet>
+
+                <footer>
+                    <button string="✅ Sí, Restaurar Ahora"
+                            type="object"
+                            name="action_confirm_restore"
+                            class="btn-primary"
+                            invisible="file_exists == False"/>
+                    <button string="Cancelar"
+                            type="object"
+                            name="action_cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

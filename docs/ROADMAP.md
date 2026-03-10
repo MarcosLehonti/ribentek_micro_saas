@@ -24,25 +24,25 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ## 📊 Estado General del Proyecto
 
 ### Progreso por Épicas
-- [ ] **ÉPICA 1:** Infraestructura Base (0/10)
-- [ ] **ÉPICA 2:** Portal Web y eCommerce (0/14)
-- [ ] **ÉPICA 3:** Sistema de Provisión Automática (0/19)
-- [ ] **ÉPICA 4:** Gestión de Ciclo de Vida (0/15)
-- [ ] **ÉPICA 5:** Portal del Cliente (0/11)
-- [ ] **ÉPICA 6:** Sistema de Notificaciones (0/11)
-- [ ] **ÉPICA 7:** Integración de Pagos (0/9)
+- [X] **ÉPICA 1:** Infraestructura Base (0/10)
+- [X] **ÉPICA 2:** Portal Web y eCommerce (0/14)
+- [X] **ÉPICA 3:** Sistema de Provisión Automática (0/19)
+- [X] **ÉPICA 4:** Gestión de Ciclo de Vida (0/15)
+- [X] **ÉPICA 5:** Portal del Cliente (0/11)
+- [X] **ÉPICA 6:** Sistema de Notificaciones (0/11)
+- [X] **ÉPICA 7:** Integración de Pagos (0/9)
 - [ ] **ÉPICA 8:** Despliegue a Producción (0/15)
 
 ### Progreso por Sprints
-- [ ] **Sprint 1:** Fundamentos (Semana 1)
-- [ ] **Sprint 2:** Portal Web (Semana 2)
-- [ ] **Sprint 3:** Fundamentos del Módulo (Semana 3)
-- [ ] **Sprint 4:** Captura de Ventas (Semana 4)
-- [ ] **Sprint 5:** Creación de Instancias (Semana 5)
-- [ ] **Sprint 6:** Suspensión Automática (Semana 6)
-- [ ] **Sprint 7:** Reactivación (Semana 7)
-- [ ] **Sprint 8:** Portal del Cliente (Semana 8)
-- [ ] **Sprint 9:** Notificaciones (Semana 9)
+- [X] **Sprint 1:** Fundamentos (Semana 1)
+- [X] **Sprint 2:** Portal Web (Semana 2)
+- [X] **Sprint 3:** Fundamentos del Módulo (Semana 3)
+- [X] **Sprint 4:** Captura de Ventas (Semana 4)
+- [X] **Sprint 5:** Creación de Instancias (Semana 5)
+- [X] **Sprint 6:** Suspensión Automática (Semana 6)
+- [X] **Sprint 7:** Reactivación (Semana 7)
+- [X] **Sprint 8:** Portal del Cliente (Semana 8)
+- [X] **Sprint 9:** Notificaciones (Semana 9)
 - [ ] **Sprint 10:** Pagos Reales (Semana 10)
 - [ ] **Sprint 11:** Infraestructura Cloud (Semana 11)
 - [ ] **Sprint 12:** Producción Final (Semana 12)
@@ -62,7 +62,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ### Tareas
 
 #### E1-001: [SPIKE] Investigar Docker y contenedores
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Descripción:** Entender qué es Docker, cómo funcionan los contenedores, diferencia entre imagen y contenedor
@@ -75,7 +75,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ---
 
 #### E1-002: Instalar Ubuntu Server en VirtualBox (Pendiente)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Descargar Ubuntu Server 22.04 LTS e instalarlo en VirtualBox
@@ -92,7 +92,7 @@ Un sistema de venta automatizada de instancias Odoo que funciona como un servici
 ---
 
 #### E1-003: Configurar red bridged para acceso desde host (Pendiente y en revision)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Descripción:** Configurar red en modo bridge para que Windows pueda acceder al Ubuntu
@@ -107,7 +107,7 @@ ip addr show
 ---
 
 #### E1-004: Instalar Docker Engine en Ubuntu
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Instalar Docker siguiendo documentación oficial
@@ -129,7 +129,7 @@ sudo usermod -aG docker $USER
 ---
 
 #### E1-005: Instalar Docker Compose
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Descripción:** Instalar Docker Compose para orquestar contenedores
@@ -145,7 +145,7 @@ docker-compose --version
 ---
 
 #### E1-006: Crear estructura de proyecto
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 1 punto
 - **Descripción:** Crear carpetas para el proyecto
@@ -165,7 +165,7 @@ cd ~/odoo-saas-project
 ---
 
 #### E1-007: Configurar docker-compose.yml para Odoo Maestro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Descripción:** Crear archivo docker-compose.yml con servicios de PostgreSQL y Odoo
@@ -179,7 +179,7 @@ cd ~/odoo-saas-project
 ---
 
 #### E1-008: Levantar Odoo Maestro + PostgreSQL
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Descripción:** Ejecutar docker-compose up y verificar que los servicios arrancan
@@ -198,7 +198,7 @@ docker logs odoo_maestro
 ---
 
 #### E1-009: Verificar acceso desde navegador Windows
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Descripción:** Abrir navegador en Windows y acceder a http://IP_UBUNTU:8069
@@ -216,7 +216,7 @@ http://[IP_UBUNTU]:8069
 ---
 
 #### E1-010: Configurar volumen para addons personalizados
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Descripción:** Montar carpeta de addons en el contenedor de Odoo
@@ -248,7 +248,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ### Tareas
 
 #### E2-001: Landing page atractiva
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como visitante, quiero ver una landing page atractiva que explique el servicio
@@ -268,7 +268,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-002: Página de precios
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como visitante, quiero ver los planes disponibles con sus precios
@@ -283,7 +283,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-003: Instalar módulo Website en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -295,7 +295,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-004: Instalar módulo eCommerce en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -307,7 +307,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-005: Diseñar página de inicio con Website Builder
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -321,7 +321,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-006: Crear página "Cómo Funciona"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -337,7 +337,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-007: Crear página "Precios"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -349,7 +349,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-008: Configurar productos: Plan Básico, Plan Pro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -368,7 +368,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-009: Configurar precios y descripciones
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -380,7 +380,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-010: Personalizar tema visual (colores, logo)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -395,7 +395,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-011: Sistema de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Historia de Usuario:** Como cliente, quiero poder registrarme en el sitio
@@ -408,7 +408,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-012: Sistema de login
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Historia de Usuario:** Como cliente, quiero poder hacer login
@@ -420,7 +420,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-013: Configurar formulario de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -435,7 +435,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E2-014: Probar flujo completo de registro
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -466,7 +466,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ### Tareas - Sprint 3: Fundamentos del Módulo
 
 #### E3-001: [SPIKE] Investigar Odoo ORM y herencia de modelos
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -482,7 +482,7 @@ docker exec -it odoo_maestro ls /mnt/extra-addons
 ---
 
 #### E3-002: [SPIKE] Investigar subprocess y comandos Docker desde Python
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -504,7 +504,7 @@ import subprocess
 ---
 
 #### E3-003: Crear estructura del módulo saas_docker_manager
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Sprint:** 3
@@ -535,7 +535,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-004: Configurar __manifest__.py con dependencias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Sprint:** 3
@@ -549,7 +549,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-005: Crear modelo saas.instance para control de instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -563,7 +563,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-006: Definir campos del modelo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 3
@@ -584,7 +584,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-007: Crear vistas XML para gestión de instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 3
@@ -605,7 +605,7 @@ touch models/saas_instance.py
 ### Tareas - Sprint 4: Captura de Ventas
 
 #### E3-008: Implementar método para calcular siguiente puerto disponible
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -623,7 +623,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-009: Heredar modelo sale.order para detectar ventas
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 4
@@ -637,7 +637,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-010: Sobrescribir método action_confirm()
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -651,7 +651,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-011: Implementar validación de producto (es suscripción Odoo?)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 4
@@ -665,7 +665,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-012: Crear función para generar contraseña aleatoria
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 2 puntos
 - **Sprint:** 4
@@ -684,7 +684,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-013: Implementar creación de registro en saas.instance
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 4
@@ -706,7 +706,7 @@ touch models/saas_instance.py
 ### Tareas - Sprint 5: Creación de Instancias
 
 #### E3-014: Implementar comando Docker para crear PostgreSQL del cliente
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
 - **Sprint:** 5
@@ -728,7 +728,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-015: Implementar comando Docker para crear Odoo del cliente
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
 - **Sprint:** 5
@@ -751,7 +751,7 @@ touch models/saas_instance.py
 ---
 
 #### E3-016: Implementar gestión de red Docker
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -768,7 +768,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-017: Implementar manejo de errores en creación
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -789,7 +789,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-018: Probar creación manual de instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 5
@@ -809,7 +809,7 @@ docker network inspect odoo_network
 ---
 
 #### E3-019: Probar creación automática tras venta
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 5
@@ -845,7 +845,7 @@ docker network inspect odoo_network
 ### Tareas - Sprint 6: Suspensión Automática
 
 #### E4-001: [SPIKE] Investigar Cron Jobs en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -861,7 +861,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-002: Scheduled Action para verificación diaria
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -882,7 +882,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-003: Crear Scheduled Action
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -897,7 +897,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-004: Implementar método _cron_check_expired_subscriptions()
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -911,7 +911,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-005: Implementar lógica de búsqueda de instancias expiradas
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -927,7 +927,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-006: Implementar función action_stop_container()
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 6
@@ -941,7 +941,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-007: Implementar comando docker stop
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 6
@@ -955,7 +955,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-008: Actualizar estado en BD a 'suspendido'
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 6
@@ -973,7 +973,7 @@ docker network inspect odoo_network
 ### Tareas - Sprint 7: Reactivación
 
 #### E4-009: Implementar función action_start_container()
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -987,7 +987,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-010: Implementar comando docker start
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Sprint:** 7
@@ -1002,7 +1002,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-011: Actualizar estado en BD a 'activo'
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 7
@@ -1018,7 +1018,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-012: Implementar trigger de reactivación al pagar
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -1033,7 +1033,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-013: Detectar pago de renovación
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Sprint:** 7
@@ -1047,7 +1047,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-014: Actualizar fecha de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Sprint:** 7
@@ -1061,7 +1061,7 @@ docker network inspect odoo_network
 ---
 
 #### E4-015: Probar ciclo completo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Sprint:** 7
@@ -1099,7 +1099,7 @@ docker network inspect odoo_network
 ### Tareas
 
 #### E5-001: Vista de instancias en "Mi Cuenta"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como cliente, quiero ver mis instancias en "Mi Cuenta"
@@ -1113,7 +1113,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-002: Botón de acceso a Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero acceder a mi Odoo con un botón
@@ -1128,7 +1128,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-003: Vista de estado de suscripción
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero ver el estado de mi suscripción
@@ -1143,7 +1143,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-004: Crear template XML para portal
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -1156,7 +1156,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-005: Extender portal_my_home
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1168,7 +1168,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-006: Crear controlador para /my/instances
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -1181,7 +1181,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-007: Diseñar tarjetas de instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1197,7 +1197,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-008: Implementar botón "Acceder a mi Odoo"
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1209,7 +1209,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-009: Mostrar fecha de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1222,7 +1222,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-010: Mostrar estado visual
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1235,7 +1235,7 @@ docker network inspect odoo_network
 ---
 
 #### E5-011: Implementar mensaje si no hay instancias
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Low
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -1259,7 +1259,7 @@ docker network inspect odoo_network
 ### Tareas
 
 #### E6-001: Email con credenciales al crear instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Historia de Usuario:** Como cliente, quiero recibir mis credenciales por email al crear instancia
@@ -1273,7 +1273,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-002: Email de recordatorio antes de expiración
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero recibir recordatorio antes de expiración
@@ -1286,7 +1286,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-003: Email de notificación de suspensión
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Historia de Usuario:** Como cliente, quiero recibir notificación de suspensión
@@ -1299,7 +1299,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-004: Configurar servidor SMTP en Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1319,7 +1319,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-005: Crear plantilla de email de bienvenida
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1334,7 +1334,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-006: Crear plantilla de email de recordatorio
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1348,7 +1348,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-007: Crear plantilla de email de suspensión
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1362,7 +1362,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-008: Crear plantilla de email de reactivación
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Medium
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1376,7 +1376,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-009: Implementar envío automático tras crear instancia
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1389,7 +1389,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-010: Implementar envío en cron de recordatorio
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**
@@ -1402,7 +1402,7 @@ docker network inspect odoo_network
 ---
 
 #### E6-011: Probar recepción de todos los emails
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** High
 - **Estimación:** 2 puntos
 - **Comandos/Notas:**
@@ -1431,7 +1431,7 @@ docker network inspect odoo_network
 ### Tareas
 
 #### E7-001: [SPIKE] Investigar integración de QR con Odoo
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 5 puntos
 - **Comandos/Notas:**
@@ -1445,7 +1445,7 @@ docker network inspect odoo_network
 ---
 
 #### E7-002: Sistema de pago con QR
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 8 puntos
 - **Historia de Usuario:** Como cliente, quiero pagar con QR de forma segura
@@ -1457,7 +1457,7 @@ docker network inspect odoo_network
 ---
 
 #### E7-003: Crear cuenta de QR (modo test)
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 1 punto
 - **Comandos/Notas:**
@@ -1515,7 +1515,7 @@ docker network inspect odoo_network
 ---
 
 #### E7-007: Probar pago de prueba
-- [ ] Completada
+- [X] Completada
 - **Prioridad:** Critical
 - **Estimación:** 3 puntos
 - **Comandos/Notas:**

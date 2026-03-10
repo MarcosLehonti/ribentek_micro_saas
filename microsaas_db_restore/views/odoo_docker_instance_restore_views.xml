@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_odoo_docker_instance_restore_inherit">
+        <field name="name">odoo.docker.instance.restore.inherit</field>
+        <field name="model">odoo.docker.instance</field>
+        <field name="inherit_id" ref="micro_saas.view_odoo_docker_instance_form"/>
+        <field name="arch" type="xml">
+
+            <!-- BOTÓN EN EL HEADER: antes del statusbar -->
+            <xpath expr="//header/field[@name='state']" position="before">
+                <field name="db_restore_state" invisible="1"/>
+                <button
+                    string="Restaurar BD Plantilla"
+                    type="object"
+                    name="action_open_restore_wizard"
+                    class="btn-warning"
+                    invisible="state != 'running' or db_restore_state == 'done'"
+                    help="Copia la BD plantilla ZIP a esta instancia"/>
+            </xpath>
+
+            <!-- NUEVO NOTEBOOK antes del notebook que contiene el campo 'log' -->
+            <xpath expr="//field[@name='log']/../.." position="before">
+                <notebook>
+                    <page string="Restauracion de BD" name="page_restore_bd">
+
+                        <div class="alert alert-success mb-3" role="alert"
+                             invisible="db_restore_state != 'done'">
+                            <i class="fa fa-check-circle fa-lg"/>
+                            <strong> Base de datos restaurada correctamente.</strong>
+                            Abre la URL de la instancia: ya esta configurada con los datos del ZIP.
+                        </div>
+
+                        <div class="alert alert-danger mb-3" role="alert"
+                             invisible="db_restore_state != 'error'">
+                            <i class="fa fa-exclamation-triangle fa-lg"/>
+                            <strong> Error en la restauracion.</strong>
+                            Revisa el log de la instancia y el campo Log abajo.
+                        </div>
+
+                        <div class="alert alert-info mb-3" role="alert"
+                             invisible="db_restore_state != 'in_progress'">
+                            <i class="fa fa-spinner fa-spin fa-lg"/>
+                            <strong> Restauracion en progreso...</strong>
+                            Espera y recarga la pagina para ver el resultado.
+                        </div>
+
+                        <group string="Configuracion">
+                            <group>
+                                <field name="zip_plantilla"
+                                       string="ZIP Plantilla"
+                                       readonly="db_restore_state == 'done'"
+                                       help="ZIPs disponibles en microsaas_db_restore/static/db_backups/"/>
+                                <field name="db_restore_name"
+                                       string="Nombre de la BD"
+                                       placeholder="ej: cliente_empresa"
+                                       readonly="db_restore_state == 'done'"/>
+                                <field name="db_restore_master_password"
+                                       string="Master Password Instancia"
+                                       password="True"
+                                       readonly="db_restore_state == 'done'"/>
+                            </group>
+                            <group>
+                                <field name="db_restore_state" string="Estado" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group string="Log de Restauracion"
+                               invisible="db_restore_log == False or db_restore_log == ''">
+                            <field name="db_restore_log"
+                                   nolabel="1"
+                                   readonly="1"
+                                   colspan="2"
+                                   style="font-family:monospace; background:#1e1e1e; color:#d4d4d4;
+                                          padding:10px; border-radius:4px; min-height:80px;"/>
+                        </group>
+
+                        <group string="Como funciona" invisible="db_restore_state == 'done'">
+                            <div class="alert alert-light border" role="alert">
+                                <ol class="mb-0">
+                                    <li>Copia tu ZIP (del Database Manager de Odoo) a:
+                                        <code>microsaas_db_restore/static/db_backups/</code>
+                                    </li>
+                                    <li>Selecciona ese ZIP en <strong>ZIP Plantilla</strong></li>
+                                    <li>Escribe el nombre de la BD que se creara en la instancia</li>
+                                    <li>Haz clic en <strong>Start Instance</strong> y espera Running</li>
+                                    <li>Haz clic en <strong>Restaurar BD Plantilla</strong> (boton arriba)</li>
+                                    <li>Confirma en el wizard y espera unos minutos</li>
+                                    <li>Abre la URL: Odoo ya configurado con los datos del ZIP</li>
+                                </ol>
+                            </div>
+                        </group>
+
+                    </page>
+                </notebook>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

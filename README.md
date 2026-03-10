@@ -138,6 +138,153 @@ Módulo auxiliar encargado de centralizar y distribuir las traducciones de la in
 
 ---
 
+
+### 8. `microsaas_db_restore` — Restauración de Base de Datos Plantilla
+
+Módulo que permite **restaurar automáticamente una base de datos plantilla dentro de una instancia Docker recién creada**. Utiliza el endpoint interno de Odoo `/web/database/restore` para cargar un archivo ZIP que contiene la base de datos y su filestore.
+
+Este módulo automatiza la **configuración inicial de una instancia**, permitiendo que el cliente acceda inmediatamente a un Odoo ya configurado con datos base, módulos preinstalados o configuraciones predeterminadas.
+
+### Flujo de restauración
+
+1. Se crea una instancia Docker mediante el módulo `micro_saas`
+2. La instancia se levanta y queda en estado **`running`**
+3. El usuario selecciona un **archivo ZIP plantilla**
+4. Se presiona el botón **Restaurar BD Plantilla**
+5. Se abre un **wizard de confirmación**
+6. El servidor envía el ZIP al endpoint interno de Odoo:
+
+```
+/web/database/restore
+```
+
+7. La instancia restaura la base de datos internamente
+8. La instancia queda lista para usar con la BD configurada
+---
+
+### Campos agregados al modelo `odoo.docker.instance`
+
+Este módulo extiende el modelo principal del sistema.
+
+**Modelo extendido:** `odoo.docker.instance`
+
+| Campo | Tipo | Descripción |
+|------|------|-------------|
+| `zip_plantilla` | Selection | Archivo ZIP de respaldo disponible |
+| `db_restore_name` | Char | Nombre que tendrá la base de datos restaurada |
+| `db_restore_master_password` | Char | Master password requerido por el endpoint de Odoo |
+| `db_restore_state` | Selection | Estado del proceso de restauración |
+| `db_restore_log` | Text | Registro de eventos del proceso |
+
+---
+
+### Estados de restauración
+
+| Estado | Descripción |
+|------|-------------|
+| `not_started` | Restauración aún no iniciada |
+| `in_progress` | Restauración en ejecución |
+| `done` | Base de datos restaurada correctamente |
+| `error` | Error durante el proceso |
+
+---
+
+### Wizard de confirmación
+
+Antes de ejecutar la restauración se abre un **wizard de confirmación** que permite validar:
+
+- Instancia destino
+- Archivo ZIP seleccionado
+- Nombre de la base de datos
+- Master password de Odoo
+
+Esto evita restauraciones accidentales.
+
+---
+
+### Comunicación entre contenedores
+
+Para restaurar la base de datos, el módulo envía una petición HTTP al Odoo que corre dentro del contenedor Docker.
+
+Debido a que la petición se realiza **desde otro contenedor**, el sistema resuelve automáticamente la IP del host Docker utilizando el siguiente orden:
+
+1. `host.docker.internal` (Docker Desktop)
+2. Gateway de la red Docker (`/proc/net/route`)
+3. Fallback: `172.17.0.1`
+
+Esto garantiza compatibilidad con:
+
+- Linux
+- Docker Desktop (Windows / Mac)
+- Entornos de desarrollo como Codespaces
+
+---
+
+### Endpoint utilizado
+
+La restauración se realiza mediante el endpoint interno de Odoo:
+
+```
+POST /web/database/restore
+```
+
+Parámetros enviados:
+
+| Parámetro | Descripción |
+|-----------|-------------|
+| `master_pwd` | Master password del servidor Odoo |
+| `name` | Nombre de la nueva base de datos |
+| `copy` | Indica si se crea copia o restauración directa |
+| `backup_file` | Archivo ZIP de respaldo |
+
+---
+
+### Resultado final
+
+Después de la restauración:
+
+- La instancia contiene **una base de datos completamente configurada**
+- El cliente puede acceder inmediatamente a su Odoo
+- No es necesario realizar configuración manual
+
+Ejemplo de acceso:
+
+```
+http://localhost:8069
+```
+
+o el dominio configurado en la instancia.
+
+---
+
+### Dependencias
+
+| Módulo | Motivo |
+|------|------|
+| `micro_saas` | Provee el modelo de instancias Docker |
+| `base` | Dependencias básicas de Odoo |
+
+---
+
+💡 **Nota técnica**
+
+Este módulo **no crea la instancia**, solo **restaura una base de datos dentro de una instancia existente**.
+
+Flujo completo del sistema:
+
+```
+Factura pagada
+      ↓
+Crear instancia Docker
+      ↓
+Levantar contenedor
+      ↓
+Restaurar BD plantilla
+      ↓
+Instancia lista para el cliente
+```
+
+
 ## 🔄 Flujo General del Sistema
 
 ```
